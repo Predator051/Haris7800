@@ -281,5 +281,35 @@ namespace Harris7800HMP
         public string stopBits;
         public string parity;
         public string enable;
+        public string originalName = "";
+
+        public void parseFromListWidgetTextParams(List<WidgetTextParams> textParams)
+        {
+            Func<string, WidgetTextParams> findParam = (string name) =>
+            {
+                return textParams.Find(tp => tp.Name == name);
+            };
+
+            Func<string, string> getValueTextParam = (string name) =>
+            {
+                return findParam(name).currParam();
+            };
+
+            name = getValueTextParam("PRESET NAME");
+            modemType = getValueTextParam("MODEM TYPE");
+            dataRate = getValueTextParam("DATA RATE");
+            mode = getValueTextParam("MODE");
+            dataBits = getValueTextParam("DATA BITS");
+            stopBits = getValueTextParam("STOP BITS");
+            parity = getValueTextParam("PARITY");
+            enable = getValueTextParam("ENABLE");
+;        }
+
+        public static StationPresetModemModule parse(List<WidgetTextParams> textParams)
+        {
+            StationPresetModemModule module = new StationPresetModemModule();
+            module.parseFromListWidgetTextParams(textParams);
+            return module;
+        }
     }
 }

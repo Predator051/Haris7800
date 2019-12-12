@@ -32,10 +32,42 @@ namespace Harris7800HMP
         KeyModule keys = new KeyModule();
         List<StationPresetModemModule> presetModemsModule = new List<StationPresetModemModule>();
         
+        public RadioStation()
+        {
+            //for (int i = 1; i <= 20; i++)
+            //{
+            //    string numStr = i < 10 ? "0" + i : i.ToString();
+            //    StationPresetModemModule m = new StationPresetModemModule();
+            //    m.originalName = "MDM" + numStr;
+            //    m.name = "MDM" + numStr;
+            //    presetModemsModule.Add(m);
+            //}
+        }
         public bool KeyBoardLock { get => keyBoardLock; set => keyBoardLock = value; }
         public SwitchOnSteps OnSteps { get => onSteps; set => onSteps = value; }
         public RadioStationMode Mode { get => mode; set => mode = value; }
         public KeyModule Keys { get => keys; set => keys = value; }
+        public List<StationPresetModemModule> PresetModems { get => presetModemsModule; set => presetModemsModule = value; }
+
+        public void addPresetModem(StationPresetModemModule modem)
+        {
+            var isContains = presetModemsModule.Find(m => m.originalName == modem.originalName);
+            if (isContains != null)
+            {
+                presetModemsModule.Remove(isContains);
+            }
+            presetModemsModule.Add(modem);
+        }
+
+        public void updatePresetModem(StationPresetModemModule modem, string oldName)
+        {
+            var isContains = presetModemsModule.Find(m => m.name == oldName);
+            if (isContains != null)
+            {
+                presetModemsModule.Remove(isContains);
+            }
+            presetModemsModule.Add(modem);
+        }
 
         public string currentModeToString()
         {

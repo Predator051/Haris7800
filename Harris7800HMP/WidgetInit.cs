@@ -6897,13 +6897,13 @@ namespace Harris7800HMP
                 cParam.text = cParam.Text.Remove(cParam.ActiveFrom, cParam.ActiveTo);
                 cParam.text = cParam.Text.Insert(cParam.ActiveFrom, text);
 
-            }, "MDM20", 3, 10));
+            }, "MDM01", 3, 10));
             programMenu.addParam(new Param("Info", null, "ENT TO SAVE - CLR TO EXIT", 4, 15));
 
             programMenu.getParam("KeyValue").IsActive = true;
 
             WidgetTextParams modemNumTP = new WidgetTextParams("MODEM PRESET");
-            for (int i = 20; i > 0; i--)
+            for (int i = 1; i <= 20; i++)
             {
                 string numStr = i < 10 ? "0" + i : i.ToString();
                 modemNumTP.addParam("MDM" + numStr);
@@ -6941,6 +6941,7 @@ namespace Harris7800HMP
             radioParams.Add(parityTP);
             radioParams.Add(enableTP);
 
+            string oldPresetName = "MDM01";
 
             programMenu.addActionToParam(programMenu.getParam("KeyValue"), new Button("DOWN", (Button btn, RadioStation rs, Widget wdg) =>
             {
@@ -6961,7 +6962,15 @@ namespace Harris7800HMP
                     activeParam.ActiveFrom = 0;
                     activeParam.ActiveTo = 1;
                 }
-                activeParam.action("9");
+                string symbols = "9YZ?";
+                string currentSymbol = activeParam.getActiveText();
+                int index = symbols.IndexOf(currentSymbol) + 1;
+                if (index > symbols.Length - 1 || index < 0)
+                {
+                    index = 0;
+                }
+                string nextSymbol = symbols.Substring(index, 1);
+                activeParam.action(nextSymbol);
             }));
 
             programMenu.addActionToParam(programMenu.getParam("KeyValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
@@ -6985,7 +6994,15 @@ namespace Harris7800HMP
                     activeParam.ActiveFrom = 0;
                     activeParam.ActiveTo = 1;
                 }
-                activeParam.action("6");
+                string symbols = "6PQR";
+                string currentSymbol = activeParam.getActiveText();
+                int index = symbols.IndexOf(currentSymbol) + 1;
+                if (index > symbols.Length - 1 || index < 0)
+                {
+                    index = 0;
+                }
+                string nextSymbol = symbols.Substring(index, 1);
+                activeParam.action(nextSymbol);
             }));
 
             programMenu.addActionToParam(programMenu.getParam("KeyValue"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
@@ -7063,7 +7080,15 @@ namespace Harris7800HMP
                     activeParam.ActiveFrom = 0;
                     activeParam.ActiveTo = 1;
                 }
-                activeParam.action("1");
+                string symbols = "1ABC";
+                string currentSymbol = activeParam.getActiveText();
+                int index = symbols.IndexOf(currentSymbol) + 1;
+                if (index > symbols.Length - 1 || index < 0)
+                {
+                    index = 0;
+                }
+                string nextSymbol = symbols.Substring(index, 1);
+                activeParam.action(nextSymbol);
 
             }));
             programMenu.addActionToParam(programMenu.getParam("Body"), new Button("LT", (Button btn, RadioStation rs, Widget wdg) =>
@@ -7082,7 +7107,15 @@ namespace Harris7800HMP
                     activeParam.ActiveFrom = 0;
                     activeParam.ActiveTo = 1;
                 }
-                activeParam.action("2");
+                string symbols = "2DEF";
+                string currentSymbol = activeParam.getActiveText();
+                int index = symbols.IndexOf(currentSymbol) + 1;
+                if (index > symbols.Length - 1 || index < 0)
+                {
+                    index = 0;
+                }
+                string nextSymbol = symbols.Substring(index, 1);
+                activeParam.action(nextSymbol);
 
             }));
             programMenu.addActionToParam(programMenu.getParam("Body"), new Button("MODE", (Button btn, RadioStation rs, Widget wdg) =>
@@ -7101,7 +7134,15 @@ namespace Harris7800HMP
                     activeParam.ActiveFrom = 0;
                     activeParam.ActiveTo = 1;
                 }
-                activeParam.action("3");
+                string symbols = "3GHI";
+                string currentSymbol = activeParam.getActiveText();
+                int index = symbols.IndexOf(currentSymbol) + 1;
+                if (index > symbols.Length - 1 || index < 0)
+                {
+                    index = 0;
+                }
+                string nextSymbol = symbols.Substring(index, 1);
+                activeParam.action(nextSymbol);
 
             }));
             programMenu.addActionToParam(programMenu.getParam("Body"), new Button("SQL", (Button btn, RadioStation rs, Widget wdg) =>
@@ -7120,7 +7161,15 @@ namespace Harris7800HMP
                     activeParam.ActiveFrom = 0;
                     activeParam.ActiveTo = 1;
                 }
-                activeParam.action("4");
+                string symbols = "4JKL";
+                string currentSymbol = activeParam.getActiveText();
+                int index = symbols.IndexOf(currentSymbol) + 1;
+                if (index > symbols.Length - 1 || index < 0)
+                {
+                    index = 0;
+                }
+                string nextSymbol = symbols.Substring(index, 1);
+                activeParam.action(nextSymbol);
 
 
             }));
@@ -7141,7 +7190,15 @@ namespace Harris7800HMP
                     activeParam.ActiveFrom = 0;
                     activeParam.ActiveTo = 1;
                 }
-                activeParam.action("5");
+                string symbols = "5MNO";
+                string currentSymbol = activeParam.getActiveText();
+                int index = symbols.IndexOf(currentSymbol) + 1;
+                if (index > symbols.Length - 1 || index < 0)
+                {
+                    index = 0;
+                }
+                string nextSymbol = symbols.Substring(index, 1);
+                activeParam.action(nextSymbol);
 
 
             }));
@@ -7163,7 +7220,15 @@ namespace Harris7800HMP
                     activeParam.ActiveFrom = 0;
                     activeParam.ActiveTo = 1;
                 }
-                activeParam.action("7");
+                string symbols = "7STU";
+                string currentSymbol = activeParam.getActiveText();
+                int index = symbols.IndexOf(currentSymbol) + 1;
+                if (index > symbols.Length - 1 || index < 0)
+                {
+                    index = 0;
+                }
+                string nextSymbol = symbols.Substring(index, 1);
+                activeParam.action(nextSymbol);
 
 
             }));
@@ -7184,7 +7249,15 @@ namespace Harris7800HMP
                     activeParam.ActiveFrom = 0;
                     activeParam.ActiveTo = 1;
                 }
-                activeParam.action("8");
+                string symbols = "8VWX";
+                string currentSymbol = activeParam.getActiveText();
+                int index = symbols.IndexOf(currentSymbol) + 1;
+                if (index > symbols.Length - 1 || index < 0)
+                {
+                    index = 0;
+                }
+                string nextSymbol = symbols.Substring(index, 1);
+                activeParam.action(nextSymbol);
 
 
             }));
@@ -7221,12 +7294,21 @@ namespace Harris7800HMP
                 {
                     var currParam = radioParams.Find(p => p.Name == paramTitle);
                     currParam.Parameters[currParam.CurrIndex] = activeParam.Text;
-                    var currParam = radioParams.Find(p => p.Name == "PRESET NAME");
                 }
+                
                 if (titleParam.Text == "MODEM PRESET")
                 {
                     var currParam = radioParams.Find(p => p.Name == "PRESET NAME");
                     currParam.Parameters[0] = activeParam.Text;
+                    oldPresetName = activeParam.Text;
+                }
+
+                if (titleParam.Text == "ENABLE")
+                {
+                    var presetNameParam = radioParams.Find(p => p.Name == "MODEM PRESET");
+                    presetNameParam.Parameters[presetNameParam.CurrIndex] = radioParams.Find(p => p.Name == "PRESET NAME").currParam();
+                    var newModem = StationPresetModemModule.parse(radioParams);
+                    station.updatePresetModem(newModem, oldPresetName);
                 }
 
                 int nextIndex = radioParams.IndexOf(radioParams.Find(p => p.Name == paramTitle)) + 1;
