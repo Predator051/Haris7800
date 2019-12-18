@@ -25,9 +25,9 @@ namespace Harris7800HMP
             { SwitcherState.Off, Properties.Resources.offSwitch },
             { SwitcherState.PT, Properties.Resources.PTSwitch },
             { SwitcherState.CT, Properties.Resources.CTSwitch },
-            { SwitcherState.LD, Properties.Resources.LDSwitch},
+            { SwitcherState.LD, Properties.Resources.LDSwitch },
             { SwitcherState.Z, Properties.Resources.ZSwitch },
-            { SwitcherState.CLR, Properties.Resources.ClrSwitch},
+            { SwitcherState.CLR, Properties.Resources.ClrSwitch },
         };
 
         public SwitcherState nextState()

@@ -127,22 +127,22 @@
   <data name="background-keys" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\background-keys.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="offSwitch" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="offSwitch_Old" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\offSwitch.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ClrSwitch" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="ClrSwitch_Old" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ClrSwitch.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CTSwitch" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="CTSwitch_Old" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CTSwitch.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="LDSwitch" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="LDSwitch_Old" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\LDSwitch.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="PTSwitch" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="PTSwitch_Old" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PTSwitch.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ZSwitch" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="ZSwitch_Old" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ZSwitch.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="display_jpg" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -156,5 +156,41 @@
   </data>
   <data name="powerOnModel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\post2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ClrSwitch" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\presetKnob_5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="coupler" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\antenamodules\coupler.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CTSwitch" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\presetKnob_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="handsetMP" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\antenamodules\handsetmp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="hfAnt" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\antenamodules\hfant.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="LDSwitch" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\presetKnob_3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="offSwitch" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\presetKnob_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PTSwitch" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\presetKnob_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="usbJustConnector" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\antenamodules\usbjustconnector.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ZSwitch" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\presetKnob_4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="handset" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\antenamodules\handset.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="handsetTube" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\antenamodules\handsettube.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

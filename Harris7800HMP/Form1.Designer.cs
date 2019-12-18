@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.btVolPlus = new System.Windows.Forms.Button();
             this.btVolMinus = new System.Windows.Forms.Button();
             this.btClr = new System.Windows.Forms.Button();
@@ -50,14 +49,19 @@
             this.btPreMinus = new System.Windows.Forms.Button();
             this.btEnter = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.lbDisplay = new System.Windows.Forms.Label();
             this.richDispley = new System.Windows.Forms.RichTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pbOn = new System.Windows.Forms.PictureBox();
             this.timerOn = new System.Windows.Forms.Timer(this.components);
             this.timerAnimation = new System.Windows.Forms.Timer(this.components);
+            this.pbCoulper = new System.Windows.Forms.PictureBox();
+            this.pbHandsetTube = new System.Windows.Forms.PictureBox();
+            this.pbUsb = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbOn)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbCoulper)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbHandsetTube)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbUsb)).BeginInit();
             this.SuspendLayout();
             // 
             // btVolPlus
@@ -330,28 +334,12 @@
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox1.Image = global::Harris7800HMP.Properties.Resources.offSwitch;
-            this.pictureBox1.Location = new System.Drawing.Point(688, 183);
+            this.pictureBox1.Location = new System.Drawing.Point(683, 179);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(99, 99);
             this.pictureBox1.TabIndex = 19;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
-            // 
-            // lbDisplay
-            // 
-            this.lbDisplay.AutoSize = true;
-            this.lbDisplay.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lbDisplay.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbDisplay.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.lbDisplay.Font = new System.Drawing.Font("Segoe UI Emoji", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbDisplay.Image = ((System.Drawing.Image)(resources.GetObject("lbDisplay.Image")));
-            this.lbDisplay.Location = new System.Drawing.Point(621, 33);
-            this.lbDisplay.MaximumSize = new System.Drawing.Size(237, 75);
-            this.lbDisplay.MinimumSize = new System.Drawing.Size(237, 75);
-            this.lbDisplay.Name = "lbDisplay";
-            this.lbDisplay.Size = new System.Drawing.Size(237, 75);
-            this.lbDisplay.TabIndex = 21;
-            this.lbDisplay.Text = "11111111111111111111111111111111";
             // 
             // richDispley
             // 
@@ -389,6 +377,39 @@
             this.timerAnimation.Interval = 1000;
             this.timerAnimation.Tick += new System.EventHandler(this.timerAnimation_Tick);
             // 
+            // pbCoulper
+            // 
+            this.pbCoulper.BackColor = System.Drawing.Color.Transparent;
+            this.pbCoulper.Image = global::Harris7800HMP.Properties.Resources.coupler;
+            this.pbCoulper.Location = new System.Drawing.Point(-9, 192);
+            this.pbCoulper.Name = "pbCoulper";
+            this.pbCoulper.Size = new System.Drawing.Size(289, 394);
+            this.pbCoulper.TabIndex = 24;
+            this.pbCoulper.TabStop = false;
+            // 
+            // pbHandsetTube
+            // 
+            this.pbHandsetTube.BackColor = System.Drawing.Color.Transparent;
+            this.pbHandsetTube.Image = global::Harris7800HMP.Properties.Resources.handsetTube;
+            this.pbHandsetTube.Location = new System.Drawing.Point(683, 358);
+            this.pbHandsetTube.Name = "pbHandsetTube";
+            this.pbHandsetTube.Size = new System.Drawing.Size(145, 269);
+            this.pbHandsetTube.TabIndex = 25;
+            this.pbHandsetTube.TabStop = false;
+            // 
+            // pbUsb
+            // 
+            this.pbUsb.BackColor = System.Drawing.Color.Transparent;
+            this.pbUsb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.pbUsb.Image = global::Harris7800HMP.Properties.Resources.usbJustConnector;
+            this.pbUsb.Location = new System.Drawing.Point(753, 284);
+            this.pbUsb.Name = "pbUsb";
+            this.pbUsb.Size = new System.Drawing.Size(90, 156);
+            this.pbUsb.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pbUsb.TabIndex = 26;
+            this.pbUsb.TabStop = false;
+            this.pbUsb.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -397,9 +418,11 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(969, 530);
+            this.Controls.Add(this.pbUsb);
+            this.Controls.Add(this.pbHandsetTube);
+            this.Controls.Add(this.pbCoulper);
             this.Controls.Add(this.pbOn);
             this.Controls.Add(this.richDispley);
-            this.Controls.Add(this.lbDisplay);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btEnter);
             this.Controls.Add(this.btPreMinus);
@@ -422,10 +445,15 @@
             this.Controls.Add(this.btVolPlus);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
+            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbOn)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbCoulper)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbHandsetTube)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbUsb)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -451,12 +479,14 @@
         private System.Windows.Forms.Button btPreMinus;
         private System.Windows.Forms.Button btEnter;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label lbDisplay;
         private System.Windows.Forms.RichTextBox richDispley;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.PictureBox pbOn;
         private System.Windows.Forms.Timer timerOn;
         private System.Windows.Forms.Timer timerAnimation;
+        private System.Windows.Forms.PictureBox pbCoulper;
+        private System.Windows.Forms.PictureBox pbHandsetTube;
+        private System.Windows.Forms.PictureBox pbUsb;
     }
 }
 

@@ -11,7 +11,7 @@ namespace Harris7800HMP
         FIX, ALE, ThreeG, HOP
     };
     public class RadioStation
-    {   
+    {
         public enum SwitchOnSteps
         {
             Logo, Model, Init, AfterInit
@@ -31,23 +31,27 @@ namespace Harris7800HMP
         string fourthLine = "";
         KeyModule keys = new KeyModule();
         List<StationPresetModemModule> presetModemsModule = new List<StationPresetModemModule>();
-        
+        StationPresetSystemContainer presetSystemsModule = new StationPresetSystemContainer();
+        txMsgContainer txMsgs = new txMsgContainer();
+
         public RadioStation()
         {
-            //for (int i = 1; i <= 20; i++)
-            //{
-            //    string numStr = i < 10 ? "0" + i : i.ToString();
-            //    StationPresetModemModule m = new StationPresetModemModule();
-            //    m.originalName = "MDM" + numStr;
-            //    m.name = "MDM" + numStr;
-            //    presetModemsModule.Add(m);
-            //}
+            for (int i = 1; i <= 20; i++)
+            {
+                string numStr = i < 10 ? "0" + i : i.ToString();
+                StationPresetModemModule m = new StationPresetModemModule();
+                m.originalName = "MDM" + numStr;
+                m.name = "MDM" + numStr;
+                presetModemsModule.Add(m);
+            }
         }
         public bool KeyBoardLock { get => keyBoardLock; set => keyBoardLock = value; }
         public SwitchOnSteps OnSteps { get => onSteps; set => onSteps = value; }
         public RadioStationMode Mode { get => mode; set => mode = value; }
         public KeyModule Keys { get => keys; set => keys = value; }
         public List<StationPresetModemModule> PresetModems { get => presetModemsModule; set => presetModemsModule = value; }
+        public txMsgContainer TxMsgs { get => txMsgs; set => txMsgs = value; }
+        public StationPresetSystemContainer PresetSystemsModule { get => presetSystemsModule; set => presetSystemsModule = value; }
 
         public void addPresetModem(StationPresetModemModule modem)
         {
@@ -59,6 +63,56 @@ namespace Harris7800HMP
             presetModemsModule.Add(modem);
         }
 
+        public void addPresetSystem(List<WidgetTextParams> textParams, string oldName)
+        {
+            Func<string, WidgetTextParams> findParam = (string name) =>
+            {
+                return textParams.Find(tp => tp.Name == name);
+            };
+
+            Func<string, string> getValueTextParam = (string name) =>
+            {
+                return findParam(name).currParam();
+            };
+
+            StationPresetSystem stationPresetSystemModule = new StationPresetSystem();
+
+            stationPresetSystemModule.name = getValueTextParam("PRESET NAME");
+            stationPresetSystemModule.radioMode = stringToMode(getValueTextParam("RADIO MODE"));
+            stationPresetSystemModule.channelNumber = getValueTextParam("CHANNEL NUMBER");
+            string modemPreset = getValueTextParam("MODEM PRESET");
+            string keyTypeName = getValueTextParam("ENCRYPTION TYPE");
+            string keyName = getValueTextParam("ENCRYPTION KEY");
+            stationPresetSystemModule.ptVoiceMode = getValueTextParam("PT VOICE MODE");
+            stationPresetSystemModule.ctVoiceMode = getValueTextParam("CT VOICE MODE");
+            stationPresetSystemModule.enable = getValueTextParam("ENABLE");
+
+
+            if (modemPreset != "OFF")
+            {
+                stationPresetSystemModule.modemPreset = PresetModems.Find(pm => pm.name == modemPreset);
+            }
+
+            if (keyName == "--------------------")
+            {
+                KeyModule.KeyType kType = KeyModule.stringToType(keyTypeName);
+                KeyModule.KeyValue value = Keys.Keys[kType].Find(k => k.KeyName == keyName);
+                stationPresetSystemModule.key = new KeyValuePair<KeyModule.KeyType, KeyModule.KeyValue>(kType, value);
+            } 
+            else
+            {
+                KeyModule.KeyType kType = KeyModule.stringToType(keyTypeName);
+                stationPresetSystemModule.key = new KeyValuePair<KeyModule.KeyType, KeyModule.KeyValue>(kType, null);
+            }
+
+            var isContains = presetSystemsModule.SystemPresets.Find(psm => psm.name == oldName);
+            if (isContains != null)
+            {
+                presetSystemsModule.SystemPresets.Remove(isContains);
+            }
+
+            presetSystemsModule.addPresetSystem(stationPresetSystemModule);
+        }
         public void updatePresetModem(StationPresetModemModule modem, string oldName)
         {
             var isContains = presetModemsModule.Find(m => m.name == oldName);
@@ -84,9 +138,43 @@ namespace Harris7800HMP
             return Enum.GetName(typeof(RadioStationMode), mode);
         }
 
+        public static RadioStationMode stringToMode(string str)
+        {
+
+            switch(str)
+            {
+                case "3G ":
+                case "3G":
+                    {
+                        return RadioStationMode.ThreeG;
+                    }
+                case "FIX":
+                    {
+                        return RadioStationMode.FIX;
+                    }
+                case "ALE":
+                    {
+                        return RadioStationMode.ALE;
+                    }
+                case "HOP":
+                    {
+                        return RadioStationMode.HOP;
+                    }
+            }
+            return RadioStationMode.FIX;
+        }
+
         public RadioStation(Switcher sw)
         {
-            switcher = sw;
+            switcher = sw; 
+            for (int i = 1; i <= 20; i++)
+            {
+                string numStr = i < 10 ? "0" + i : i.ToString();
+                StationPresetModemModule m = new StationPresetModemModule();
+                m.originalName = "MDM" + numStr;
+                m.name = "MDM" + numStr;
+                presetModemsModule.Add(m);
+            }
         }
 
         public SwitcherState getState()

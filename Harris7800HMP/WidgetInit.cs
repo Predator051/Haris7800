@@ -21,6 +21,10 @@ namespace Harris7800HMP
             ProgramModePresetMenu,
             ProgramModePresetChannelMenu, 
             ProgramModePresetModemMenu,
+            ProgramModePresetSystemMenu,
+            ProgramModeAleMenu,
+            ProgramModeAleAmdMenu,
+            ProgramModeAleAmdTxMsgMenu,
             TransitionProgramMenu,
             ProgramMenu2,
             OptionMenu,
@@ -99,6 +103,10 @@ namespace Harris7800HMP
             Widget programModePresetMenu = initProgramModePresetMenu(station);
             Widget programModePresetChannelMenu = initProgramModePresetChannelMenu(station);
             Widget programModePresetModemMenu = initProgramModePresetModemMenu(station);
+            Widget programModePresetSystemMenu = initProgramModePresetSystemMenu(station);
+            Widget programModeAleMenu = initProgramModeAleMenu(station);
+            Widget programModeAleAmdMenu = initProgramModeAleAmdMenu(station);
+            Widget programModeAleAmdTxMsgMenu = initProgramModeAleAmdTxMsgMenu(station);
 
             transitionPM.addAvailableWidget(getNameMenu(MenuNames.ProgramMenu), programMenu);
 
@@ -117,9 +125,15 @@ namespace Harris7800HMP
             programComsecMenu.addAvailableWidget(getNameMenu(MenuNames.ProgramComsecKeysMenu), programComsecKeysMenu);
 
             programModeMenu.addAvailableWidget(getNameMenu(MenuNames.ProgramModePresetMenu), programModePresetMenu);
+            programModeMenu.addAvailableWidget(getNameMenu(MenuNames.ProgramModeAleMenu), programModeAleMenu);
 
             programModePresetMenu.addAvailableWidget(getNameMenu(MenuNames.ProgramModePresetChannelMenu), programModePresetChannelMenu);
             programModePresetMenu.addAvailableWidget(getNameMenu(MenuNames.ProgramModePresetModemMenu), programModePresetModemMenu);
+            programModePresetMenu.addAvailableWidget(getNameMenu(MenuNames.ProgramModePresetSystemMenu), programModePresetSystemMenu);
+
+            programModeAleMenu.addAvailableWidget(getNameMenu(MenuNames.ProgramModeAleAmdMenu), programModeAleAmdMenu);
+
+            programModeAleAmdMenu.addAvailableWidget(getNameMenu(MenuNames.ProgramModeAleAmdTxMsgMenu), programModeAleAmdTxMsgMenu);
 
             optionMenu.addAvailableWidget(getNameMenu(MenuNames.OptionMenu2), optionMenu2);
             optionMenu.addAvailableWidget(getNameMenu(MenuNames.OptionMenuRadio), optionMenuRadio);
@@ -702,7 +716,51 @@ namespace Harris7800HMP
 
                 wdg.prepareToShowWidget(getNameMenu(MenuNames.SelectModeMenu));
             }));
+            mainMenu.addActionToParam(mainMenu.getParam("Body"), new Button("PRE_PLUS", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                if (mainMenu.activeParam() != null)
+                {
+                    return;
+                }
 
+                var next = station.PresetSystemsModule.nextPreset();
+
+                var chan = mainMenu.getParam("Chan");
+                chan.Text = next.channelNumber;
+
+                var voice = mainMenu.getParam("VoiceValue");
+                voice.Text = next.ctVoiceMode;
+
+                var mode = mainMenu.getParam("StationMode");
+                mode.Text = RadioStation.modeToString(next.radioMode);
+
+                var name = mainMenu.getParam("Manual");
+                name.Text = next.name;
+                
+            }));
+
+            mainMenu.addActionToParam(mainMenu.getParam("Body"), new Button("PRE_PLUS", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                if (mainMenu.activeParam() != null)
+                {
+                    return;
+                }
+
+                var next = station.PresetSystemsModule.prevPreset();
+
+                var chan = mainMenu.getParam("Chan");
+                chan.Text = next.channelNumber;
+
+                var voice = mainMenu.getParam("VoiceValue");
+                voice.Text = next.ctVoiceMode;
+
+                var mode = mainMenu.getParam("StationMode");
+                mode.Text = RadioStation.modeToString(next.radioMode);
+
+                var name = mainMenu.getParam("Manual");
+                name.Text = next.name;
+
+            }));
             //3G mode
 
             mainMenu.addParam(new Param("3GTitle", null, "INCOMPLETE 3G FILL", 2, 6), false).addModeForParam("3GTitle", RadioStationMode.ThreeG);
@@ -3918,6 +3976,11 @@ namespace Harris7800HMP
                 wdg.prepareToShowWidget(getNameMenu(MenuNames.OptionAleLqaMenu));
             }));
 
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                wdg.showPreviousWidget();
+            }));
+
             optionMenu.addActionToParam(optionMenu.getParam("Tx-msg"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
             {
                 if (wdg.activeParam() == null
@@ -3926,8 +3989,13 @@ namespace Harris7800HMP
                     return;
                 }
 
-                Form1.currObject.QueueWidget.add(initOptionAleTxMsgMenu(station));
-                Form1.currObject.QueueWidget.add(wdg);
+                var txMsg = initOptionAleTxMsgMenu(station);
+                txMsg.comeFrom = optionMenu;
+                Form1.currObject.QueueWidget.add(txMsg);
+                if (station.TxMsgs.Msgs.Count < 0)
+                {
+                    Form1.currObject.QueueWidget.add(wdg);
+                }
                 Form1.currObject.startShowWidgetQueue();
             }));
             return optionMenu;
@@ -4124,11 +4192,79 @@ namespace Harris7800HMP
             optionMenu.addParam(new Param("LineTwo", null, "MESSAGES", 3, 0));
             optionMenu.addParam(new Param("Info", null, "PRESS ENT/CLR TO CONTINUE", 4, 15));
 
+            var lineOne = optionMenu.getParam("LineOne");
+            var lineTwo = optionMenu.getParam("LineTwo");
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
             {
                 wdg.showPreviousWidget();
             }));
+
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                if (station.TxMsgs.isEmpty())
+                {
+                    return;
+                }
+                Action clr = () => {
+                    Form1.currObject.QueueWidget.add(optionMenu);
+                    Form1.currObject.startShowWidgetQueue();
+                };
+                var question = dialogMenu("OPTION-ALE-TX_MSG", "SEND TX MESSAGE"
+                    , clr
+                    , ifYes: () => {
+                        var sendingMenu = initOptionAleTxMsgSendingMenu(station, clr);
+                        Form1.currObject.QueueWidget.add(sendingMenu);
+                        Form1.currObject.startShowWidgetQueue();
+                    }
+                    , clr);
+
+
+                Form1.currObject.QueueWidget.add(question);
+                Form1.currObject.startShowWidgetQueue();
+            }));
+
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("DOWN", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                if (station.TxMsgs.isEmpty())
+                {
+                    return;
+                }
+                var next = station.TxMsgs.prevNDMsg();
+                lineTwo.Text = next.msg;
+            }));
+
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                if (station.TxMsgs.isEmpty())
+                {
+                    return;
+                }
+                var next = station.TxMsgs.nextNDMsg();
+                lineTwo.Text = next.msg;
+            }));
+
+            optionMenu.addParam(new Param("Rebuild", null, "", 1, 0, () => { 
+                if (station.TxMsgs.isEmpty())
+                {
+                    lineOne.Text = "NO TX";
+                    lineTwo.Text = "MESSAGES";
+                    lineOne.setLocation(2, 10);
+                    lineTwo.setLocation(3, 8);
+                    return;
+                }
+
+                lineOne.Text = "TX MESSAGES TO SEND:";
+                if (lineTwo.Text == "MESSAGES")
+                {
+                    optionMenu.getParam("LineTwo").Text = station.TxMsgs.Msgs[0].msg;
+                }
+
+                lineOne.setLocation(2, 5);
+                lineTwo.setLocation(3, 0);
+            }));
+
+            
 
             return optionMenu;
         }
@@ -4645,6 +4781,13 @@ namespace Harris7800HMP
                 }
 
                 wdg.prepareToShowWidget(getNameMenu(MenuNames.ProgramComsecAksMenu));
+
+            }));
+
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+
+                wdg.showPreviousWidget();
 
             }));
             return optionMenu;
@@ -5606,7 +5749,7 @@ namespace Harris7800HMP
 
                 if (activeParam.isInParam())
                 {
-                    if (activeParam.ActiveFrom < 20)
+                    if (activeParam.ActiveFrom < 19)
                     {
                         activeParam.ActiveFrom += 1;
                         activeParam.ActiveTo = 1;
@@ -6315,6 +6458,23 @@ namespace Harris7800HMP
 
                 wdg.prepareToShowWidget(getNameMenu(MenuNames.ProgramModePresetMenu));
 
+            })); 
+            optionMenu.addActionToParam(optionMenu.getParam("Ale"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+
+                var activeParam = wdg.activeParam();
+
+                if (activeParam == null || activeParam.Name != "Ale")
+                {
+                    return;
+                }
+
+                wdg.prepareToShowWidget(getNameMenu(MenuNames.ProgramModeAleMenu));
+
+            }));
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                wdg.showPreviousWidget();
             }));
             return optionMenu;
         }
@@ -6450,6 +6610,23 @@ namespace Harris7800HMP
 
                 wdg.prepareToShowWidget(getNameMenu(MenuNames.ProgramModePresetModemMenu));
 
+            }));
+            optionMenu.addActionToParam(optionMenu.getParam("System"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+
+                var activeParam = wdg.activeParam();
+
+                if (activeParam == null || activeParam.Name != "System")
+                {
+                    return;
+                }
+
+                wdg.prepareToShowWidget(getNameMenu(MenuNames.ProgramModePresetSystemMenu));
+
+            }));
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                wdg.showPreviousWidget();
             }));
             return optionMenu;
         }
@@ -7342,6 +7519,1044 @@ namespace Harris7800HMP
             }));
 
             return programMenu;
+        }
+
+        static public Widget initProgramModePresetSystemMenu(RadioStation station)
+        {
+
+            Widget programMenu = new Widget(getNameMenu(MenuNames.ProgramModePresetSystemMenu));
+
+            programMenu.LineSize[0] = 5;
+            programMenu.LineSize[1] = 8;
+            programMenu.LineSize[2] = 8;
+            programMenu.LineSize[3] = 5;
+            programMenu.LineCharOffset[1] = 6;
+            programMenu.LineCharOffset[2] = 4;
+            programMenu.addParam(new Param("Body", null, "", 1, 0));
+            programMenu.addParam(new Param("Title", null, "PGM-MODE-PRESET-SYSTEM-", 1, 0));
+            programMenu.addParam(new Param("KeyTitle", null, "SYSTEM PRESET", 2, 10));
+            programMenu.addParam(new Param("KeyTitleCont", null, "TO CHANGE:", 3, 0));
+            programMenu.addParam(new Param("KeyValue", (string text, Param cParam) =>
+            {
+                cParam.text = cParam.Text.Remove(cParam.ActiveFrom, cParam.ActiveTo);
+                cParam.text = cParam.Text.Insert(cParam.ActiveFrom, text);
+
+            }, "SYSPRE01", 3, 10));
+            programMenu.addParam(new Param("Info", null, "ENT TO SAVE - CLR TO EXIT", 4, 15));
+
+            programMenu.getParam("KeyValue").IsActive = true;
+
+            WidgetTextParams modemNumTP = new WidgetTextParams("SYSTEM PRESET");
+            for (int i = 1; i <= 75; i++)
+            {
+                string numStr = i < 10 ? "0" + i : i.ToString();
+                modemNumTP.addParam("SYSPRE" + numStr);
+            }
+
+            WidgetTextParams presetNameTP = new WidgetTextParams("PRESET NAME"); //ENTER
+            presetNameTP.addParam("");
+            WidgetTextParams radioModeTP = new WidgetTextParams("RADIO MODE");
+            radioModeTP.addParam("FIX").addParam("3G").addParam("ALE").addParam("HOP");
+            WidgetTextParams channelNumberTP = new WidgetTextParams("CHANNEL NUMBER"); //ENTER
+            channelNumberTP.addParam("000");
+            WidgetTextParams modemPreset = new WidgetTextParams("MODEM PRESET");
+            modemPreset.addParam("OFF");
+            WidgetTextParams encryptionType = new WidgetTextParams("ENCRYPTION TYPE");
+            encryptionType.addParam("CITADEL").addParam("AES-256").addParam("AES-128");
+            WidgetTextParams encryptionKeyTP = new WidgetTextParams("ENCRYPTION KEY"); //TO DO
+            encryptionKeyTP.addParam("-------------------");
+            WidgetTextParams ptVoiceModeTP = new WidgetTextParams("PT VOICE MODE");
+            ptVoiceModeTP.addParam("CVSD").addParam("CLR").addParam("NONE").addParam("LDV").addParam("ME24")
+                .addParam("ME12").addParam("ME6").addParam("DV24").addParam("DV6").addParam("AVS");
+            WidgetTextParams ctVoiceModeTP = new WidgetTextParams("CT VOICE MODE");
+            ctVoiceModeTP.addParam("NONE").addParam("LDV").addParam("ME24")
+                .addParam("ME12").addParam("ME6").addParam("DV24").addParam("DV6");
+            WidgetTextParams enableTP = new WidgetTextParams("ENABLE");
+            enableTP.addParam("YES").addParam("NO");
+
+
+            List<WidgetTextParams> radioParams = new List<WidgetTextParams>();
+            radioParams.Add(modemNumTP);
+            radioParams.Add(presetNameTP);
+            radioParams.Add(radioModeTP);
+            radioParams.Add(channelNumberTP);
+            radioParams.Add(modemPreset);
+            radioParams.Add(encryptionType);
+            radioParams.Add(encryptionKeyTP);
+            radioParams.Add(ptVoiceModeTP);
+            radioParams.Add(ctVoiceModeTP);
+            radioParams.Add(enableTP);
+
+            string oldPresetName = "SYSPRE01";
+
+            programMenu.addActionToParam(programMenu.getParam("KeyValue"), new Button("DOWN", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                Param activeParam = wdg.activeParam();
+                Param titleParam = wdg.getParam("KeyTitle");
+
+                if (titleParam.Text != "PRESET NAME" && titleParam.Text != "CHANNEL NUMBER")
+                {
+                    string paramTitle = titleParam.Text;
+
+                    activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getPrevParam();
+                    activeParam.ActiveTo = activeParam.Text.Length;
+                    return;
+                }
+
+                if (!activeParam.isInParam())
+                {
+                    activeParam.ActiveFrom = 0;
+                    activeParam.ActiveTo = 1;
+                }
+
+                if (titleParam.Text == "CHANNEL NUMBER")
+                {
+                    activeParam.action("9");
+                    return;
+                }
+
+                string symbols = "9YZ?";
+                string currentSymbol = activeParam.getActiveText();
+                int index = symbols.IndexOf(currentSymbol) + 1;
+                if (index > symbols.Length - 1 || index < 0)
+                {
+                    index = 0;
+                }
+                string nextSymbol = symbols.Substring(index, 1);
+                activeParam.action(nextSymbol);
+            }));
+
+            programMenu.addActionToParam(programMenu.getParam("KeyValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                Param activeParam = wdg.activeParam();
+                Param titleParam = wdg.getParam("KeyTitle");
+
+
+                if (titleParam.Text != "PRESET NAME" && titleParam.Text != "CHANNEL NUMBER")
+                {
+
+                    string paramTitle = titleParam.Text;
+
+                    activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getNextParam();
+                    activeParam.ActiveTo = activeParam.Text.Length;
+                    return;
+                }
+
+                if (!activeParam.isInParam())
+                {
+                    activeParam.ActiveFrom = 0;
+                    activeParam.ActiveTo = 1;
+                }
+                if (titleParam.Text == "CHANNEL NUMBER")
+                {
+                    activeParam.action("6");
+                    return;
+                }
+
+                string symbols = "6PQR";
+                string currentSymbol = activeParam.getActiveText();
+                int index = symbols.IndexOf(currentSymbol) + 1;
+                if (index > symbols.Length - 1 || index < 0)
+                {
+                    index = 0;
+                }
+                string nextSymbol = symbols.Substring(index, 1);
+                activeParam.action(nextSymbol);
+            }));
+
+            programMenu.addActionToParam(programMenu.getParam("KeyValue"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                Param activeParam = wdg.activeParam();
+                Param titleParam = wdg.getParam("KeyTitle");
+
+
+                if (activeParam == null || (titleParam.Text != "PRESET NAME" && titleParam.Text != "CHANNEL NUMBER"))
+                {
+                    return;
+                }
+
+                if (!activeParam.isInParam())
+                {
+                    activeParam.ActiveFrom = 0;
+                    activeParam.ActiveTo = 1;
+                    return;
+                }
+
+                if (activeParam.isInParam())
+                {
+                    if (activeParam.ActiveFrom <= 0)
+                    {
+                        return;
+                    }
+                    activeParam.ActiveFrom -= 1;
+                }
+            }));
+
+            programMenu.addActionToParam(programMenu.getParam("KeyValue"), new Button("RIGTH", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                Param activeParam = wdg.activeParam();
+                Param titleParam = wdg.getParam("KeyTitle");
+
+
+
+                if (activeParam == null 
+                || (titleParam.Text != "PRESET NAME" && titleParam.Text != "CHANNEL NUMBER"))
+                {
+                    return;
+                }
+
+
+                if (!activeParam.isInParam())
+                {
+                    activeParam.ActiveFrom = 0;
+                    activeParam.ActiveTo = 1;
+                    return;
+                }
+
+                if (activeParam.isInParam())
+                {
+                    activeParam.ActiveFrom += 1;
+
+                    if (activeParam.ActiveFrom > activeParam.Text.Length - 1)
+                    {
+                        activeParam.ActiveFrom = activeParam.Text.Length - 1;
+                    }
+                }
+            }));
+
+            programMenu.addActionToParam(programMenu.getParam("Body"), new Button("CALL", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                var activeParam = wdg.activeParam();
+                var titleParam = wdg.getParam("KeyTitle");
+
+                if (activeParam == null || (titleParam.Text != "PRESET NAME" && titleParam.Text != "CHANNEL NUMBER"))
+                {
+                    return;
+                }
+
+
+                if (!activeParam.isInParam())
+                {
+                    activeParam.ActiveFrom = 0;
+                    activeParam.ActiveTo = 1;
+                }
+                if (titleParam.Text == "CHANNEL NUMBER")
+                {
+                    activeParam.action("1");
+                    return;
+                }
+
+                string symbols = "1ABC";
+                string currentSymbol = activeParam.getActiveText();
+                int index = symbols.IndexOf(currentSymbol) + 1;
+                if (index > symbols.Length - 1 || index < 0)
+                {
+                    index = 0;
+                }
+                string nextSymbol = symbols.Substring(index, 1);
+                activeParam.action(nextSymbol);
+
+            }));
+            programMenu.addActionToParam(programMenu.getParam("Body"), new Button("LT", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                var activeParam = wdg.activeParam();
+                var titleParam = wdg.getParam("KeyTitle");
+
+                if (activeParam == null || (titleParam.Text != "PRESET NAME" && titleParam.Text != "CHANNEL NUMBER"))
+                {
+                    return;
+                }
+
+
+                if (!activeParam.isInParam())
+                {
+                    activeParam.ActiveFrom = 0;
+                    activeParam.ActiveTo = 1;
+                }
+                if (titleParam.Text == "CHANNEL NUMBER")
+                {
+                    activeParam.action("2");
+                    return;
+                }
+
+                string symbols = "2DEF";
+                string currentSymbol = activeParam.getActiveText();
+                int index = symbols.IndexOf(currentSymbol) + 1;
+                if (index > symbols.Length - 1 || index < 0)
+                {
+                    index = 0;
+                }
+                string nextSymbol = symbols.Substring(index, 1);
+                activeParam.action(nextSymbol);
+
+            }));
+            programMenu.addActionToParam(programMenu.getParam("Body"), new Button("MODE", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                var activeParam = wdg.activeParam();
+                var titleParam = wdg.getParam("KeyTitle");
+
+                if (activeParam == null || (titleParam.Text != "PRESET NAME" && titleParam.Text != "CHANNEL NUMBER"))
+                {
+                    return;
+                }
+
+
+                if (!activeParam.isInParam())
+                {
+                    activeParam.ActiveFrom = 0;
+                    activeParam.ActiveTo = 1;
+                }
+                if (titleParam.Text == "CHANNEL NUMBER")
+                {
+                    activeParam.action("3");
+                    return;
+                }
+
+                string symbols = "3GHI";
+                string currentSymbol = activeParam.getActiveText();
+                int index = symbols.IndexOf(currentSymbol) + 1;
+                if (index > symbols.Length - 1 || index < 0)
+                {
+                    index = 0;
+                }
+                string nextSymbol = symbols.Substring(index, 1);
+                activeParam.action(nextSymbol);
+
+            }));
+            programMenu.addActionToParam(programMenu.getParam("Body"), new Button("SQL", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                var activeParam = wdg.activeParam();
+                var titleParam = wdg.getParam("KeyTitle");
+
+                if (activeParam == null || (titleParam.Text != "PRESET NAME" && titleParam.Text != "CHANNEL NUMBER"))
+                {
+                    return;
+                }
+
+
+                if (!activeParam.isInParam())
+                {
+                    activeParam.ActiveFrom = 0;
+                    activeParam.ActiveTo = 1;
+                }
+                if (titleParam.Text == "CHANNEL NUMBER")
+                {
+                    activeParam.action("4");
+                    return;
+                }
+
+                string symbols = "4JKL";
+                string currentSymbol = activeParam.getActiveText();
+                int index = symbols.IndexOf(currentSymbol) + 1;
+                if (index > symbols.Length - 1 || index < 0)
+                {
+                    index = 0;
+                }
+                string nextSymbol = symbols.Substring(index, 1);
+                activeParam.action(nextSymbol);
+
+
+            }));
+            programMenu.addActionToParam(programMenu.getParam("Body"), new Button("ZERO", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+
+                var activeParam = wdg.activeParam();
+                var titleParam = wdg.getParam("KeyTitle");
+
+                if (activeParam == null || (titleParam.Text != "PRESET NAME" && titleParam.Text != "CHANNEL NUMBER"))
+                {
+                    return;
+                }
+
+
+                if (!activeParam.isInParam())
+                {
+                    activeParam.ActiveFrom = 0;
+                    activeParam.ActiveTo = 1;
+                }
+                if (titleParam.Text == "CHANNEL NUMBER")
+                {
+                    activeParam.action("5");
+                    return;
+                }
+
+                string symbols = "5MNO";
+                string currentSymbol = activeParam.getActiveText();
+                int index = symbols.IndexOf(currentSymbol) + 1;
+                if (index > symbols.Length - 1 || index < 0)
+                {
+                    index = 0;
+                }
+                string nextSymbol = symbols.Substring(index, 1);
+                activeParam.action(nextSymbol);
+
+
+            }));
+
+            programMenu.addActionToParam(programMenu.getParam("Body"), new Button("OPT", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+
+                var activeParam = wdg.activeParam();
+                var titleParam = wdg.getParam("KeyTitle");
+
+                if (activeParam == null || (titleParam.Text != "PRESET NAME" && titleParam.Text != "CHANNEL NUMBER"))
+                {
+                    return;
+                }
+
+
+                if (!activeParam.isInParam())
+                {
+                    activeParam.ActiveFrom = 0;
+                    activeParam.ActiveTo = 1;
+                }
+                if (titleParam.Text == "CHANNEL NUMBER")
+                {
+                    activeParam.action("7");
+                    return;
+                }
+
+                string symbols = "7STU";
+                string currentSymbol = activeParam.getActiveText();
+                int index = symbols.IndexOf(currentSymbol) + 1;
+                if (index > symbols.Length - 1 || index < 0)
+                {
+                    index = 0;
+                }
+                string nextSymbol = symbols.Substring(index, 1);
+                activeParam.action(nextSymbol);
+
+
+            }));
+            programMenu.addActionToParam(programMenu.getParam("Body"), new Button("PGM", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+
+                var activeParam = wdg.activeParam();
+                var titleParam = wdg.getParam("KeyTitle");
+
+                if (activeParam == null || (titleParam.Text != "PRESET NAME" && titleParam.Text != "CHANNEL NUMBER"))
+                {
+                    return;
+                }
+
+
+                if (!activeParam.isInParam())
+                {
+                    activeParam.ActiveFrom = 0;
+                    activeParam.ActiveTo = 1;
+                }
+                if (titleParam.Text == "CHANNEL NUMBER")
+                {
+                    activeParam.action("8");
+                    return;
+                }
+
+                string symbols = "8VWX";
+                string currentSymbol = activeParam.getActiveText();
+                int index = symbols.IndexOf(currentSymbol) + 1;
+                if (index > symbols.Length - 1 || index < 0)
+                {
+                    index = 0;
+                }
+                string nextSymbol = symbols.Substring(index, 1);
+                activeParam.action(nextSymbol);
+
+
+            }));
+            programMenu.addActionToParam(programMenu.getParam("Body"), new Button("UPDATE", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+
+                var activeParam = wdg.activeParam();
+                var titleParam = wdg.getParam("KeyTitle");
+
+                if (activeParam == null || (titleParam.Text != "PRESET NAME" && titleParam.Text != "CHANNEL NUMBER"))
+                {
+                    return;
+                }
+
+                if (!activeParam.isInParam())
+                {
+                    activeParam.ActiveFrom = 0;
+                    activeParam.ActiveTo = 1;
+                }
+                activeParam.action("0");
+
+
+            }));
+
+            programMenu.addActionToParam(programMenu.getParam("Body"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+
+                Param activeParam = wdg.activeParam();
+                Param titleParam = wdg.getParam("KeyTitle");
+
+                string paramTitle = titleParam.Text;
+
+                if (titleParam.Text == "PRESET NAME")
+                {
+                    var currParam = radioParams.Find(p => p.Name == paramTitle);
+                    currParam.Parameters[currParam.CurrIndex] = activeParam.Text;
+                }
+
+                if (titleParam.Text == "SYSTEM PRESET")
+                {
+                    var currParam = radioParams.Find(p => p.Name == "PRESET NAME");
+                    currParam.Parameters[0] = activeParam.Text;
+                    oldPresetName = activeParam.Text;
+                }
+
+                if (titleParam.Text == "ENABLE")
+                {
+                    var presetNameParam = radioParams.Find(p => p.Name == "SYSTEM PRESET");
+                    presetNameParam.Parameters[presetNameParam.CurrIndex] = radioParams.Find(p => p.Name == "PRESET NAME").currParam();
+                    station.addPresetSystem(radioParams, oldPresetName);
+                }
+
+                if (titleParam.Text == "ENCRYPTION TYPE")
+                {
+                    var nextParam = radioParams.Find(p => p.Name == "ENCRYPTION KEY");
+                    nextParam.clear();
+                    nextParam.addParam("-------------------");
+                    KeyModule.KeyType type = KeyModule.stringToType(activeParam.Text);
+                    foreach (var key in station.Keys.Keys[type])
+                    {
+                        nextParam.addParam(key.KeyName);
+                    }
+                }
+
+                int nextIndex = radioParams.IndexOf(radioParams.Find(p => p.Name == paramTitle)) + 1;
+                if (nextIndex < radioParams.Count)
+                {
+                    titleParam.Text = radioParams[nextIndex].Name;
+                    activeParam.Text = radioParams[nextIndex].currParam();
+                }
+                else
+                {
+                    titleParam.Text = radioParams[0].Name;
+                    activeParam.Text = radioParams[0].currParam();
+                }
+
+                activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.ActiveFrom = 0;
+
+                if (titleParam.Text == "MODEM PRESET")
+                {
+                    programMenu.getParam("KeyTitleCont").IsVisible = true;
+                    modemPreset.clear();
+                    modemPreset.addParam("OFF");
+                    foreach (var modem in station.PresetModems)
+                    {
+                        modemPreset.addParam(modem.name);
+                    }
+                }
+                else
+                {
+                    programMenu.getParam("KeyTitleCont").IsVisible = false;
+                }
+            }));
+
+            programMenu.addActionToParam(programMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                wdg.showPreviousWidget();
+            }));
+
+            return programMenu;
+        }
+
+        static public Widget initProgramModeAleMenu(RadioStation station)
+        {
+
+            Widget optionMenu = new Widget(getNameMenu(MenuNames.ProgramModeAleMenu));
+            optionMenu.LineSize[0] = 5;
+            optionMenu.LineSize[1] = 8;
+            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[3] = 8;
+            optionMenu.addParam(new Param("Body", null, "", 1, 0));
+            optionMenu.addParam(new Param("Title", null, "PGM-MODE-ALE", 1, 0));
+            optionMenu.addParam(new Param("EmptyLine", null, " ", 2, 0));
+            optionMenu.addParam(new Param("Chan_group", null, "CHAN_GROUP", 3, 0));
+            optionMenu.addParam(new Param("Address", null, "ADDRESS", 3, 15));
+            optionMenu.addParam(new Param("Config", null, "CONFIG", 4, 0));
+            optionMenu.addParam(new Param("Lqa", null, "LQA", 4, 10));
+            optionMenu.addParam(new Param("Amd", null, "AMD", 4, 15));
+
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                var activeParam = wdg.activeParam();
+
+                if (activeParam == null)
+                {
+                    var param = wdg.getParam("Amd");
+                    wdg.deactiveParam();
+                    param.IsActive = true;
+                    return;
+                }
+
+                switch (activeParam.Name)
+                {
+                    case "Chan_group":
+                        {
+                            var param = wdg.getParam("Amd");
+                            wdg.deactiveParam();
+                            param.IsActive = true;
+                            break;
+                        }
+                    case "Address":
+                        {
+                            var param = wdg.getParam("Chan_group");
+                            wdg.deactiveParam();
+                            param.IsActive = true;
+                            break;
+                        }
+                    case "Config":
+                        {
+                            var param = wdg.getParam("Address");
+                            wdg.deactiveParam();
+                            param.IsActive = true;
+                            break;
+                        }
+                    case "Lqa":
+                        {
+                            var param = wdg.getParam("Config");
+                            wdg.deactiveParam();
+                            param.IsActive = true;
+                            break;
+                        }
+                    case "Amd":
+                        {
+                            var param = wdg.getParam("Lqa");
+                            wdg.deactiveParam();
+                            param.IsActive = true;
+                            break;
+                        }
+                }
+
+            }));
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("RIGTH", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+
+                var activeParam = wdg.activeParam();
+
+                if (activeParam == null)
+                {
+                    var param = wdg.getParam("Chan_group");
+                    wdg.deactiveParam();
+                    param.IsActive = true;
+                    return;
+                }
+
+                switch (activeParam.Name)
+                {
+                    case "Chan_group":
+                        {
+                            var param = wdg.getParam("Address");
+                            wdg.deactiveParam();
+                            param.IsActive = true;
+                            break;
+                        }
+                    case "Address":
+                        {
+                            var param = wdg.getParam("Config");
+                            wdg.deactiveParam();
+                            param.IsActive = true;
+                            break;
+                        }
+                    case "Config":
+                        {
+                            var param = wdg.getParam("Lqa");
+                            wdg.deactiveParam();
+                            param.IsActive = true;
+                            break;
+                        }
+                    case "Lqa":
+                        {
+                            var param = wdg.getParam("Amd");
+                            wdg.deactiveParam();
+                            param.IsActive = true;
+                            break;
+                        }
+                    case "Amd":
+                        {
+                            var param = wdg.getParam("Address");
+                            wdg.deactiveParam();
+                            param.IsActive = true;
+                            break;
+                        }
+                }
+            }));
+
+            optionMenu.addActionToParam(optionMenu.getParam("Amd"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+
+                var activeParam = wdg.activeParam();
+
+                if (activeParam == null || activeParam.Name != "Amd")
+                {
+                    return;
+                }
+
+                wdg.prepareToShowWidget(getNameMenu(MenuNames.ProgramModeAleAmdMenu));
+
+            }));
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                wdg.showPreviousWidget();
+            }));
+            return optionMenu;
+        }
+        static public Widget initProgramModeAleAmdMenu(RadioStation station)
+        {
+
+            Widget optionMenu = new Widget(getNameMenu(MenuNames.ProgramModeAleAmdMenu));
+            optionMenu.LineSize[0] = 5;
+            optionMenu.LineSize[1] = 8;
+            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[3] = 8;
+            optionMenu.addParam(new Param("Body", null, "", 1, 0));
+            optionMenu.addParam(new Param("Title", null, "PGM-MODE-ALE-AMD", 1, 0));
+            optionMenu.addParam(new Param("EmptyLine", null, " ", 2, 0));
+            optionMenu.addParam(new Param("Tx_msg", null, "TX_MSG", 3, 0));
+            optionMenu.addParam(new Param("Rx_msg", null, "RX_MSG", 3, 15));
+
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                var activeParam = wdg.activeParam();
+
+                if (activeParam == null)
+                {
+                    var param = wdg.getParam("Rx_msg");
+                    wdg.deactiveParam();
+                    param.IsActive = true;
+                    return;
+                }
+
+                switch (activeParam.Name)
+                {
+                    case "Tx_msg":
+                        {
+                            var param = wdg.getParam("Rx_msg");
+                            wdg.deactiveParam();
+                            param.IsActive = true;
+                            break;
+                        }
+                    case "Rx_msg":
+                        {
+                            var param = wdg.getParam("Tx_msg");
+                            wdg.deactiveParam();
+                            param.IsActive = true;
+                            break;
+                        }
+                }
+
+            }));
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("RIGTH", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+
+                var activeParam = wdg.activeParam();
+
+                if (activeParam == null)
+                {
+                    var param = wdg.getParam("Tx_msg");
+                    wdg.deactiveParam();
+                    param.IsActive = true;
+                    return;
+                }
+
+                switch (activeParam.Name)
+                {
+                    case "Tx_msg":
+                        {
+                            var param = wdg.getParam("Rx_msg");
+                            wdg.deactiveParam();
+                            param.IsActive = true;
+                            break;
+                        }
+                    case "Rx_msg":
+                        {
+                            var param = wdg.getParam("Tx_msg");
+                            wdg.deactiveParam();
+                            param.IsActive = true;
+                            break;
+                        }
+                }
+
+            }));
+
+            optionMenu.addActionToParam(optionMenu.getParam("Tx_msg"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+
+                var activeParam = wdg.activeParam();
+
+                if (activeParam == null || activeParam.Name != "Tx_msg")
+                {
+                    return;
+                }
+
+                wdg.prepareToShowWidget(getNameMenu(MenuNames.ProgramModeAleAmdTxMsgMenu));
+
+            }));
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                wdg.showPreviousWidget();
+            }));
+            return optionMenu;
+        }
+
+        public static Widget initProgramModeAleAmdTxMsgMenu(RadioStation station)
+        {
+            Widget optionMenu = new Widget(getNameMenu(MenuNames.ProgramModeAleAmdTxMsgMenu));
+
+            optionMenu.LineSize[0] = 5;
+            optionMenu.LineSize[1] = 8;
+            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[1] = 6;
+            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.addParam(new Param("Body", null, "", 1, 0));
+            optionMenu.addParam(new Param("Title", null, "PGM-MODE-ALE-AMD-TX_MSG", 1, 0));
+            optionMenu.addParam(new Param("SmsTitle", null, "TX_MESSAGE", 2, 7));
+            optionMenu.addParam(new Param("SmsValue", null, "EDIT", 3, 12));
+            optionMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 15));
+
+            optionMenu.getParam("SmsValue").IsActive = true;
+
+            WidgetTextParams smsFunctions = new WidgetTextParams("TX_MESSAGE");
+            smsFunctions.addParam("EDIT").addParam("REVIEW").addParam("DELETE");
+
+            List<WidgetTextParams> radioParams = new List<WidgetTextParams>();
+            radioParams.Add(smsFunctions);
+
+
+            optionMenu.addActionToParam(optionMenu.getParam("SmsValue"), new Button("DOWN", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                Param activeParam = wdg.activeParam();
+                Param titleParam = wdg.getParam("SmsTitle");
+
+                string paramTitle = titleParam.Text;
+
+                activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getPrevParam();
+                activeParam.ActiveTo = activeParam.Text.Length;
+            }));
+
+            optionMenu.addActionToParam(optionMenu.getParam("SmsValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                Param activeParam = wdg.activeParam();
+                Param titleParam = wdg.getParam("SmsTitle");
+
+                string paramTitle = titleParam.Text;
+
+                activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getNextParam();
+                activeParam.ActiveTo = activeParam.Text.Length;
+            }));
+
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                Param activeParam = wdg.activeParam();
+
+                switch (activeParam.Text)
+                {
+                    case "EDIT":
+                        {
+                            Form1.currObject.QueueWidget.add(initProgramModeAleAmdTxMsgSelectMenu(station, true, false, clr: () =>
+                            {
+                                Form1.currObject.QueueWidget.add(optionMenu);
+                                Form1.currObject.startShowWidgetQueue();
+                            }));
+                            Form1.currObject.startShowWidgetQueue();
+                            break;
+                        }
+                    case "DELETE":
+                        {
+                            Form1.currObject.QueueWidget.add(initProgramModeAleAmdTxMsgSelectMenu(station, false, true, clr: () =>
+                            {
+                                Form1.currObject.QueueWidget.add(optionMenu);
+                                Form1.currObject.startShowWidgetQueue();
+                            }));
+                            Form1.currObject.startShowWidgetQueue();
+                            break;
+                        }
+                }
+            }));
+
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                wdg.showPreviousWidget();
+            }));
+
+            return optionMenu;
+        }
+        public static Widget initProgramModeAleAmdTxMsgSelectMenu(RadioStation station, bool edit = false, bool remove = false, Action clr = null)
+        {
+            Widget optionMenu = new Widget("initProgramModeAleAmdTxMsgSelectMenu");
+
+            optionMenu.LineSize[0] = 5;
+            optionMenu.LineSize[1] = 8;
+            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[1] = 6;
+            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.addParam(new Param("Body", null, "", 1, 0));
+            optionMenu.addParam(new Param("Title", null, "PGM-MODE-ALE-AMD-TX_MSG", 1, 0));
+            optionMenu.addParam(new Param("TitleNumberMessage", null, "", 1, 25, () => {
+                var tnm = optionMenu.getParam("TitleNumberMessage");
+                tnm.Text = "EDIT " + station.TxMsgs.currMsg().number;
+            }));
+            optionMenu.addParam(new Param("SmsTitle", null, "TX MESSAGE:", 2, 7));
+            optionMenu.addParam(new Param("SmsValue", null, "", 3, 0, () => {
+                var smsVal = optionMenu.getParam("SmsValue");
+                int defLenghtEmptyMsg = txMsg.emptyMsg.Length;
+                var currMsg = station.TxMsgs.currMsg();
+                if (currMsg.msg.Length < defLenghtEmptyMsg)
+                {
+                    smsVal.Text = currMsg.msg;
+                } 
+                else
+                {
+                    smsVal.Text = currMsg.msg.Substring(0, defLenghtEmptyMsg - 1);
+                }
+            }));
+            optionMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL / ENT TO CONT", 4, 10));
+
+            optionMenu.getParam("SmsValue").IsActive = true;
+
+
+            optionMenu.addActionToParam(optionMenu.getParam("SmsValue"), new Button("DOWN", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                station.TxMsgs.nextMsg();
+            }));
+
+            optionMenu.addActionToParam(optionMenu.getParam("SmsValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                station.TxMsgs.prevMsg();
+            }));
+
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                Param activeParam = wdg.activeParam();
+                Action clrAction = () =>
+                {
+                    Form1.currObject.QueueWidget.add(optionMenu);
+                    Form1.currObject.startShowWidgetQueue();
+                };
+
+
+                if (edit)
+                {
+                    Widget editMessageView = enterMsg("PGM-MODE-ALE-AMD-TX_MSG-", "ENT TO SAVE - CLR TO EXIT", 
+                    clr: clrAction, 
+                    ent: (string newMsg) => {
+                        station.TxMsgs.currMsg().msg = newMsg;
+                        clrAction.Invoke();
+                    });
+
+                    Form1.currObject.QueueWidget.add(editMessageView);
+                    Form1.currObject.startShowWidgetQueue();
+                }
+
+                if (remove)
+                {
+                    Form1.currObject.QueueWidget.add(dialogMenu("PGM-MODE-ALE-AMD-TX_MSG-", "TX MESSAGE:", 
+                        clr: clrAction, 
+                        ifYes: () => {
+                            station.TxMsgs.currMsg().msg = txMsg.emptyMsg;
+                            clrAction.Invoke();
+                        }, 
+                        ifNo: () => {
+                            clrAction.Invoke();
+                        }));
+                    Form1.currObject.startShowWidgetQueue();
+                }
+            }));
+
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                clr?.Invoke();
+            }));
+
+            return optionMenu;
+        }
+
+        public static Widget initOptionAleTxMsgSendingMenu(RadioStation station, Action clr = null)
+        {
+            Widget optionMenu = new Widget("initOptionAleTxMsgSendingMenu");
+
+            optionMenu.LineSize[0] = 5;
+            optionMenu.LineSize[1] = 8;
+            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[1] = 6;
+            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.addParam(new Param("Body", null, "", 1, 0));
+            optionMenu.addParam(new Param("Title", null, "PGM-MODE-ALE-AMD-TX_MSG", 1, 0));
+            optionMenu.addParam(new Param("SmsTitle", null, "CALL TYPE", 2, 7));
+            optionMenu.addParam(new Param("SmsValue", null, "AUTOMATIC", 3, 12));
+            optionMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 15));
+
+            optionMenu.getParam("SmsValue").IsActive = true;
+
+            WidgetTextParams callTypeTP = new WidgetTextParams("CALL TYPE");
+            callTypeTP.addParam("AUTOMATIC").addParam("MANUAL");
+            WidgetTextParams addressTypeTP = new WidgetTextParams("ADDRESS TYPE");
+            addressTypeTP.addParam("INDIVIDUAL").addParam("ALL").addParam("ANY").addParam("GROUP").addParam("NET");
+            WidgetTextParams individualAddressTypeTP = new WidgetTextParams("INDIV ADDR");
+            individualAddressTypeTP.addParam("R2");
+
+            List<WidgetTextParams> radioParams = new List<WidgetTextParams>();
+            radioParams.Add(callTypeTP);
+            radioParams.Add(addressTypeTP);
+            radioParams.Add(individualAddressTypeTP);
+
+
+            optionMenu.addActionToParam(optionMenu.getParam("SmsValue"), new Button("DOWN", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                Param activeParam = wdg.activeParam();
+                Param titleParam = wdg.getParam("SmsTitle");
+
+                string paramTitle = titleParam.Text;
+
+                activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getPrevParam();
+                activeParam.ActiveTo = activeParam.Text.Length;
+            }));
+
+            optionMenu.addActionToParam(optionMenu.getParam("SmsValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                Param activeParam = wdg.activeParam();
+                Param titleParam = wdg.getParam("SmsTitle");
+
+                string paramTitle = titleParam.Text;
+
+                activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getNextParam();
+                activeParam.ActiveTo = activeParam.Text.Length;
+            }));
+
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                Param activeParam = wdg.activeParam();
+                Param titleP = wdg.getParam("SmsTitle");
+
+                int nextIndex = radioParams.IndexOf(radioParams.Find(p => p.Name == titleP.Text)) + 1;
+                if (nextIndex < radioParams.Count)
+                {
+                    titleP.Text = radioParams[nextIndex].Name;
+                    activeParam.Text = radioParams[nextIndex].currParam();
+                }
+                else
+                {
+                    titleP.Text = radioParams[0].Name;
+                    activeParam.Text = radioParams[0].currParam();
+                }
+
+                activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.ActiveFrom = 0;
+
+            }));
+
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                clr?.Invoke();
+            }));
+
+            return optionMenu;
         }
     }
 

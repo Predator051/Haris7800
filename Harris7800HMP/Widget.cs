@@ -64,6 +64,12 @@ namespace Harris7800HMP
         public Action UpdateFunction { get => updateFunction; set => updateFunction = value; }
         public bool IsVisible { get => isVisible; set => isVisible = value; }
 
+        public void setLocation(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
         public void update()
         {
             UpdateFunction?.Invoke();

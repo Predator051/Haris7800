@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Text;
+using System.IO;
 
 namespace Harris7800HMP
 {
@@ -25,6 +26,9 @@ namespace Harris7800HMP
         public static String keyNeed = "1379";
         public static String keyEntered = "";
         public static Form1 currObject;
+        FileInfo fileLesson;
+        public RichTextBox lessonsInfo = new RichTextBox();
+        Bitmap usbImage;
 
         public WidgetQueue QueueWidget
         {
@@ -45,7 +49,7 @@ namespace Harris7800HMP
             transitionTimer.Start();
         }
 
-        public Form1()
+        public Form1(FileInfo fLesson)
         {
             InitializeComponent();
             Form1.currObject = this;
@@ -54,19 +58,16 @@ namespace Harris7800HMP
             displayFonts.AddFontFile(@"fonts\pixelmix.ttf");
 
             radioStation = new RadioStation(switcher);
-            display = new Display(radioStation);
             currentWidget = WidgetInit.initDefaultWidgets(radioStation);
 
-            this.lbDisplay.Text = currentWidget.ToString();
             widgetTextToRichText(currentWidget);
             this.timer1.Interval = 500;
             this.timerAnimation.Interval = 1000;
-            ////Form1.currObject.QueueWidget.add(getTestInProgressMenu());
-            ////Form1.currObject.QueueWidget.add(getTestContrastMenu());
-            ////Form1.currObject.QueueWidget.add(getTestLightMenu());
-            ////Form1.currObject.QueueWidget.add(getTestInProgressMenu());
-            //currentWidget = WidgetInit.getTestLightMenu();
-            //widgetTextToRichText(currentWidget);
+            fileLesson = fLesson;
+
+            usbImage = Properties.Resources.usbJustConnector;
+            usbImage.MakeTransparent(usbImage.GetPixel(0, 0));
+            //this.pbUsb.Image = usbImage;
         }
 
         private void widgetTextToRichText(Widget currWidget)
@@ -138,49 +139,42 @@ namespace Harris7800HMP
         private void btVolPlus_Click(object sender, EventArgs e)
         {
             currentWidget.btnClick("VOLUME_PLUS", radioStation);
-            this.lbDisplay.Text = currentWidget.ToString();
             widgetTextToRichText(currentWidget);
         }
 
         private void btVolMinus_Click(object sender, EventArgs e)
         {
             currentWidget.btnClick("VOLUME_MINUS", radioStation);
-            this.lbDisplay.Text = currentWidget.ToString();
             widgetTextToRichText(currentWidget);
         }
 
         private void btClr_Click(object sender, EventArgs e)
         {
             currentWidget.btnClick("CLR", radioStation);
-            this.lbDisplay.Text = currentWidget.ToString();
             widgetTextToRichText(currentWidget);
         }
 
         private void btUpdate_Click(object sender, EventArgs e)
         {
             currentWidget.btnClick("UPDATE", radioStation);
-            this.lbDisplay.Text = currentWidget.ToString();
             widgetTextToRichText(currentWidget);
         }
 
         private void btOpt_Click(object sender, EventArgs e)
         {
             currentWidget.btnClick("OPT", radioStation);
-            this.lbDisplay.Text = currentWidget.ToString();
             widgetTextToRichText(currentWidget);
         }
 
         private void btSql_Click(object sender, EventArgs e)
         {
             currentWidget.btnClick("SQL", radioStation);
-            this.lbDisplay.Text = currentWidget.ToString();
             widgetTextToRichText(currentWidget);
         }
 
         private void btCall_Click(object sender, EventArgs e)
         {
             currentWidget.btnClick("CALL", radioStation);
-            this.lbDisplay.Text = currentWidget.ToString();
             widgetTextToRichText(currentWidget);
         }
 
@@ -188,7 +182,6 @@ namespace Harris7800HMP
         {
 
             currentWidget.btnClick("LT", radioStation);
-            this.lbDisplay.Text = currentWidget.ToString();
             widgetTextToRichText(currentWidget);
         }
 
@@ -196,42 +189,36 @@ namespace Harris7800HMP
         {
 
             currentWidget.btnClick("ZERO", radioStation);
-            this.lbDisplay.Text = currentWidget.ToString();
             widgetTextToRichText(currentWidget);
         }
 
         private void btPgm_Click(object sender, EventArgs e)
         {
             currentWidget.btnClick("PGM", radioStation);
-            this.lbDisplay.Text = currentWidget.ToString();
             widgetTextToRichText(currentWidget);
         }
 
         private void btLeft_Click(object sender, EventArgs e)
         {
             currentWidget.btnClick("LEFT", radioStation);
-            this.lbDisplay.Text = currentWidget.ToString();
             widgetTextToRichText(currentWidget);
         }
 
         private void btRigth_Click(object sender, EventArgs e)
         {
             currentWidget.btnClick("RIGTH", radioStation);
-            this.lbDisplay.Text = currentWidget.ToString();
             widgetTextToRichText(currentWidget);
         }
 
         private void btDown_Click(object sender, EventArgs e)
         {
             currentWidget.btnClick("DOWN", radioStation);
-            this.lbDisplay.Text = currentWidget.ToString();
             widgetTextToRichText(currentWidget);
         }
 
         private void btUp_Click(object sender, EventArgs e)
         {
             currentWidget.btnClick("UP", radioStation);
-            this.lbDisplay.Text = currentWidget.ToString();
             widgetTextToRichText(currentWidget);
         }
 
@@ -242,28 +229,24 @@ namespace Harris7800HMP
         //    radioStation.nextMode();
         //    this.lbDisplay.Text = display.ToString();
             currentWidget.btnClick("MODE", radioStation);
-            this.lbDisplay.Text = currentWidget.ToString();
             widgetTextToRichText(currentWidget);
         }
 
         private void btPrePlus_Click(object sender, EventArgs e)
         {
             currentWidget.btnClick("PRE_PLUS", radioStation);
-            this.lbDisplay.Text = currentWidget.ToString();
             widgetTextToRichText(currentWidget);
         }
 
         private void btPreMinus_Click(object sender, EventArgs e)
         {
             currentWidget.btnClick("PRE_MINUS", radioStation);
-            this.lbDisplay.Text = currentWidget.ToString();
             widgetTextToRichText(currentWidget);
         }
 
         private void btEnter_Click(object sender, EventArgs e)
         {
             currentWidget.btnClick("ENT", radioStation);
-            this.lbDisplay.Text = currentWidget.ToString();
             widgetTextToRichText(currentWidget);
         }
 
@@ -277,7 +260,6 @@ namespace Harris7800HMP
             radioStation.nextState();
             PictureBox pBox = (PictureBox)sender;
             pBox.Image = switcher.getImage();
-            this.lbDisplay.Text = display.ToString();
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -349,6 +331,29 @@ namespace Harris7800HMP
 
             currentWidget = next;
             this.widgetTextToRichText(next);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            this.Owner.Visible = false;
+            LessonsInfo lInfo = new LessonsInfo(fileLesson);
+            lInfo.Show(this);
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.Owner.Visible = true;
+
+            switcher.initToOff();
+
+            WidgetInit.widgetContainer.Clear();
+            radioStation = null;
+            currentWidget = null;
+        }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.DrawImage(usbImage, 700, 284);
         }
     }
 }

@@ -108,6 +108,12 @@ namespace Harris7800HMP
         {
             return a.Name != b.Name;
         }
+    
+        public void clear()
+        {
+            currIndex = 0;
+            parameters.Clear();
+        }
     }
 
     public class SmsMenu
@@ -201,6 +207,7 @@ namespace Harris7800HMP
                     {
                         return KeyType.Aes256;
                     }
+                case "CITADEL":
                 case "CITADEL I (MK-128)":
                     {
                         return KeyType.Citadel1;
@@ -310,6 +317,196 @@ namespace Harris7800HMP
             StationPresetModemModule module = new StationPresetModemModule();
             module.parseFromListWidgetTextParams(textParams);
             return module;
+        }
+    }
+
+    public class StationPresetSystem
+    {
+        public string name;
+        public RadioStationMode radioMode;
+        public string channelNumber;
+        public StationPresetModemModule modemPreset;
+        public KeyValuePair<KeyModule.KeyType, KeyModule.KeyValue> key;
+        public string ptVoiceMode;
+        public string ctVoiceMode;
+        public string enable;
+    }
+
+    public class StationPresetSystemContainer
+    {
+        List<StationPresetSystem> systemPresets = new List<StationPresetSystem>();
+        int currIndex = 0;
+
+        public StationPresetSystemContainer ()
+        {
+            StationPresetSystem def = new StationPresetSystem();
+
+            def.channelNumber = "001";
+            def.enable = "ON";
+            def.key = new KeyValuePair<KeyModule.KeyType, KeyModule.KeyValue>(KeyModule.KeyType.None, null);
+            def.ctVoiceMode = "CLR";
+            def.modemPreset = null;
+            def.radioMode = RadioStationMode.FIX;
+        }
+
+        public List<StationPresetSystem> SystemPresets { get => systemPresets; set => systemPresets = value; }
+
+        public void addPresetSystem(StationPresetSystem newPreset)
+        {
+            SystemPresets.Add(newPreset);
+        } 
+
+        public StationPresetSystem nextPreset()
+        {
+            currIndex++;
+            if (currIndex > SystemPresets.Count - 1)
+            {
+                currIndex = 0;
+            }
+
+            return SystemPresets[currIndex];
+        }
+
+        public StationPresetSystem prevPreset()
+        {
+            currIndex--;
+            if (currIndex < 0)
+            {
+                currIndex = SystemPresets.Count - 1;
+            }
+
+            return SystemPresets[currIndex];
+        }
+    }
+
+    public class txMsg
+    {
+        public static string emptyMsg = "------------------------";
+        public string msg;
+        public int number;
+        public bool isDefault()
+        {
+            return msg == emptyMsg;
+        }
+    }
+
+    public class txMsgContainer
+    {
+        List<txMsg> msgs;
+        int currIndex = 0;
+
+        public bool isEmpty()
+        {
+            return !msgs.Any((txMsg msg)=> {
+                return msg.msg != txMsg.emptyMsg;
+            });
+        }
+
+        public txMsgContainer()
+        {
+            msgs = new List<txMsg>();
+
+            for (int i = 0; i <= 9; i++)
+            {
+                txMsg tx = new txMsg();
+                tx.msg = txMsg.emptyMsg;
+                tx.number = i + 1;
+                msgs.Add(tx);
+            }
+        }
+
+        public List<txMsg> Msgs { get => msgs; set => msgs = value; }
+
+        public txMsg currMsg()
+        {
+            if (msgs.Count == 0)
+            {
+                return null;
+            }
+
+            return msgs[currIndex];
+        }
+
+        public txMsg nextNDMsg()
+        {
+            currIndex++;
+            bool found = false;
+
+            for (; currIndex < msgs.Count; currIndex++)
+            {
+                if (msgs[currIndex].isDefault())
+                {
+                    continue;
+                }
+                found = true;
+                break;
+            }
+
+            if (!found)
+            {
+                currIndex = 0;
+                for (; currIndex < msgs.Count; currIndex++)
+                {
+                    if (msgs[currIndex].isDefault())
+                    {
+                        continue;
+                    }
+                    break;
+                }
+            }
+
+            return msgs[currIndex];
+        }
+
+        public txMsg prevNDMsg()
+        {
+            currIndex--;
+            bool found = false;
+            for (; currIndex >= 0; currIndex--)
+            {
+                if (msgs[currIndex].isDefault())
+                {
+                    continue;
+                }
+                found = true;
+                break;
+            }
+
+            if (!found)
+            {
+                currIndex = msgs.Count - 1;
+                for (; currIndex >= 0; currIndex--)
+                {
+                    if (msgs[currIndex].isDefault())
+                    {
+                        continue;
+                    }
+                    break;
+                }
+            }
+
+            return msgs[currIndex];
+        }
+        public txMsg nextMsg()
+        {
+            currIndex++;
+            if (currIndex > msgs.Count - 1)
+            {
+                currIndex = 0;
+            }
+
+            return msgs[currIndex];
+        }
+
+        public txMsg prevMsg()
+        {
+            currIndex--;
+            if (currIndex < 0)
+            {
+                currIndex = msgs.Count - 1;
+            }
+
+            return msgs[currIndex];
         }
     }
 }
