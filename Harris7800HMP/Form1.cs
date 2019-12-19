@@ -30,6 +30,8 @@ namespace Harris7800HMP
         public RichTextBox lessonsInfo = new RichTextBox();
         Bitmap usbImage;
 
+        RadioModules externalModules = new RadioModules();
+
         public WidgetQueue QueueWidget
         {
             get => this.queueWidget;
@@ -65,9 +67,6 @@ namespace Harris7800HMP
             this.timerAnimation.Interval = 1000;
             fileLesson = fLesson;
 
-            usbImage = Properties.Resources.usbJustConnector;
-            usbImage.MakeTransparent(usbImage.GetPixel(0, 0));
-            //this.pbUsb.Image = usbImage;
         }
 
         private void widgetTextToRichText(Widget currWidget)
@@ -353,7 +352,74 @@ namespace Harris7800HMP
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.DrawImage(usbImage, 700, 284);
+            if (this.radioStation.connectedCoupler)
+            {
+                var usb = externalModules.modulesImage[RadioModules.ModuleType.Coupler];
+                e.Graphics.DrawImage(usb.Item1, usb.Item2.x, usb.Item2.y);
+            }
+
+            if (this.radioStation.connectedUsb)
+            {
+                var usb = externalModules.modulesImage[RadioModules.ModuleType.Usb];
+                e.Graphics.DrawImage((Bitmap)usb.Item1, usb.Item2.x, usb.Item2.y);
+            } 
+
+            if (this.radioStation.connectedHandset)
+            {
+                var usb = externalModules.modulesImage[RadioModules.ModuleType.Handset];
+                e.Graphics.DrawImage(usb.Item1, usb.Item2.x, usb.Item2.y);
+            }
+        }
+
+        private void btnCoupler_Click(object sender, EventArgs e)
+        {
+            if (this.radioStation.connectedCoupler)
+            {
+                this.radioStation.connectedCoupler = false;
+                this.BackgroundImage = Properties.Resources.background_keys;
+            } else
+            {
+                this.radioStation.connectedCoupler = true;
+                var coupler = externalModules.modulesImage[RadioModules.ModuleType.Coupler];
+                this.CreateGraphics().DrawImage((Bitmap)coupler.Item1, coupler.Item2.x, coupler.Item2.y);
+            }
+            this.Update();
+        }
+
+        private void btnHandset_Click(object sender, EventArgs e)
+        {
+            if (this.radioStation.connectedHandset)
+            {
+                this.radioStation.connectedHandset = false;
+                this.BackgroundImage = Properties.Resources.background_keys;
+            }
+            else
+            {
+                this.radioStation.connectedHandset = true;
+                var handset = externalModules.modulesImage[RadioModules.ModuleType.Handset];
+                this.CreateGraphics().DrawImage((Bitmap)handset.Item1, handset.Item2.x, handset.Item2.y);
+            }
+            this.Update();
+        }
+
+        private void btnUsb_Click(object sender, EventArgs e)
+        {
+            if (this.radioStation.connectedUsb)
+            {
+                this.radioStation.connectedUsb = false;
+                this.BackgroundImage = Properties.Resources.background_keys;
+            }
+            else
+            {
+                this.radioStation.connectedUsb = true;
+                var usb = externalModules.modulesImage[RadioModules.ModuleType.Usb];
+                this.CreateGraphics().DrawImage((Bitmap)usb.Item1, usb.Item2.x, usb.Item2.y);
+            }
+            this.Update();
+        }
+
+        private void btnUsb_MouseUp(object sender, MouseEventArgs e)
+        {
         }
     }
 }

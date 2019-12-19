@@ -182,6 +182,12 @@ namespace Harris7800HMP
         static public Widget initMainMenu(RadioStation station)
         {
             Widget mainMenu = new Widget(Enum.GetName(typeof(MenuNames), MenuNames.MainMenu));
+            mainMenu.LineSize[0] = 6;
+            mainMenu.LineSize[1] = 8;
+            mainMenu.LineSize[2] = 8;
+            mainMenu.LineSize[3] = 6;
+            mainMenu.LineCharOffset[1] = 6;
+            mainMenu.LineCharOffset[2] = 4;
 
             mainMenu.addParam(new Param("Body", null, "", 1, 0))
                 .addModesForParam("Body", new List<RadioStationMode> { RadioStationMode.ThreeG, RadioStationMode.ALE, RadioStationMode.HOP });
@@ -205,12 +211,12 @@ namespace Harris7800HMP
                 }))
                 .addModesForParam("SwitchState", new List<RadioStationMode> { RadioStationMode.ThreeG, RadioStationMode.ALE, RadioStationMode.HOP });
             mainMenu
-                .addParam(new Param("SwitchStateChan", null, "S 3 6 9 *", 1, 28))
+                .addParam(new Param("SwitchStateChan", null, "S 3 6 9 *", 1, 32))
                 .addModesForParam("SwitchStateChan", new List<RadioStationMode> { RadioStationMode.ThreeG, RadioStationMode.ALE, RadioStationMode.HOP });
 
             mainMenu.addParam(new Param("Manual", null, "MANUAL", 2, 0))
                 .addModesForParam("Manual", new List<RadioStationMode> { RadioStationMode.ALE, RadioStationMode.HOP });
-            mainMenu.addParam(new Param("UpdateSignal", null, "⟲▮▮▮▯", 2, 32))
+            mainMenu.addParam(new Param("UpdateSignal", null, "⟲▮▮▮▯", 2, 23))
                 .addModesForParam("UpdateSignal", new List<RadioStationMode> { RadioStationMode.ALE, RadioStationMode.HOP });
 
             mainMenu
@@ -223,18 +229,18 @@ namespace Harris7800HMP
                 .addParam(new Param("VoiceValue", (string text, Param cParam) =>
             {
                 cParam.Text = text;
-            }, "CLR", 3, 14))
+            }, "CLR", 3, 9))
                 .addModesForParam("VoiceValue", new List<RadioStationMode> { RadioStationMode.ALE, RadioStationMode.HOP }); ;
             mainMenu
-                .addParam(new Param("KeyValue", null, "▬▬▬▬▬", 3, 22))
+                .addParam(new Param("KeyValue", null, "▬▬▬▬▬", 3, 15))
                 .addModesForParam("KeyValue", new List<RadioStationMode> { RadioStationMode.ALE, RadioStationMode.HOP }); ;
             mainMenu
                 .addParam(new Param("ChanValue", (string text, Param cParam) =>
             {
-                cParam.Text = cParam.Text.Remove(cParam.ActiveFrom, cParam.ActiveTo);
-                cParam.Text = cParam.Text.Insert(cParam.ActiveFrom, text);
+                cParam.text = cParam.Text.Remove(cParam.ActiveFrom, cParam.ActiveTo);
+                cParam.text = cParam.Text.Insert(cParam.ActiveFrom, text);
 
-            }, "003", 3, 32))
+            }, "003", 3, 23))
                 .addModesForParam("ChanValue", new List<RadioStationMode> { RadioStationMode.ALE, RadioStationMode.HOP }); ;
 
             mainMenu.addParam(new Param("Data", null, "DATA", 4, 0))
@@ -243,7 +249,7 @@ namespace Harris7800HMP
                 .addModesForParam("Voice", new List<RadioStationMode> { RadioStationMode.ALE, RadioStationMode.HOP }); ;
             mainMenu.addParam(new Param("Key", null, "KEY", 4, 24))
                 .addModesForParam("Key", new List<RadioStationMode> { RadioStationMode.ALE, RadioStationMode.HOP }); ;
-            mainMenu.addParam(new Param("Chan", null, "CHAN", 4, 33))
+            mainMenu.addParam(new Param("Chan", null, "CHAN", 4, 35))
                 .addModesForParam("Chan", new List<RadioStationMode> { RadioStationMode.ALE, RadioStationMode.HOP }); ;
 
             mainMenu.addActionToParam(mainMenu.getParam("SQ"), new Button("SQL", (Button btn, RadioStation rs, Widget wdg) =>
@@ -772,15 +778,6 @@ namespace Harris7800HMP
 
                 mainMenu.invisibleAllParams();
                 mainMenu.visibleParamsByNode(station.Mode);
-
-                if (station.Mode == RadioStationMode.ThreeG)
-                {
-                    mainMenu.LineSize[1] = 8;
-                }
-                if (station.Mode == RadioStationMode.FIX)
-                {
-                    mainMenu.LineSize[1] = 6;
-                }
             }));
 
             return mainMenu;
@@ -790,17 +787,19 @@ namespace Harris7800HMP
             Widget programMenu = new Widget(getNameMenu(MenuNames.ProgramMenu));
             programMenu.LineSize[0] = 5;
             programMenu.LineSize[1] = 5;
-            programMenu.LineSize[2] = 8;
-            programMenu.LineSize[3] = 8;
+            programMenu.LineSize[2] = 9;
+            programMenu.LineSize[3] = 9;
+            programMenu.LineCharOffset[1] = 6;
+            programMenu.LineCharOffset[2] = 6;
 
             programMenu.addParam(new Param("Body", null, "", 1, 0));
             programMenu.addParam(new Param("Title", null, "PGM", 1, 0));
             programMenu.addParam(new Param("EmptyLine", null, "             ", 2, 0));
             programMenu.addParam(new Param("Comsec", null, "COMSEC", 3, 0));
-            programMenu.addParam(new Param("Config", null, "CONFIG", 3, 9));
-            programMenu.addParam(new Param("Mode", null, "MODE", 3, 18));
+            programMenu.addParam(new Param("Config", null, "CONFIG", 3, 13));
+            programMenu.addParam(new Param("Mode", null, "MODE", 3, 22));
             programMenu.addParam(new Param("Maintenance", null, "MAINTENANCE", 4, 0));
-            programMenu.addParam(new Param("NextPage", null, "->", 4, 20));
+            programMenu.addParam(new Param("NextPage", null, "->", 4, 24));
             programMenu.getParam("Comsec").IsActive = true;
             programMenu.addActionToParam(programMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
             {
@@ -928,23 +927,24 @@ namespace Harris7800HMP
             transition.LineSize[2] = 8;
             transition.LineSize[3] = 8;
             transition.addParam(new Param("Body", null, "", 1, 0));
-            transition.addParam(new Param("ActionEnter", null, "** ENTERING **", 2, 8));
-            transition.addParam(new Param("Title", null, "PROGRAM MENU", 3, 8));
-            transition.addParam(new Param("Description", null, "...WAIT...", 4, 11));
+            transition.addParam(new Param("ActionEnter", null, "** ENTERING **", 2, 10));
+            transition.addParam(new Param("Title", null, "PROGRAM MENU", 3, 10));
+            transition.addParam(new Param("Description", null, "...WAIT...", 4, 13));
             return transition;
         }
         static public Widget initProgramMenu2(RadioStation station)
         {
             Widget programMenu = new Widget(getNameMenu(MenuNames.ProgramMenu2));
             programMenu.LineSize[0] = 5;
-            programMenu.LineSize[1] = 8;
-            programMenu.LineSize[2] = 8;
-            programMenu.LineSize[3] = 8;
+            programMenu.LineSize[1] = 9;
+            programMenu.LineSize[2] = 9;
+            programMenu.LineSize[3] = 9;
             programMenu.addParam(new Param("Body", null, "", 1, 0));
             programMenu.addParam(new Param("Title", null, "PGM", 1, 0));
-            programMenu.addParam(new Param("PreviousPage", null, "<-", 2, 0));
-            programMenu.addParam(new Param("Install", null, "INSTALL", 2, 4));
-            programMenu.addParam(new Param("Sched", null, "SCHED", 2, 15));
+            programMenu.addParam(new Param("EmptyLine", null, "", 2, 0));
+            programMenu.addParam(new Param("PreviousPage", null, "<-", 3, 0));
+            programMenu.addParam(new Param("Install", null, "INSTALL", 3, 4));
+            programMenu.addParam(new Param("Sched", null, "SCHED", 3, 15));
 
             programMenu.addActionToParam(programMenu.getParam("Body"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
             {
@@ -1013,9 +1013,9 @@ namespace Harris7800HMP
         {
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionMenu));
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
-            optionMenu.LineSize[3] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
+            optionMenu.LineSize[3] = 9;
             optionMenu
                 .addParam(new Param("Body", null, "", 1, 0))
                 .addModesForParam("Body", new List<RadioStationMode> { RadioStationMode.ThreeG, RadioStationMode.ALE, RadioStationMode.HOP });
@@ -1248,9 +1248,9 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionMenu2));
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
-            optionMenu.LineSize[3] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
+            optionMenu.LineSize[3] = 9;
             optionMenu.addParam(new Param("Body", null, "", 1, 0))
                 .addModesForParam("Body", new List<RadioStationMode> { RadioStationMode.ThreeG, RadioStationMode.ALE, RadioStationMode.HOP });
             optionMenu.addParam(new Param("Title", null, "OPTIONS", 1, 0))
@@ -1410,9 +1410,9 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionMenu2));
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
-            optionMenu.LineSize[3] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
+            optionMenu.LineSize[3] = 9;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "OPTIONS-TEST", 1, 0));
             optionMenu.addParam(new Param("EmptyLine", null, " ", 2, 0));
@@ -1590,16 +1590,16 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionMenuRadio));
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
             optionMenu.LineCharOffset[1] = 6;
-            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.LineCharOffset[2] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "OPTI0NS-RADIO", 1, 0));
             optionMenu.addParam(new Param("RadioOptionsTitle", null, "TX POWER LEVEL", 2, 7));
             optionMenu.addParam(new Param("RadioOptionsValue", null, "LOW", 3, 12));
-            optionMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 15));
+            optionMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 17));
 
             optionMenu.getParam("RadioOptionsValue").IsActive = true;
 
@@ -1673,21 +1673,26 @@ namespace Harris7800HMP
                     {
                         bool res = activeParam.Text == "ON";
                         rs.KeyBoardLock = res;
+                        if(res)
+                        {
+                            wdg.prepareToShowWidget(getNameMenu(MenuNames.KeyboardLock));
+                            wdg.getAvailableWidget(getNameMenu(MenuNames.KeyboardLock)).ComeFrom = null;
+
+                            Form1.timerAction = () =>
+                            {
+                                Widget trans = wdg.getAvailableWidget(getNameMenu(MenuNames.KeyboardLock));
+                                trans.prepareToShowWidget(getNameMenu(MenuNames.MainMenu));
+                                trans.getAvailableWidget(getNameMenu(MenuNames.MainMenu));
+                            };
+                            Form1.startTimer();
+                            return;
+                        } 
+                        else
+                        {
+                            wdg.showPreviousWidget();
+                        }
                     }
-
-                    wdg.prepareToShowWidget(getNameMenu(MenuNames.KeyboardLock));
-                    wdg.getAvailableWidget(getNameMenu(MenuNames.KeyboardLock)).ComeFrom = null;
-
-                    Form1.timerAction = () =>
-                    {
-                        Widget trans = wdg.getAvailableWidget(getNameMenu(MenuNames.KeyboardLock));
-                        trans.prepareToShowWidget(getNameMenu(MenuNames.MainMenu));
-                        trans.getAvailableWidget(getNameMenu(MenuNames.MainMenu));
-                    };
-                    Form1.startTimer();
                 }
-
-
             }));
 
             return optionMenu;
@@ -1735,14 +1740,18 @@ namespace Harris7800HMP
         {
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionGpsTodMenu));
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
-            optionMenu.LineSize[3] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
+            optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
+            optionMenu.LineCharOffset[1] = 6;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "OPTIONS", 1, 0));
-            optionMenu.addParam(new Param("GpsTitle", null, "GPS STATUS", 2, 0));
-            optionMenu.addParam(new Param("GpsValue", null, "TRACKING", 3, 0));
-            optionMenu.addParam(new Param("Info", null, "PRESS ↑ OR ↓ TO SCROLL", 4, 0));
+            optionMenu.addParam(new Param("GpsTitle", null, "GPS STATUS", 2, 9));
+            optionMenu.addParam(new Param("GpsValue", null, "TRACKING", 3, 10));
+            optionMenu.addParam(new Param("Info", null, "PRESS ↑ OR ↓ TO SCROLL", 4, 17));
 
 
             optionMenu.getParam("GpsValue").IsActive = true;
@@ -1785,6 +1794,11 @@ namespace Harris7800HMP
                 activeParam.ActiveTo = activeParam.Text.Length;
             }));
 
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                wdg.showPreviousWidget();
+            }));
+
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
             {
                 Param activeParam = wdg.activeParam();
@@ -1814,16 +1828,18 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionMenuRadio));
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
             optionMenu.LineCharOffset[1] = 6;
-            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "OPTI0NS-RADIO", 1, 0));
             optionMenu.addParam(new Param("ScanTitle", null, "ENABLE SSB SCAN", 2, 7));
             optionMenu.addParam(new Param("ScanValue", null, "ON", 3, 12));
-            optionMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 15));
+            optionMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 18));
 
             optionMenu.getParam("ScanValue").IsActive = true;
 
@@ -1878,6 +1894,11 @@ namespace Harris7800HMP
 
             }));
 
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                wdg.showPreviousWidget();
+            }));
+
             return optionMenu;
         }
 
@@ -1885,17 +1906,20 @@ namespace Harris7800HMP
         {
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionExtAccMenu));
 
+
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
             optionMenu.LineCharOffset[1] = 6;
-            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "OPTI0NS-RADIO", 1, 0));
-            optionMenu.addParam(new Param("ExtTitle", null, "EXTERNAL ADAPTER", 2, 7));
-            optionMenu.addParam(new Param("ExtValue", null, "NOT DETECTED", 3, 12));
-            optionMenu.addParam(new Param("Info", null, "PRESS ENT TO CONT", 4, 15));
+            optionMenu.addParam(new Param("ExtTitle", null, "EXTERNAL ADAPTER", 2, 6));
+            optionMenu.addParam(new Param("ExtValue", null, "NOT DETECTED", 3, 8));
+            optionMenu.addParam(new Param("Info", null, "PRESS ENT TO CONT", 4, 18));
 
             optionMenu.getParam("ExtValue").IsActive = true;
 
@@ -1959,6 +1983,10 @@ namespace Harris7800HMP
 
             }));
 
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                wdg.showPreviousWidget();
+            }));
             return optionMenu;
         }
 
@@ -1967,16 +1995,18 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionTestBitMenu));
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
             optionMenu.LineCharOffset[1] = 6;
-            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "OPTI0NS-RADIO", 1, 0));
             optionMenu.addParam(new Param("TestTitle", null, "BUILT-IN-TEST", 2, 7));
-            optionMenu.addParam(new Param("TestValue", null, "SYSTEM", 3, 12));
-            optionMenu.addParam(new Param("Info", null, "↑↓ TO SCROLL - ENT TO EXECUTE", 4, 5));
+            optionMenu.addParam(new Param("TestValue", null, "SYSTEM", 3, 10));
+            optionMenu.addParam(new Param("Info", null, "↑↓ TO SCROLL - ENT TO EXECUTE", 4, 10));
 
             optionMenu.getParam("TestValue").IsActive = true;
 
@@ -2112,15 +2142,17 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget("TestInProgressMenu");
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
             optionMenu.LineCharOffset[1] = 6;
-            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "TESTING", 1, 0));
-            optionMenu.addParam(new Param("TestTitle", null, "*** TEST ***", 2, 10));
-            optionMenu.addParam(new Param("TestValue", null, "IN PROGRESS", 3, 10));
+            optionMenu.addParam(new Param("TestTitle", null, "*** TEST ***", 2, 9));
+            optionMenu.addParam(new Param("TestValue", null, "IN PROGRESS", 3, 8));
             optionMenu.addParam(new Param("Info", null, "...WAIT...", 4, 23));
 
             return optionMenu;
@@ -2130,35 +2162,38 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget("TestContrastMenu");
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
             optionMenu.LineCharOffset[0] = 6;
-            optionMenu.LineCharOffset[1] = 3;
-            optionMenu.LineCharOffset[2] = 3;
+            optionMenu.LineCharOffset[1] = 6;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "TESTING", 1, 0));
-            optionMenu.addParam(new Param("TestTitle", null, "CONTRAST TEST", 2, 8));
+            optionMenu.addParam(new Param("TestTitle", null, "CONTRAST TEST", 2, 7));
             optionMenu.addParam(new Param("TestValue", null, "", 3, 12));
-            optionMenu.addParam(new Param("Info", null, "...WAIT...", 4, 21));
+            optionMenu.addParam(new Param("Info", null, "...WAIT...", 4, 23));
 
             return optionMenu;
         }
         static public Widget getTestLightMenu()
         {
-            Widget optionMenu = new Widget("TestContrastMenu");
+            Widget optionMenu = new Widget("TestLightMenu");
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
             optionMenu.LineCharOffset[1] = 6;
-            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "TESTING", 1, 0));
-            optionMenu.addParam(new Param("TestTitle", null, "LIGHT TEST", 2, 10));
+            optionMenu.addParam(new Param("TestTitle", null, "LIGHT TEST", 2, 9));
             optionMenu.addParam(new Param("TestValue", null, "", 3, 12));
-            optionMenu.addParam(new Param("Info", null, "...WAIT...", 4, 22));
+            optionMenu.addParam(new Param("Info", null, "...WAIT...", 4, 23));
 
             return optionMenu;
         }
@@ -2167,16 +2202,18 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget("getTestPassedMenu");
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
             optionMenu.LineCharOffset[1] = 6;
-            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "TESTING", 1, 0));
-            optionMenu.addParam(new Param("TestTitle", null, "*** TEST ***", 2, 10));
-            optionMenu.addParam(new Param("TestValue", null, "PASSED", 3, 10));
-            optionMenu.addParam(new Param("Info", null, "PRESS CLR/ENT TO EXIT", 4, 15));
+            optionMenu.addParam(new Param("TestTitle", null, "*** TEST ***", 2, 9));
+            optionMenu.addParam(new Param("TestValue", null, "PASSED", 3, 11));
+            optionMenu.addParam(new Param("Info", null, "PRESS CLR/ENT TO EXIT", 4, 17));
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("ENT", (Button btn, RadioStation st, Widget wdg) =>
             {
                 WidgetInit.widgetContainer[getNameMenu(MenuNames.MainMenu)].MoveTo = null;
@@ -2254,7 +2291,7 @@ namespace Harris7800HMP
         }
         static public Widget getExtraMenu()
         {
-            Widget optionMenu = new Widget("getPrepostMenu");
+            Widget optionMenu = new Widget("getExtraMenu");
 
             optionMenu.LineSize[0] = 5;
             optionMenu.LineSize[1] = 8;
@@ -2287,25 +2324,27 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionTestBatteryMenu));
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
             optionMenu.LineCharOffset[1] = 6;
-            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "OPTI0NS-RADIO", 1, 0));
-            optionMenu.addParam(new Param("BatteryTitle", null, "BATT: RECHARGEABLE", 2, 0));
-            optionMenu.addParam(new Param("BatteryValue", null, "VOLTAGE:29.7 NOMINAL", 3, 0));
+            optionMenu.addParam(new Param("BatteryTitle", null, "BATT:          RECHARGEABLE", 2, 0));
+            optionMenu.addParam(new Param("BatteryValue", null, "VOLTAGE:       29.7 NOMINAL", 3, 0));
             optionMenu.addParam(new Param("Info", null, "PRESS ENT TO CONT", 4, 15));
 
             optionMenu.getParam("BatteryValue").IsActive = true;
 
-            WidgetTextParams paramFirst = new WidgetTextParams("BATT: RECHARGEABLE");
-            paramFirst.addParam("VOLTAGE:29.7 NOMINAL");
-            WidgetTextParams paramSecond = new WidgetTextParams("HUB VOLTAGE: 3.62 V");
-            paramSecond.addParam("HUB STATUS: NOMINAL");
-            WidgetTextParams paramFMSquelch = new WidgetTextParams("HUB CAPACITY EST");
-            paramFMSquelch.addParam("DAYS REMAINING: 349");
+            WidgetTextParams paramFirst = new WidgetTextParams("BATT:          RECHARGEABLE");
+            paramFirst.addParam("VOLTAGE:       29.7 NOMINAL");
+            WidgetTextParams paramSecond = new WidgetTextParams("HUB VOLTAGE:      3.62 V");
+            paramSecond.addParam("HUB STATUS:       NOMINAL");
+            WidgetTextParams paramFMSquelch = new WidgetTextParams("      HUB CAPACITY EST");
+            paramFMSquelch.addParam("     DAYS REMAINING:    349");
 
             List<WidgetTextParams> radioParams = new List<WidgetTextParams>();
             radioParams.Add(paramFirst);
@@ -2356,7 +2395,10 @@ namespace Harris7800HMP
 
 
             }));
-
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation st, Widget wdg) =>
+            {
+                wdg.showPreviousWidget();
+            }));
             return optionMenu;
         }
 
@@ -2365,16 +2407,18 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionTestTempMenu));
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
             optionMenu.LineCharOffset[1] = 6;
-            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "TESTING-TEMP", 1, 0));
-            optionMenu.addParam(new Param("TestTitle", null, "DIG BD TEMP: 42.0 C", 2, 10));
-            optionMenu.addParam(new Param("TestValue", null, "PA TEMP: 35.6 C", 3, 10));
-            optionMenu.addParam(new Param("Info", null, "ENT TO REFRESH/CLR TO EXIT", 4, 10));
+            optionMenu.addParam(new Param("TestTitle", null, "DIG BD TEMP: 42.0 C", 2, 5));
+            optionMenu.addParam(new Param("TestValue", null, "PA TEMP: 35.6 C", 3, 7));
+            optionMenu.addParam(new Param("Info", null, "ENT TO REFRESH/CLR TO EXIT", 4, 13));
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation st, Widget wdg) =>
             {
@@ -2392,11 +2436,13 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionTestSpecialMenu));
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
             optionMenu.LineCharOffset[1] = 6;
-            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "OPTION-TEST-SPECIAL", 1, 0));
             optionMenu.addParam(new Param("Version", null, "VERSION", 2, 0));
@@ -2520,11 +2566,13 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionTestSpecialVersionMenu));
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
             optionMenu.LineCharOffset[1] = 6;
-            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "OPTION-TEST-SPECIAL-VERSION", 1, 0));
             optionMenu.addParam(new Param("Software", null, "SOFTWARE", 2, 0));
@@ -2606,11 +2654,13 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionTestSpecialConfigMenu));
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
             optionMenu.LineCharOffset[1] = 6;
-            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "OPTION-TEST-SPECIAL-CONFIG", 1, 0));
             optionMenu.addParam(new Param("Ids", null, "IDS", 2, 0));
@@ -2695,11 +2745,12 @@ namespace Harris7800HMP
 
             mainMenu.LineSize[0] = 5;
             mainMenu.LineSize[1] = 9;
-            mainMenu.LineSize[2] = 8;
+            mainMenu.LineSize[2] = 9;
             mainMenu.LineSize[3] = 5;
-            mainMenu.LineCharOffset[0] = 5;
-            mainMenu.LineCharOffset[1] = 2;
-            mainMenu.LineCharOffset[2] = 2;
+            mainMenu.LineCharOffset[0] = 6;
+            mainMenu.LineCharOffset[1] = 6;
+            mainMenu.LineCharOffset[2] = 7;
+            mainMenu.LineCharOffset[3] = 6;
             mainMenu.addParam(new Param("Body", null, "", 1, 0));
             mainMenu.addParam(new Param("StationRTmode", null, "R", 1, 0));
             mainMenu.addParam(new Param("Battery", null, "BAT ■■■■■", 1, 2));
@@ -2712,9 +2763,9 @@ namespace Harris7800HMP
             {
                 mainMenu.getParam("SwitchState").Text = Enum.GetName(typeof(SwitcherState), station.getState());
             }));
-            mainMenu.addParam(new Param("Select", null, $">>> {station.currentModeToString()} <<<", 2, 8));
+            mainMenu.addParam(new Param("Select", null, $">>> {station.currentModeToString()} <<<", 2, 9));
             mainMenu.addParam(new Param("EmptyLine", null, "", 3, 0));
-            mainMenu.addParam(new Param("Info", null, "MODE TO SELECT", 4, 18));
+            mainMenu.addParam(new Param("Info", null, "MODE TO SELECT", 4, 20));
 
             mainMenu.addActionToParam(mainMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation st, Widget wdg) =>
             {
@@ -2895,9 +2946,13 @@ namespace Harris7800HMP
         {
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionThreeG2Menu));
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
-            optionMenu.LineSize[3] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
+            optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
+            optionMenu.LineCharOffset[1] = 6;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu
                 .addParam(new Param("Body", null, "", 1, 0))
                 .addModesForParam("Body", new List<RadioStationMode> { RadioStationMode.ThreeG });
@@ -2964,9 +3019,13 @@ namespace Harris7800HMP
 
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionMsgMenu));
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
-            optionMenu.LineSize[3] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
+            optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
+            optionMenu.LineCharOffset[1] = 6;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu
                 .addParam(new Param("Body", null, "", 1, 0))
                 .addModesForParam("Body", new List<RadioStationMode> { RadioStationMode.ThreeG });

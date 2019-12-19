@@ -29,10 +29,15 @@ namespace Harris7800HMP
         string secondLine = "";
         string thirdLine = " ";
         string fourthLine = "";
+
         KeyModule keys = new KeyModule();
         List<StationPresetModemModule> presetModemsModule = new List<StationPresetModemModule>();
         StationPresetSystemContainer presetSystemsModule = new StationPresetSystemContainer();
         txMsgContainer txMsgs = new txMsgContainer();
+
+        public bool connectedUsb = false;
+        public bool connectedHandset = false;
+        public bool connectedCoupler = false;
 
         public RadioStation()
         {

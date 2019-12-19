@@ -54,14 +54,11 @@
             this.pbOn = new System.Windows.Forms.PictureBox();
             this.timerOn = new System.Windows.Forms.Timer(this.components);
             this.timerAnimation = new System.Windows.Forms.Timer(this.components);
-            this.pbCoulper = new System.Windows.Forms.PictureBox();
-            this.pbHandsetTube = new System.Windows.Forms.PictureBox();
-            this.pbUsb = new System.Windows.Forms.PictureBox();
+            this.btnCoupler = new System.Windows.Forms.Button();
+            this.btnHandset = new System.Windows.Forms.Button();
+            this.btnUsb = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbOn)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbCoulper)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbHandsetTube)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbUsb)).BeginInit();
             this.SuspendLayout();
             // 
             // btVolPlus
@@ -345,11 +342,11 @@
             // 
             this.richDispley.BackColor = System.Drawing.Color.OliveDrab;
             this.richDispley.Cursor = System.Windows.Forms.Cursors.Default;
-            this.richDispley.Location = new System.Drawing.Point(372, 192);
+            this.richDispley.Location = new System.Drawing.Point(368, 187);
             this.richDispley.Name = "richDispley";
             this.richDispley.ReadOnly = true;
             this.richDispley.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.richDispley.Size = new System.Drawing.Size(221, 57);
+            this.richDispley.Size = new System.Drawing.Size(234, 66);
             this.richDispley.TabIndex = 22;
             this.richDispley.Text = "";
             // 
@@ -360,9 +357,9 @@
             // pbOn
             // 
             this.pbOn.BackColor = System.Drawing.Color.Transparent;
-            this.pbOn.Location = new System.Drawing.Point(372, 183);
+            this.pbOn.Location = new System.Drawing.Point(368, 182);
             this.pbOn.Name = "pbOn";
-            this.pbOn.Size = new System.Drawing.Size(221, 76);
+            this.pbOn.Size = new System.Drawing.Size(234, 76);
             this.pbOn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbOn.TabIndex = 23;
             this.pbOn.TabStop = false;
@@ -377,38 +374,51 @@
             this.timerAnimation.Interval = 1000;
             this.timerAnimation.Tick += new System.EventHandler(this.timerAnimation_Tick);
             // 
-            // pbCoulper
+            // btnCoupler
             // 
-            this.pbCoulper.BackColor = System.Drawing.Color.Transparent;
-            this.pbCoulper.Image = global::Harris7800HMP.Properties.Resources.coupler;
-            this.pbCoulper.Location = new System.Drawing.Point(-9, 192);
-            this.pbCoulper.Name = "pbCoulper";
-            this.pbCoulper.Size = new System.Drawing.Size(289, 394);
-            this.pbCoulper.TabIndex = 24;
-            this.pbCoulper.TabStop = false;
+            this.btnCoupler.BackColor = System.Drawing.Color.Transparent;
+            this.btnCoupler.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.btnCoupler.FlatAppearance.BorderSize = 0;
+            this.btnCoupler.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+            this.btnCoupler.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.btnCoupler.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCoupler.Location = new System.Drawing.Point(169, 209);
+            this.btnCoupler.Name = "btnCoupler";
+            this.btnCoupler.Size = new System.Drawing.Size(92, 87);
+            this.btnCoupler.TabIndex = 24;
+            this.btnCoupler.UseVisualStyleBackColor = false;
+            this.btnCoupler.Click += new System.EventHandler(this.btnCoupler_Click);
             // 
-            // pbHandsetTube
+            // btnHandset
             // 
-            this.pbHandsetTube.BackColor = System.Drawing.Color.Transparent;
-            this.pbHandsetTube.Image = global::Harris7800HMP.Properties.Resources.handsetTube;
-            this.pbHandsetTube.Location = new System.Drawing.Point(683, 358);
-            this.pbHandsetTube.Name = "pbHandsetTube";
-            this.pbHandsetTube.Size = new System.Drawing.Size(145, 269);
-            this.pbHandsetTube.TabIndex = 25;
-            this.pbHandsetTube.TabStop = false;
+            this.btnHandset.BackColor = System.Drawing.Color.Transparent;
+            this.btnHandset.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.btnHandset.FlatAppearance.BorderSize = 0;
+            this.btnHandset.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
+            this.btnHandset.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.btnHandset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnHandset.Location = new System.Drawing.Point(690, 377);
+            this.btnHandset.Name = "btnHandset";
+            this.btnHandset.Size = new System.Drawing.Size(92, 87);
+            this.btnHandset.TabIndex = 25;
+            this.btnHandset.UseVisualStyleBackColor = false;
+            this.btnHandset.Click += new System.EventHandler(this.btnHandset_Click);
             // 
-            // pbUsb
+            // btnUsb
             // 
-            this.pbUsb.BackColor = System.Drawing.Color.Transparent;
-            this.pbUsb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.pbUsb.Image = global::Harris7800HMP.Properties.Resources.usbJustConnector;
-            this.pbUsb.Location = new System.Drawing.Point(753, 284);
-            this.pbUsb.Name = "pbUsb";
-            this.pbUsb.Size = new System.Drawing.Size(90, 156);
-            this.pbUsb.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.pbUsb.TabIndex = 26;
-            this.pbUsb.TabStop = false;
-            this.pbUsb.Visible = false;
+            this.btnUsb.BackColor = System.Drawing.Color.Transparent;
+            this.btnUsb.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.btnUsb.FlatAppearance.BorderSize = 0;
+            this.btnUsb.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.btnUsb.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.btnUsb.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnUsb.Location = new System.Drawing.Point(768, 295);
+            this.btnUsb.Name = "btnUsb";
+            this.btnUsb.Size = new System.Drawing.Size(46, 43);
+            this.btnUsb.TabIndex = 26;
+            this.btnUsb.UseVisualStyleBackColor = false;
+            this.btnUsb.Click += new System.EventHandler(this.btnUsb_Click);
+            this.btnUsb.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnUsb_MouseUp);
             // 
             // Form1
             // 
@@ -418,9 +428,9 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(969, 530);
-            this.Controls.Add(this.pbUsb);
-            this.Controls.Add(this.pbHandsetTube);
-            this.Controls.Add(this.pbCoulper);
+            this.Controls.Add(this.btnUsb);
+            this.Controls.Add(this.btnHandset);
+            this.Controls.Add(this.btnCoupler);
             this.Controls.Add(this.pbOn);
             this.Controls.Add(this.richDispley);
             this.Controls.Add(this.pictureBox1);
@@ -450,9 +460,6 @@
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbOn)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbCoulper)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbHandsetTube)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbUsb)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -484,9 +491,9 @@
         private System.Windows.Forms.PictureBox pbOn;
         private System.Windows.Forms.Timer timerOn;
         private System.Windows.Forms.Timer timerAnimation;
-        private System.Windows.Forms.PictureBox pbCoulper;
-        private System.Windows.Forms.PictureBox pbHandsetTube;
-        private System.Windows.Forms.PictureBox pbUsb;
+        private System.Windows.Forms.Button btnCoupler;
+        private System.Windows.Forms.Button btnHandset;
+        private System.Windows.Forms.Button btnUsb;
     }
 }
 
