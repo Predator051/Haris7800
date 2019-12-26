@@ -19,5 +19,13 @@ namespace Harris7800HMP
             return firstPart + insertString + secondPart;
         }
 
+        static public int calcCenterIndent(int textLength, int lineLength)
+        {
+            int midTextLength = textLength / 2;
+            int midLineLength = lineLength / 2;
+
+            return midLineLength - midTextLength;
+        }
+
     }
 }

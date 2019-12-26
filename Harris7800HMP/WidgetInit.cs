@@ -11,6 +11,7 @@ namespace Harris7800HMP
         public enum MenuNames
         {
             MainMenu,
+            MainMenuDisplayOpt,
             ProgramMenu,
             ProgramComsecMenu,
             ProgramComsecIdMenu,
@@ -66,6 +67,7 @@ namespace Harris7800HMP
         static public Widget initDefaultWidgets(RadioStation station)
         {
             Widget mainMenu = initMainMenu(station);
+            Widget mainMenuDisplayOpt = initMainMenuDisplayOpt(station);
             Widget programMenu = initProgramMenu(station);
             Widget transitionPM = initTransitionProgramMenu(station);
             Widget programMenu2 = initProgramMenu2(station);
@@ -114,6 +116,7 @@ namespace Harris7800HMP
             mainMenu.addAvailableWidget(getNameMenu(MenuNames.OptionMenu), optionMenu);
             mainMenu.addAvailableWidget(getNameMenu(MenuNames.KeyboardLock), keyBoardLock);
             mainMenu.addAvailableWidget(getNameMenu(MenuNames.SelectModeMenu), optionModeSelectMenu);
+            mainMenu.addAvailableWidget(getNameMenu(MenuNames.MainMenuDisplayOpt), mainMenuDisplayOpt);
 
             programMenu.addAvailableWidget(getNameMenu(MenuNames.ProgramMenu2), programMenu2);
             programMenu.addAvailableWidget(getNameMenu(MenuNames.ProgramComsecMenu), programComsecMenu);
@@ -744,6 +747,16 @@ namespace Harris7800HMP
                 name.Text = next.name;
                 
             }));
+            mainMenu.addActionToParam(mainMenu.getParam("Body"), new Button("LT", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                if (mainMenu.activeParam() != null)
+                {
+                    return;
+                }
+
+                mainMenu.prepareToShowWidget(getNameMenu(MenuNames.MainMenuDisplayOpt));
+
+            }));
 
             mainMenu.addActionToParam(mainMenu.getParam("Body"), new Button("PRE_PLUS", (Button btn, RadioStation rs, Widget wdg) =>
             {
@@ -781,6 +794,179 @@ namespace Harris7800HMP
             }));
 
             return mainMenu;
+        }
+        static public Widget initMainMenuDisplayOpt(RadioStation station)
+        {
+            Widget programMenu = new Widget(getNameMenu(MenuNames.MainMenuDisplayOpt));
+            programMenu.LineSize[0] = 5;
+            programMenu.LineSize[1] = 10;
+            programMenu.LineSize[2] = 11;
+            programMenu.LineSize[3] = 10;
+            programMenu.LineCharOffset[0] = 6;
+            programMenu.LineCharOffset[1] = 6;
+            programMenu.LineCharOffset[2] = 6;
+
+            programMenu.addParam(new Param("Body", null, "", 1, 0));
+            programMenu.addParam(new Param("StationRTmode", null, "R", 1, 0))
+                .addModesForParam("StationRTmode", new List<RadioStationMode> { RadioStationMode.ThreeG, RadioStationMode.ALE, RadioStationMode.HOP });
+            programMenu.addParam(new Param("Battery", null, "BAT ■■■■■", 1, 2))
+                .addModesForParam("Battery", new List<RadioStationMode> { RadioStationMode.ThreeG, RadioStationMode.ALE, RadioStationMode.HOP });
+            programMenu
+                .addParam(new Param("StationMode", null, "FIX", 1, 10, () =>
+                {
+                    programMenu.getParam("StationMode").Text = Enum.GetName(typeof(RadioStationMode), station.Mode);
+                }))
+                .addModesForParam("StationMode", new List<RadioStationMode> { RadioStationMode.ThreeG, RadioStationMode.ALE, RadioStationMode.HOP }); ;
+            programMenu
+                .addParam(new Param("SQ", null, "SQ", 1, 14))
+                .addModesForParam("SQ", new List<RadioStationMode> { RadioStationMode.ThreeG, RadioStationMode.ALE, RadioStationMode.HOP }); ;
+            programMenu
+                .addParam(new Param("SwitchState", null, "PT", 1, 17, () =>
+                {
+                    programMenu.getParam("SwitchState").Text = Enum.GetName(typeof(SwitcherState), station.getState());
+                }))
+                .addModesForParam("SwitchState", new List<RadioStationMode> { RadioStationMode.ThreeG, RadioStationMode.ALE, RadioStationMode.HOP });
+            programMenu.addParam(new Param("BrightTitle", null, "BRIGHT", 2, 1));
+            programMenu.addParam(new Param("ContrastTitle", null, "CONTRAST", 2, 16));
+            programMenu.addParam(new Param("BrightValue", null, "7", 3, 3));
+            programMenu.addParam(new Param("ContrastValue", null, "100%", 3, 17));
+            programMenu.getParam("BrightValue").IsActive = true;
+            programMenu.addActionToParam(programMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                wdg.showPreviousWidget();
+            }));
+            programMenu.addActionToParam(programMenu.getParam("Body"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                var activeParam = wdg.activeParam();
+
+                if (activeParam == null)
+                {
+                    var param = wdg.getParam("ContrastValue");
+                    wdg.deactiveParam();
+                    param.IsActive = true;
+                    return;
+                }
+
+                switch (activeParam.Name)
+                {
+                    case "BrightValue":
+                        {
+                            var param = wdg.getParam("ContrastValue");
+                            wdg.deactiveParam();
+                            param.IsActive = true;
+                            break;
+                        }
+                    case "ContrastValue":
+                        {
+                            var param = wdg.getParam("BrightValue");
+                            wdg.deactiveParam();
+                            param.IsActive = true;
+                            break;
+                        }
+                }
+
+            }));
+            programMenu.addActionToParam(programMenu.getParam("Body"), new Button("RIGTH", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                var activeParam = wdg.activeParam();
+
+                if (activeParam == null)
+                {
+                    var param = wdg.getParam("BrightValue");
+                    wdg.deactiveParam();
+                    param.IsActive = true;
+                    return;
+                }
+
+                switch (activeParam.Name)
+                {
+                    case "BrightValue":
+                        {
+                            var param = wdg.getParam("ContrastValue");
+                            wdg.deactiveParam();
+                            param.IsActive = true;
+                            break;
+                        }
+                    case "ContrastValue":
+                        {
+                            var param = wdg.getParam("BrightValue");
+                            wdg.deactiveParam();
+                            param.IsActive = true;
+                            break;
+                        }
+                }
+
+
+            }));
+
+            programMenu.addActionToParam(programMenu.getParam("Body"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                var activeParam = wdg.activeParam();
+
+                switch (activeParam.Name)
+                {
+                    case "BrightValue":
+                        {
+                            int value = int.Parse(activeParam.Text);
+                            value++;
+                            if (value > 7)
+                            {
+                                value = 1;
+                            }
+                            Form1.currObject.setBrigth(value);
+                            activeParam.Text = value.ToString();
+                            break;
+                        }
+                    case "ContrastValue":
+                        {
+                            int value = int.Parse(activeParam.Text.Replace("%",""));
+                            value += 10;
+                            if (value > 100)
+                            {
+                                value = 20;
+                            }
+                            Form1.currObject.setContrast(value);
+                            activeParam.Text = value.ToString() + "%";
+                            break;
+                        }
+                }
+            }));
+
+            programMenu.addActionToParam(programMenu.getParam("Body"), new Button("DOWN", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                var activeParam = wdg.activeParam();
+
+                switch (activeParam.Name)
+                {
+                    case "BrightValue":
+                        {
+                            int value = int.Parse(activeParam.Text);
+                            value--;
+                            if (value < 1)
+                            {
+                                value = 7;
+                            }
+                            Form1.currObject.setBrigth(value);
+                            activeParam.Text = value.ToString();
+                            break;
+                        }
+                    case "ContrastValue":
+                        {
+                            int value = int.Parse(activeParam.Text.Replace("%", ""));
+                            value -= 10;
+                            if (value < 20)
+                            {
+                                value = 100;
+                            }
+                            Form1.currObject.setContrast(value);
+                            activeParam.Text = value.ToString() + "%";
+                            break;
+                        }
+                }
+
+
+            }));
+            return programMenu;
         }
         static public Widget initProgramMenu(RadioStation station)
         {
@@ -823,6 +1009,7 @@ namespace Harris7800HMP
                         {
                             wdg.deactiveParam();
                             wdg.prepareToShowWidget(Enum.GetName(typeof(MenuNames), MenuNames.ProgramMenu2));
+                            wdg.getAvailableWidget(getNameMenu(MenuNames.ProgramMenu2)).getParam("Sched").IsActive = true;
                             break;
                         }
                     case "Config":
@@ -888,6 +1075,7 @@ namespace Harris7800HMP
                         {
                             wdg.deactiveParam();
                             wdg.prepareToShowWidget(Enum.GetName(typeof(MenuNames), MenuNames.ProgramMenu2));
+                            wdg.getAvailableWidget(getNameMenu(MenuNames.ProgramMenu2)).getParam("Install").IsActive = true;
                             break;
                         }
                 }
@@ -945,6 +1133,7 @@ namespace Harris7800HMP
             programMenu.addParam(new Param("PreviousPage", null, "<-", 3, 0));
             programMenu.addParam(new Param("Install", null, "INSTALL", 3, 4));
             programMenu.addParam(new Param("Sched", null, "SCHED", 3, 15));
+            programMenu.getParam("Install").IsActive = true;
 
             programMenu.addActionToParam(programMenu.getParam("Body"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
             {
@@ -1000,7 +1189,7 @@ namespace Harris7800HMP
                     case "Sched":
                         {
                             wdg.deactiveParam();
-                            wdg.showPreviousWidget();
+                            wdg.showPreviousWidget().getParam("Comsec").IsActive = true;
                             break;
                         }
                 }
@@ -1047,6 +1236,8 @@ namespace Harris7800HMP
                 optionMenu.visibleParamsByNode(station.Mode);
             }));
 
+            optionMenu.getParam("GPS-tod").IsActive = true;
+
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
             {
                 var activeParam = wdg.activeParam();
@@ -1064,7 +1255,7 @@ namespace Harris7800HMP
                     case "GPS-tod":
                         {
                             wdg.deactiveParam();
-                            //wdg.showPreviousWidget().getParam("Maintenance").IsActive = true;
+                            wdg.getAvailableWidget(getNameMenu(MenuNames.OptionMenu2)).getParam("Test").IsActive = true;
                             wdg.prepareToShowWidget(getNameMenu(MenuNames.OptionMenu2));
                             break;
                         }
@@ -1177,8 +1368,8 @@ namespace Harris7800HMP
                     case "GPS-apr":
                         {
                             wdg.deactiveParam();
-                            //wdg.showPreviousWidget().getParam("Maintenance").IsActive = true;
                             wdg.prepareToShowWidget(getNameMenu(MenuNames.OptionMenu2));
+                            wdg.getAvailableWidget(getNameMenu(MenuNames.OptionMenu2)).getParam("Ext-acc").IsActive = true;
                             break;
                         }
                 }
@@ -1266,6 +1457,8 @@ namespace Harris7800HMP
             optionMenu.addParam(new Param("Msg", null, "MSG", 3, 20), false)
                 .addModesForParam("Msg", new List<RadioStationMode> { RadioStationMode.ThreeG });
 
+            optionMenu.getParam("Ext-acc").IsActive = true;
+
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
             {
                 var activeParam = wdg.activeParam();
@@ -1283,7 +1476,7 @@ namespace Harris7800HMP
                     case "Ext-acc":
                         {
                             wdg.deactiveParam();
-                            wdg.showPreviousWidget();
+                            wdg.showPreviousWidget().getParam("GPS-apr").IsActive = true;
                             break;
                         }
                     case "Msg":
@@ -1346,7 +1539,7 @@ namespace Harris7800HMP
                     case "Test":
                         {
                             wdg.deactiveParam();
-                            wdg.showPreviousWidget();
+                            wdg.showPreviousWidget().getParam("GPS-tod").IsActive = true;
                             break;
                         }
                 }
@@ -1422,6 +1615,8 @@ namespace Harris7800HMP
             optionMenu.addParam(new Param("Vswr", null, "VSWR", 4, 0));
             optionMenu.addParam(new Param("Temp", null, "TEMP", 4, 10));
             optionMenu.addParam(new Param("Special", null, "SPECIAL", 4, 20));
+
+            optionMenu.getParam("Bit").IsActive = true;
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
             {
@@ -1640,6 +1835,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getPrevParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("RadioOptionsValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
@@ -1651,6 +1848,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getNextParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
@@ -1666,6 +1865,8 @@ namespace Harris7800HMP
                     titleParam.Text = radioParams[nextIndex].Name;
                     activeParam.Text = radioParams[nextIndex].currParam();
                     activeParam.ActiveTo = activeParam.Text.Length;
+                    activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                    titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
                 }
                 else
                 {
@@ -1690,6 +1891,11 @@ namespace Harris7800HMP
                         else
                         {
                             wdg.showPreviousWidget();
+
+                            activeParam.Text = radioParams[0].currParam();
+                            titleParam.Text = radioParams[0].Name;
+                            activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                            titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
                         }
                     }
                 }
@@ -1781,6 +1987,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getPrevParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("GpsValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
@@ -1792,11 +2000,20 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getNextParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
             {
                 wdg.showPreviousWidget();
+                Param activeParam = wdg.activeParam();
+                Param titleParam = wdg.getParam("GpsTitle");
+
+                activeParam.Text = radioParams[0].currParam();
+                titleParam.Text = radioParams[0].Name;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
@@ -1816,9 +2033,17 @@ namespace Harris7800HMP
                 else
                 {
                     wdg.showPreviousWidget();
+
+                    activeParam.Text = radioParams[0].currParam();
+                    titleParam.Text = radioParams[0].Name;
+                    activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                    titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
+                    return;
                 }
 
 
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
             return optionMenu;
         }
@@ -1859,6 +2084,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getPrevParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("ScanValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
@@ -1870,6 +2097,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getNextParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
@@ -1889,9 +2118,11 @@ namespace Harris7800HMP
                 else
                 {
                     wdg.showPreviousWidget();
+                    return;
                 }
 
-
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
@@ -1948,6 +2179,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getPrevParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("ExtValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
@@ -1959,6 +2192,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getNextParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
@@ -1978,14 +2213,23 @@ namespace Harris7800HMP
                 else
                 {
                     wdg.showPreviousWidget();
+                    return;
                 }
 
-
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
             {
                 wdg.showPreviousWidget();
+                Param activeParam = wdg.activeParam();
+                Param titleParam = wdg.getParam("ExtTitle");
+
+                activeParam.Text = radioParams[0].currParam();
+                titleParam.Text = radioParams[0].Name;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
             return optionMenu;
         }
@@ -2051,6 +2295,7 @@ namespace Harris7800HMP
                 }
 
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("TestValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
@@ -2069,6 +2314,7 @@ namespace Harris7800HMP
                 }
 
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
@@ -2134,6 +2380,10 @@ namespace Harris7800HMP
 
             }));
 
+            optionMenu.addActionToParam(optionMenu.getParam("TestValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                optionMenu.showPreviousWidget();
+            }));
             return optionMenu;
         }
 
@@ -2391,6 +2641,11 @@ namespace Harris7800HMP
                 else
                 {
                     wdg.showPreviousWidget();
+
+                    activeParam.Text = radioParams[0].currParam();
+                    titleParam.Text = radioParams[0].Name;
+                    activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                    titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
                 }
 
 
@@ -2398,6 +2653,14 @@ namespace Harris7800HMP
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation st, Widget wdg) =>
             {
                 wdg.showPreviousWidget();
+
+                Param activeParam = wdg.activeParam();
+                Param titleParam = wdg.getParam("BatteryTitle");
+
+                activeParam.Text = radioParams[0].currParam();
+                titleParam.Text = radioParams[0].Name;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
             return optionMenu;
         }
@@ -2448,6 +2711,8 @@ namespace Harris7800HMP
             optionMenu.addParam(new Param("Version", null, "VERSION", 2, 0));
             optionMenu.addParam(new Param("Stats", null, "RADIO STATS", 2, 10));
             optionMenu.addParam(new Param("Config", null, "CONFIG", 3, 10));
+
+            optionMenu.getParam("Version").IsActive = true;
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation st, Widget wdg) =>
             {
@@ -2578,6 +2843,8 @@ namespace Harris7800HMP
             optionMenu.addParam(new Param("Software", null, "SOFTWARE", 2, 0));
             optionMenu.addParam(new Param("Hardware", null, "HARDWARE", 2, 10));
 
+            optionMenu.getParam("Software").IsActive = true;
+
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation st, Widget wdg) =>
             {
                 wdg.showPreviousWidget();
@@ -2665,6 +2932,7 @@ namespace Harris7800HMP
             optionMenu.addParam(new Param("Title", null, "OPTION-TEST-SPECIAL-CONFIG", 1, 0));
             optionMenu.addParam(new Param("Ids", null, "IDS", 2, 0));
             optionMenu.addParam(new Param("Options", null, "OPTIONS", 2, 10));
+            optionMenu.getParam("Ids").IsActive = true;
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation st, Widget wdg) =>
             {
@@ -2820,6 +3088,8 @@ namespace Harris7800HMP
             optionMenu.addParam(new Param("NextPage", null, "->", 4, 22))
                 .addModesForParam("NextPage", new List<RadioStationMode> { RadioStationMode.ThreeG });
 
+            optionMenu.getParam("Lqa").IsActive = true;
+
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
             {
                 var activeParam = wdg.activeParam();
@@ -2838,6 +3108,7 @@ namespace Harris7800HMP
                         {
                             wdg.deactiveParam();
                             wdg.prepareToShowWidget(getNameMenu(MenuNames.OptionThreeG2Menu));
+                            wdg.getAvailableWidget(getNameMenu(MenuNames.OptionThreeG2Menu)).getParam("Linked").IsActive = true;
                             break;
                         }
                     case "Scores":
@@ -2917,6 +3188,7 @@ namespace Harris7800HMP
                         {
                             wdg.deactiveParam();
                             wdg.prepareToShowWidget(getNameMenu(MenuNames.OptionThreeG2Menu));
+                            wdg.getAvailableWidget(getNameMenu(MenuNames.OptionThreeG2Menu)).getParam("Linked").IsActive = true;
                             break;
                         }
                 }
@@ -2977,6 +3249,7 @@ namespace Harris7800HMP
                     return;
                 }
 
+                wdg.ComeFrom.getParam("Todrole").IsActive = true;
                 wdg.showPreviousWidget();
             }));
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("RIGTH", (Button btn, RadioStation rs, Widget wdg) =>
@@ -2991,6 +3264,7 @@ namespace Harris7800HMP
                     return;
                 }
 
+                wdg.ComeFrom.getParam("Lqa").IsActive = true;
                 wdg.showPreviousWidget();
             }));
 
@@ -3037,6 +3311,8 @@ namespace Harris7800HMP
                 .addModesForParam("Lvd", new List<RadioStationMode> { RadioStationMode.ThreeG });
             optionMenu.addParam(new Param("Sms", null, "SMS", 3, 15))
                 .addModesForParam("Sms", new List<RadioStationMode> { RadioStationMode.ThreeG });
+
+            optionMenu.getParam("Lvd").IsActive = true;
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
             {
@@ -3125,6 +3401,14 @@ namespace Harris7800HMP
         {
             var smsMenu = new Widget(getNameMenu(MenuNames.OptionMsgSmsMenu));
 
+            smsMenu.LineSize[0] = 5;
+            smsMenu.LineSize[1] = 9;
+            smsMenu.LineSize[2] = 9;
+            smsMenu.LineSize[3] = 5;
+            smsMenu.LineCharOffset[0] = 6;
+            smsMenu.LineCharOffset[1] = 6;
+            smsMenu.LineCharOffset[2] = 7;
+            smsMenu.LineCharOffset[3] = 6;
             smsMenu
                 .addParam(new Param("Body", null, "", 1, 0))
                 .addModesForParam("Body", new List<RadioStationMode> { RadioStationMode.ThreeG });
@@ -3308,15 +3592,17 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionMenuRadio));
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
             optionMenu.LineCharOffset[1] = 6;
-            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "", 1, 0));
             optionMenu.addParam(new Param("SmsTitle", null, "MESSAGE TYPE", 2, 7));
-            optionMenu.addParam(new Param("SmsValue", null, "NEW MSG", 3, 12));
+            optionMenu.addParam(new Param("SmsValue", null, "NEW MSG", 3, 9));
             optionMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 15));
 
             optionMenu.getParam("SmsValue").IsActive = true;
@@ -3337,6 +3623,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getPrevParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("SmsValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
@@ -3348,6 +3636,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getNextParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
@@ -3376,9 +3666,13 @@ namespace Harris7800HMP
         {
             Widget enterMsgMenu = new Widget(getNameMenu(MenuNames.OptionMsgMenu));
             enterMsgMenu.LineSize[0] = 5;
-            enterMsgMenu.LineSize[1] = 8;
-            enterMsgMenu.LineSize[2] = 8;
-            enterMsgMenu.LineSize[3] = 8;
+            enterMsgMenu.LineSize[1] = 9;
+            enterMsgMenu.LineSize[2] = 9;
+            enterMsgMenu.LineSize[3] = 5;
+            enterMsgMenu.LineCharOffset[0] = 6;
+            enterMsgMenu.LineCharOffset[1] = 6;
+            enterMsgMenu.LineCharOffset[2] = 7;
+            enterMsgMenu.LineCharOffset[3] = 6;
             enterMsgMenu
                 .addParam(new Param("Body", null, "", 1, 0))
                 .addModesForParam("Body", new List<RadioStationMode> { RadioStationMode.ThreeG });
@@ -3771,15 +4065,17 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget("optionMsgSmsSendingMenu");
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
             optionMenu.LineCharOffset[1] = 6;
-            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "", 1, 0));
-            optionMenu.addParam(new Param("SendingTitle", null, "SEND TO", 2, 7));
-            optionMenu.addParam(new Param("SendingValue", null, "STATION", 3, 12));
+            optionMenu.addParam(new Param("SendingTitle", null, "SEND TO", 2, 9));
+            optionMenu.addParam(new Param("SendingValue", null, "STATION", 3, 9));
             optionMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 15));
 
             optionMenu.getParam("SendingValue").IsActive = true;
@@ -3803,6 +4099,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getPrevParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("SendingValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
@@ -3814,6 +4112,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getNextParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
@@ -3838,6 +4138,14 @@ namespace Harris7800HMP
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
             {
                 wdg.showPreviousWidget();
+
+                Param activeParam = wdg.activeParam();
+                Param titleParam = wdg.getParam("SendingTitle");
+
+                activeParam.Text = radioParams[0].currParam();
+                titleParam.Text = radioParams[0].Name;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             return optionMenu;
@@ -3849,15 +4157,17 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget("sentMessageTransition");
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
             optionMenu.LineCharOffset[1] = 6;
-            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "", 1, 0));
             optionMenu.addParam(new Param("SendingTitle", null, "", 2, 7));
-            optionMenu.addParam(new Param("SendingValue", null, "MESSAGE SENT TO", 3, 12));
+            optionMenu.addParam(new Param("SendingValue", null, "MESSAGE SENT TO", 3, 7));
 
 
             return optionMenu;
@@ -3870,11 +4180,13 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget("initAleFillMenu");
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
             optionMenu.LineCharOffset[1] = 6;
-            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("StationRTmode", null, "R", 1, 0))
                 .addModesForParam("StationRTmode", new List<RadioStationMode> { RadioStationMode.ThreeG });
@@ -3920,17 +4232,24 @@ namespace Harris7800HMP
         {
 
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionAleMenu));
+            
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
-            optionMenu.LineSize[3] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
+            optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
+            optionMenu.LineCharOffset[1] = 6;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
+
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "OPTIONS-ALE", 1, 0));
-            optionMenu.addParam(new Param("EmptyLine", null, " ", 2, 0));
-            optionMenu.addParam(new Param("Lqa", null, "LQA", 3, 0));
-            optionMenu.addParam(new Param("Scores", null, "SCORES", 3, 10));
-            optionMenu.addParam(new Param("Tx-msg", null, "TX-MSG", 4, 0));
-            optionMenu.addParam(new Param("Rx-msg", null, "RX-MSG", 4, 10));
+            //optionMenu.addParam(new Param("EmptyLine", null, " ", 2, 0));
+            optionMenu.addParam(new Param("Lqa", null, "LQA", 2, 0));
+            optionMenu.addParam(new Param("Scores", null, "SCORES", 2, 10));
+            optionMenu.addParam(new Param("Tx-msg", null, "TX-MSG", 3, 0));
+            optionMenu.addParam(new Param("Rx-msg", null, "RX-MSG", 3, 10));
+            optionMenu.getParam("Lqa").IsActive = true;
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
             {
@@ -4064,15 +4383,22 @@ namespace Harris7800HMP
         {
 
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionAleLqaMenu));
+
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
-            optionMenu.LineSize[3] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
+            optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
+            optionMenu.LineCharOffset[1] = 6;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
+
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "OPTIONS-ALE-LQA", 1, 0));
             optionMenu.addParam(new Param("EmptyLine", null, " ", 2, 0));
             optionMenu.addParam(new Param("Exchange", null, "EXCHANGE", 3, 0));
             optionMenu.addParam(new Param("Sound", null, "SOUND", 3, 15));
+            optionMenu.getParam("Exchange").IsActive = true;
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
             {
@@ -4164,6 +4490,10 @@ namespace Harris7800HMP
                 wdg.prepareToShowWidget(getNameMenu(MenuNames.OptionAleLqaExchangeMenu));
 
             }));
+            optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                wdg.showPreviousWidget();
+            }));
 
             return optionMenu;
         }
@@ -4173,11 +4503,14 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionAleLqaExchangeMenu));
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
             optionMenu.LineCharOffset[1] = 6;
-            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
+
             optionMenu.addParam(new Param("Body", null, "", 1, 0)); 
             optionMenu.addParam(new Param("StationRTmode", null, "R", 1, 0));
             optionMenu.addParam(new Param("Battery", null, "BAT ■■■■■", 1, 2));
@@ -4186,7 +4519,7 @@ namespace Harris7800HMP
             optionMenu.addParam(new Param("SwitchState", null, "PT", 1, 17));
             optionMenu.addParam(new Param("ExchangeTitle", null, "EXCHANGE TYPE", 2, 7));
             optionMenu.addParam(new Param("ExchangeValue", null, "INDIVIDUAL", 3, 12));
-            optionMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 15));
+            optionMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 17));
 
             optionMenu.getParam("ExchangeValue").IsActive = true;
 
@@ -4206,6 +4539,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getPrevParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("ExchangeValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
@@ -4217,6 +4552,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getNextParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
@@ -4240,11 +4577,14 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget("initOptionAleTxMsgMenu");
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
             optionMenu.LineCharOffset[1] = 6;
-            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
+
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "OPTION-ALE-TX_MSG", 1, 0));
             optionMenu.addParam(new Param("LineOne", null, "NO TX", 2, 0));
@@ -4308,8 +4648,8 @@ namespace Harris7800HMP
                 {
                     lineOne.Text = "NO TX";
                     lineTwo.Text = "MESSAGES";
-                    lineOne.setLocation(2, 10);
-                    lineTwo.setLocation(3, 8);
+                    lineOne.setLocation(2, 12);
+                    lineTwo.setLocation(3, 10);
                     return;
                 }
 
@@ -4332,9 +4672,13 @@ namespace Harris7800HMP
 
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionAleLqaMenu));
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
-            optionMenu.LineSize[3] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
+            optionMenu.LineSize[3] = 9;
+            optionMenu.LineCharOffset[0] = 6;
+            optionMenu.LineCharOffset[1] = 6;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "PGM-COMSEC", 1, 0));
             optionMenu.addParam(new Param("EmptyLine", null, " ", 2, 0));
@@ -4343,6 +4687,7 @@ namespace Harris7800HMP
             optionMenu.addParam(new Param("Keys", null, "KEYS", 3, 20));
             optionMenu.addParam(new Param("Mi", null, "MI", 4, 0));
             optionMenu.addParam(new Param("Aks", null, "AKS", 4, 15));
+            optionMenu.getParam("Cam").IsActive = true;
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
             {
@@ -4516,11 +4861,13 @@ namespace Harris7800HMP
             Widget optionMenu = new Widget(getNameMenu(MenuNames.ProgramComsecIdMenu));
 
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
             optionMenu.LineCharOffset[1] = 6;
-            optionMenu.LineCharOffset[2] = 4;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "PGM-COMSEC-ID", 1, 0));
             optionMenu.addParam(new Param("IdTitle", null, "KERNEL_ID", 2, 7));
@@ -4572,16 +4919,18 @@ namespace Harris7800HMP
             Widget programMenu = new Widget(getNameMenu(MenuNames.ProgramComsecMiMenu));
 
             programMenu.LineSize[0] = 5;
-            programMenu.LineSize[1] = 8;
-            programMenu.LineSize[2] = 8;
+            programMenu.LineSize[1] = 9;
+            programMenu.LineSize[2] = 9;
             programMenu.LineSize[3] = 5;
+            programMenu.LineCharOffset[0] = 6;
             programMenu.LineCharOffset[1] = 6;
-            programMenu.LineCharOffset[2] = 4;
+            programMenu.LineCharOffset[2] = 7;
+            programMenu.LineCharOffset[3] = 6;
             programMenu.addParam(new Param("Body", null, "", 1, 0));
             programMenu.addParam(new Param("Title", null, "PGM-COMSEC-MI", 1, 0));
-            programMenu.addParam(new Param("MiTitle", null, "CRYPTO MI", 2, 7));
-            programMenu.addParam(new Param("MiValue", null, "DEFAULT", 3, 12));
-            programMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 15));
+            programMenu.addParam(new Param("MiTitle", null, "CRYPTO MI", 2, 10));
+            programMenu.addParam(new Param("MiValue", null, "DEFAULT", 3, 11));
+            programMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 20));
 
             programMenu.getParam("MiValue").IsActive = true;
 
@@ -4601,6 +4950,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getPrevParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             programMenu.addActionToParam(programMenu.getParam("MiValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
@@ -4612,6 +4963,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getNextParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
 
@@ -4634,16 +4987,18 @@ namespace Harris7800HMP
             Widget programMenu = new Widget(getNameMenu(MenuNames.ProgramComsecAksMenu));
 
             programMenu.LineSize[0] = 5;
-            programMenu.LineSize[1] = 8;
-            programMenu.LineSize[2] = 7;
+            programMenu.LineSize[1] = 9;
+            programMenu.LineSize[2] = 9;
             programMenu.LineSize[3] = 5;
+            programMenu.LineCharOffset[0] = 6;
             programMenu.LineCharOffset[1] = 6;
-            programMenu.LineCharOffset[2] = 4;
+            programMenu.LineCharOffset[2] = 7;
+            programMenu.LineCharOffset[3] = 6;
             programMenu.addParam(new Param("Body", null, "", 1, 0));
             programMenu.addParam(new Param("Title", null, "PGM-COMSEC-AKS", 1, 0));
             programMenu.addParam(new Param("AksTitle", null, "AUTO KEY SELECT", 2, 7));
             programMenu.addParam(new Param("AksValue", null, "KEY & KRYPTO TYPE", 3, 10));
-            programMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 15));
+            programMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 18));
 
             programMenu.getParam("AksValue").IsActive = true;
 
@@ -4663,6 +5018,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getPrevParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             programMenu.addActionToParam(programMenu.getParam("AksValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
@@ -4674,6 +5031,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getNextParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
 
@@ -4694,9 +5053,13 @@ namespace Harris7800HMP
         {
             Widget optionMenu = new Widget(getNameMenu(MenuNames.OptionAleLqaMenu));
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
-            optionMenu.LineSize[3] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
+            optionMenu.LineSize[3] = 5;
+            optionMenu.LineCharOffset[0] = 6;
+            optionMenu.LineCharOffset[1] = 6;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "PGM-COMSEC", 1, 0));
             optionMenu.addParam(new Param("EmptyLine", null, " ", 2, 0));
@@ -4858,16 +5221,18 @@ namespace Harris7800HMP
             Widget programMenu = new Widget("initProgramComsecKeysEnterMenu");
 
             programMenu.LineSize[0] = 5;
-            programMenu.LineSize[1] = 8;
-            programMenu.LineSize[2] = 7;
+            programMenu.LineSize[1] = 9;
+            programMenu.LineSize[2] = 9;
             programMenu.LineSize[3] = 5;
+            programMenu.LineCharOffset[0] = 6;
             programMenu.LineCharOffset[1] = 6;
-            programMenu.LineCharOffset[2] = 4;
+            programMenu.LineCharOffset[2] = 7;
+            programMenu.LineCharOffset[3] = 6;
             programMenu.addParam(new Param("Body", null, "", 1, 0));
             programMenu.addParam(new Param("Title", null, "PGM-COMSEC-KEYS", 1, 0));
-            programMenu.addParam(new Param("KeyTitle", null, "KEY TYPE", 2, 7));
-            programMenu.addParam(new Param("KeyValue", null, "CITADEL I (MK-128)", 3, 10));
-            programMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 15));
+            programMenu.addParam(new Param("KeyTitle", null, "KEY TYPE", 2, 10));
+            programMenu.addParam(new Param("KeyValue", null, "CITADEL I (MK-128)", 3, 6));
+            programMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 19));
 
             programMenu.getParam("KeyValue").IsActive = true;
 
@@ -4890,6 +5255,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getPrevParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             programMenu.addActionToParam(programMenu.getParam("KeyValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
@@ -4901,8 +5268,9 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getNextParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
-
 
             programMenu.addActionToParam(programMenu.getParam("Body"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
             {
@@ -4927,20 +5295,22 @@ namespace Harris7800HMP
             Widget programMenu = new Widget("initProgramComsecKeysEnterMenu");
 
             programMenu.LineSize[0] = 5;
-            programMenu.LineSize[1] = 8;
-            programMenu.LineSize[2] = 7;
+            programMenu.LineSize[1] = 9;
+            programMenu.LineSize[2] = 9;
             programMenu.LineSize[3] = 5;
+            programMenu.LineCharOffset[0] = 6;
             programMenu.LineCharOffset[1] = 6;
-            programMenu.LineCharOffset[2] = 4;
+            programMenu.LineCharOffset[2] = 7;
+            programMenu.LineCharOffset[3] = 6;
             programMenu.addParam(new Param("Body", null, "", 1, 0));
-            programMenu.addParam(new Param("Title", null, "PGM-COMSEC-AKS-ENTER", 1, 0));
-            programMenu.addParam(new Param("KeyTitle", null, "KEY TO ENTER", 2, 7));
+            programMenu.addParam(new Param("Title", null, "PGM-COMSEC-KEYS-ENTER", 1, 0));
+            programMenu.addParam(new Param("KeyTitle", null, "KEY TO ENTER", 2, 8));
             programMenu.addParam(new Param("KeyValue", (string text, Param cParam) =>
             {
                 cParam.text = cParam.Text.Remove(cParam.ActiveFrom, cParam.ActiveTo);
                 cParam.text = cParam.Text.Insert(cParam.ActiveFrom, text);
-            }, "TEK01", 3, 10 ));
-            programMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 15));
+            }, "TEK01", 3, 11 ));
+            programMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 17));
 
             programMenu.getParam("KeyValue").IsActive = true;
             programMenu.getParam("KeyValue").ActiveTo = 1;
@@ -4966,7 +5336,7 @@ namespace Harris7800HMP
 
                 if (activeParam.isInParam())
                 {
-                    if (activeParam.ActiveFrom < 20)
+                    if (activeParam.ActiveFrom < 5)
                     {
                         activeParam.ActiveFrom += 1;
                         activeParam.ActiveTo = 1;
@@ -5168,7 +5538,6 @@ namespace Harris7800HMP
             {
                 //wdg.showPreviousWidget();
                 if (station.Keys.isContainKey(programMenu.getParam("KeyValue").Text))
-
                 {
 
                     Form1.currObject.QueueWidget.add(dialogMenu(title: "PGM-COMSEC-AKS-ENTER", text: "KEY EXIST OVERWRITE?", null
@@ -5221,9 +5590,13 @@ namespace Harris7800HMP
 
             Widget enterMsgMenu = new Widget("initProgramComsecKeysEnterValueMenu");
             enterMsgMenu.LineSize[0] = 5;
-            enterMsgMenu.LineSize[1] = 8;
-            enterMsgMenu.LineSize[2] = 8;
-            enterMsgMenu.LineSize[3] = 8;
+            enterMsgMenu.LineSize[1] = 9;
+            enterMsgMenu.LineSize[2] = 9;
+            enterMsgMenu.LineSize[3] = 5;
+            enterMsgMenu.LineCharOffset[0] = 6;
+            enterMsgMenu.LineCharOffset[1] = 6;
+            enterMsgMenu.LineCharOffset[2] = 7;
+            enterMsgMenu.LineCharOffset[3] = 6;
             enterMsgMenu
                 .addParam(new Param("Body", null, "", 1, 0))
                 .addModesForParam("Body", new List<RadioStationMode> { RadioStationMode.ThreeG });
@@ -5235,7 +5608,7 @@ namespace Harris7800HMP
                     cParam.text = cParam.Text.Remove(cParam.ActiveFrom, cParam.ActiveTo);
                     cParam.text = cParam.Text.Insert(cParam.ActiveFrom, text);
 
-                }, "____________________", 2, 0))
+                }, "____________________", 2, 4))
                 .addModesForParam("LineOne", new List<RadioStationMode> { RadioStationMode.ThreeG });
             enterMsgMenu
                 .addParam(new Param("LineTwo", (string text, Param cParam) =>
@@ -5243,10 +5616,10 @@ namespace Harris7800HMP
                     cParam.text = cParam.Text.Remove(cParam.ActiveFrom, cParam.ActiveTo);
                     cParam.text = cParam.Text.Insert(cParam.ActiveFrom, text);
 
-                }, "____________________", 3, 0))
+                }, "____________________", 3, 4))
                 .addModesForParam("LineTwo", new List<RadioStationMode> { RadioStationMode.ThreeG });
             enterMsgMenu
-                .addParam(new Param("Enter", null, "PRESS ENTER TO SEND MESSAGE", 4, 0))
+                .addParam(new Param("Enter", null, "PRESS ENTER TO SEND MESSAGE", 4, 12))
                 .addModesForParam("Enter", new List<RadioStationMode> { RadioStationMode.ThreeG });
 
             enterMsgMenu.addActionToParam(enterMsgMenu.getParam("Body"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
@@ -5265,7 +5638,7 @@ namespace Harris7800HMP
 
                 if (activeParam.isInParam())
                 {
-                    if (activeParam.ActiveFrom >= 0)
+                    if (activeParam.ActiveFrom > 0)
                     {
                         activeParam.ActiveFrom -= 1;
                         activeParam.ActiveTo = 1;
@@ -5298,7 +5671,7 @@ namespace Harris7800HMP
 
                 if (activeParam.isInParam())
                 {
-                    if (activeParam.ActiveFrom < 20)
+                    if (activeParam.ActiveFrom < 19)
                     {
                         activeParam.ActiveFrom += 1;
                         activeParam.ActiveTo = 1;
@@ -5660,16 +6033,19 @@ namespace Harris7800HMP
             Widget programMenu = new Widget(title);
 
             programMenu.LineSize[0] = 5;
-            programMenu.LineSize[1] = 8;
-            programMenu.LineSize[2] = 7;
+            programMenu.LineSize[1] = 9;
+            programMenu.LineSize[2] = 9;
             programMenu.LineSize[3] = 5;
+            programMenu.LineCharOffset[0] = 6;
             programMenu.LineCharOffset[1] = 6;
-            programMenu.LineCharOffset[2] = 4;
+            programMenu.LineCharOffset[2] = 7;
+            programMenu.LineCharOffset[3] = 6;
+
             programMenu.addParam(new Param("Body", null, "", 1, 0));
             programMenu.addParam(new Param("Title", null, title, 1, 0));
             programMenu.addParam(new Param("KeyTitle", null, text, 2, 7));
-            programMenu.addParam(new Param("KeyValue", null, "YES", 3, 10));
-            programMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 15));
+            programMenu.addParam(new Param("KeyValue", null, "YES", 3, 13));
+            programMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 18));
 
             programMenu.getParam("KeyValue").IsActive = true;
 
@@ -5731,9 +6107,14 @@ namespace Harris7800HMP
 
             Widget enterMsgMenu = new Widget(title);
             enterMsgMenu.LineSize[0] = 5;
-            enterMsgMenu.LineSize[1] = 8;
-            enterMsgMenu.LineSize[2] = 8;
-            enterMsgMenu.LineSize[3] = 8;
+            enterMsgMenu.LineSize[1] = 9;
+            enterMsgMenu.LineSize[2] = 9;
+            enterMsgMenu.LineSize[3] = 5;
+            enterMsgMenu.LineCharOffset[0] = 6;
+            enterMsgMenu.LineCharOffset[1] = 6;
+            enterMsgMenu.LineCharOffset[2] = 7;
+            enterMsgMenu.LineCharOffset[3] = 6;
+
             enterMsgMenu
                 .addParam(new Param("Body", null, "", 1, 0))
                 .addModesForParam("Body", new List<RadioStationMode> { RadioStationMode.ThreeG });
@@ -6127,11 +6508,13 @@ namespace Harris7800HMP
             Widget programMenu = new Widget(title);
 
             programMenu.LineSize[0] = 5;
-            programMenu.LineSize[1] = 8;
-            programMenu.LineSize[2] = 7;
+            programMenu.LineSize[1] = 9;
+            programMenu.LineSize[2] = 9;
             programMenu.LineSize[3] = 5;
+            programMenu.LineCharOffset[0] = 6;
             programMenu.LineCharOffset[1] = 6;
-            programMenu.LineCharOffset[2] = 4;
+            programMenu.LineCharOffset[2] = 7;
+            programMenu.LineCharOffset[3] = 6;
             programMenu.addParam(new Param("Body", null, "", 1, 0));
             programMenu.addParam(new Param("Title", null, title, 1, 0));
             programMenu.addParam(new Param("KeyTitle", null, lineOne, 2, 7));
@@ -6157,16 +6540,18 @@ namespace Harris7800HMP
             Widget programMenu = new Widget("initProgramComsecKeysEnterMenu");
 
             programMenu.LineSize[0] = 5;
-            programMenu.LineSize[1] = 8;
-            programMenu.LineSize[2] = 7;
+            programMenu.LineSize[1] = 9;
+            programMenu.LineSize[2] = 9;
             programMenu.LineSize[3] = 5;
+            programMenu.LineCharOffset[0] = 6;
             programMenu.LineCharOffset[1] = 6;
-            programMenu.LineCharOffset[2] = 4;
+            programMenu.LineCharOffset[2] = 7;
+            programMenu.LineCharOffset[3] = 6;
             programMenu.addParam(new Param("Body", null, "", 1, 0));
             programMenu.addParam(new Param("Title", null, "PGM-COMSEC-KEYS-UPDATE", 1, 0));
-            programMenu.addParam(new Param("KeyTitle", null, "KEY TYPE", 2, 7));
+            programMenu.addParam(new Param("KeyTitle", null, "KEY TYPE", 2, 9));
             programMenu.addParam(new Param("KeyValue", null, "CITADEL I (MK-128)", 3, 10));
-            programMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 15));
+            programMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 18));
 
             programMenu.getParam("KeyValue").IsActive = true;
 
@@ -6189,6 +6574,9 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getPrevParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             programMenu.addActionToParam(programMenu.getParam("KeyValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
@@ -6200,6 +6588,9 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getNextParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
 
@@ -6241,15 +6632,17 @@ namespace Harris7800HMP
             Widget programMenu = new Widget("initProgramComsecKeysUpdateKeysMenu");
 
             programMenu.LineSize[0] = 5;
-            programMenu.LineSize[1] = 8;
-            programMenu.LineSize[2] = 7;
+            programMenu.LineSize[1] = 9;
+            programMenu.LineSize[2] = 9;
             programMenu.LineSize[3] = 5;
+            programMenu.LineCharOffset[0] = 6;
             programMenu.LineCharOffset[1] = 6;
-            programMenu.LineCharOffset[2] = 4;
+            programMenu.LineCharOffset[2] = 7;
+            programMenu.LineCharOffset[3] = 6;
             programMenu.addParam(new Param("Body", null, "", 1, 0));
             programMenu.addParam(new Param("Title", null, "PGM-COMSEC-KEYS-UPDATE: ", 1, 0, () => {
                 Param title = programMenu.getParam("Title");
-                title.Text = "PGM-COMSEC-KEYS-UPDATE: " + type;
+                title.Text = "PGM-COMSEC-KEYS-UPDATE:      " + type;
             }));
             programMenu.addParam(new Param("CountTitle", null, "UPDATE COUNT:", 2, 0));
             programMenu.addParam(new Param("CountValue", null, "00", 2, 20
@@ -6265,7 +6658,7 @@ namespace Harris7800HMP
                      
                 }));
 
-            string keyValue = "";
+            string keyValue = "----------";
 
             if (keysByType.Count > 0)
             {
@@ -6277,8 +6670,8 @@ namespace Harris7800HMP
             programMenu.getParam("IsUpdateTitle").IsVisible = false;
             programMenu.getParam("IsUpdateValue").IsVisible = false;
 
-            programMenu.addParam(new Param("KeyValue", null, keyValue, 3, 10));
-            programMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 15));
+            programMenu.addParam(new Param("KeyValue", null, keyValue, 3, 9));
+            programMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 18));
 
             programMenu.getParam("KeyValue").IsActive = true;
 
@@ -6286,9 +6679,8 @@ namespace Harris7800HMP
             programMenu.addActionToParam(programMenu.getParam("KeyValue"), new Button("DOWN", (Button btn, RadioStation rs, Widget wdg) =>
             {
                 Param activeParam = wdg.activeParam();
-                if (programMenu.getParam("CountTitle").IsVisible)
+                if (programMenu.getParam("CountTitle").IsVisible && keysByType.Count > 0)
                 {
-
                     activeParam.Text = @params.getPrevParam();
                     activeParam.ActiveTo = activeParam.Text.Length;
                 }
@@ -6301,7 +6693,7 @@ namespace Harris7800HMP
             programMenu.addActionToParam(programMenu.getParam("KeyValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
             {
                 Param activeParam = wdg.activeParam();
-                if (programMenu.getParam("CountTitle").IsVisible)
+                if (programMenu.getParam("CountTitle").IsVisible && keysByType.Count > 0)
                 {
                     
                     activeParam.Text = @params.getNextParam();
@@ -6315,6 +6707,11 @@ namespace Harris7800HMP
 
             programMenu.addActionToParam(programMenu.getParam("Body"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
             {
+
+                if (keysByType.Count <= 0)
+                {
+                    return;
+                }
 
                 Action returnToThisWidget = () => {
                     Form1.currObject.QueueWidget.add(programMenu);
@@ -6372,9 +6769,13 @@ namespace Harris7800HMP
 
             Widget optionMenu = new Widget(getNameMenu(MenuNames.ProgramModeMenu));
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
-            optionMenu.LineSize[3] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
+            optionMenu.LineSize[3] = 9;
+            optionMenu.LineCharOffset[0] = 6;
+            optionMenu.LineCharOffset[1] = 6;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 7;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "PGM-MODE", 1, 0));
             optionMenu.addParam(new Param("EmptyLine", null, " ", 2, 0));
@@ -6384,6 +6785,7 @@ namespace Harris7800HMP
             optionMenu.addParam(new Param("Hop", null, "HOP", 4, 0));
             optionMenu.addParam(new Param("Arq", null, "ARQ", 4, 10));
             optionMenu.addParam(new Param("Xdl", null, "XDL", 4, 20));
+            optionMenu.getParam("Preset").IsActive = true;
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
             {
@@ -6542,9 +6944,13 @@ namespace Harris7800HMP
 
             Widget optionMenu = new Widget(getNameMenu(MenuNames.ProgramModePresetMenu));
             optionMenu.LineSize[0] = 5;
-            optionMenu.LineSize[1] = 8;
-            optionMenu.LineSize[2] = 8;
-            optionMenu.LineSize[3] = 8;
+            optionMenu.LineSize[1] = 9;
+            optionMenu.LineSize[2] = 9;
+            optionMenu.LineSize[3] = 9;
+            optionMenu.LineCharOffset[0] = 6;
+            optionMenu.LineCharOffset[1] = 6;
+            optionMenu.LineCharOffset[2] = 7;
+            optionMenu.LineCharOffset[3] = 7;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "PGM-MODE", 1, 0));
             optionMenu.addParam(new Param("EmptyLine", null, " ", 2, 0));
@@ -6552,6 +6958,7 @@ namespace Harris7800HMP
             optionMenu.addParam(new Param("Modem", null, "MODEM", 3, 10));
             optionMenu.addParam(new Param("System", null, "SYSTEM", 4, 0));
             optionMenu.addParam(new Param("Manual", null, "MANUAL", 4, 10));
+            optionMenu.getParam("Channel").IsActive = true;
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
             {
@@ -6695,21 +7102,23 @@ namespace Harris7800HMP
             Widget programMenu = new Widget(getNameMenu(MenuNames.ProgramModePresetChannelMenu));
 
             programMenu.LineSize[0] = 5;
-            programMenu.LineSize[1] = 8;
-            programMenu.LineSize[2] = 8;
+            programMenu.LineSize[1] = 9;
+            programMenu.LineSize[2] = 9;
             programMenu.LineSize[3] = 5;
+            programMenu.LineCharOffset[0] = 6;
             programMenu.LineCharOffset[1] = 6;
-            programMenu.LineCharOffset[2] = 4;
+            programMenu.LineCharOffset[2] = 7;
+            programMenu.LineCharOffset[3] = 6;
             programMenu.addParam(new Param("Body", null, "", 1, 0));
             programMenu.addParam(new Param("Title", null, "PGM-MODE-PRESET-CHANNEL-", 1, 0));
-            programMenu.addParam(new Param("KeyTitle", null, "CHANNEL NUMBER", 2, 10));
+            programMenu.addParam(new Param("KeyTitle", null, "CHANNEL NUMBER", 2, 6));
             programMenu.addParam(new Param("KeyTitleCont", null, "TO CHANGE:", 3, 0));
             programMenu.addParam(new Param("KeyValue", (string text, Param cParam) =>
             {
                 cParam.text = cParam.Text.Remove(cParam.ActiveFrom, cParam.ActiveTo);
                 cParam.text = cParam.Text.Insert(cParam.ActiveFrom, text);
 
-            }, "000", 3, 10));
+            }, "000", 3, 15));
             programMenu.addParam(new Param("Info", null, "ENT TO SAVE - CLR TO EXIT", 4, 15));
 
             programMenu.getParam("KeyValue").IsActive = true;
@@ -6760,6 +7169,9 @@ namespace Harris7800HMP
 
                     activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getPrevParam();
                     activeParam.ActiveTo = activeParam.Text.Length;
+
+                    activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                    titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
                     return;
                 }
 
@@ -6787,6 +7199,9 @@ namespace Harris7800HMP
 
                     activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getNextParam();
                     activeParam.ActiveTo = activeParam.Text.Length;
+
+                    activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                    titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
                     return;
                 }
 
@@ -7104,11 +7519,22 @@ namespace Harris7800HMP
                 {
                     programMenu.getParam("KeyTitleCont").IsVisible = false;
                 }
+
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             programMenu.addActionToParam(programMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
             {
                 wdg.showPreviousWidget();
+
+                Param activeParam = wdg.activeParam();
+                Param titleParam = wdg.getParam("KeyValue");
+
+                activeParam.Text = radioParams[0].currParam();
+                titleParam.Text = radioParams[0].Name;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             return programMenu;
@@ -7119,11 +7545,13 @@ namespace Harris7800HMP
             Widget programMenu = new Widget(getNameMenu(MenuNames.ProgramModePresetModemMenu));
 
             programMenu.LineSize[0] = 5;
-            programMenu.LineSize[1] = 8;
-            programMenu.LineSize[2] = 8;
+            programMenu.LineSize[1] = 9;
+            programMenu.LineSize[2] = 9;
             programMenu.LineSize[3] = 5;
+            programMenu.LineCharOffset[0] = 6;
             programMenu.LineCharOffset[1] = 6;
-            programMenu.LineCharOffset[2] = 4;
+            programMenu.LineCharOffset[2] = 7;
+            programMenu.LineCharOffset[3] = 6;
             programMenu.addParam(new Param("Body", null, "", 1, 0));
             programMenu.addParam(new Param("Title", null, "PGM-MODE-PRESET-MODEM-", 1, 0));
             programMenu.addParam(new Param("KeyTitle", null, "MODEM PRESET", 2, 10));
@@ -7190,6 +7618,8 @@ namespace Harris7800HMP
 
                     activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getPrevParam();
                     activeParam.ActiveTo = activeParam.Text.Length;
+                    activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                    titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
                     return;
                 }
 
@@ -7222,6 +7652,8 @@ namespace Harris7800HMP
 
                     activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getNextParam();
                     activeParam.ActiveTo = activeParam.Text.Length;
+                    activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                    titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
                     return;
                 }
 
@@ -7570,11 +8002,21 @@ namespace Harris7800HMP
                 {
                     programMenu.getParam("KeyTitleCont").IsVisible = false;
                 }
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             programMenu.addActionToParam(programMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
             {
                 wdg.showPreviousWidget();
+
+                Param activeParam = wdg.activeParam();
+                Param titleParam = wdg.getParam("KeyTitle");
+
+                activeParam.Text = presetNameTP.currParam();
+                titleParam.Text = presetNameTP.Name;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             return programMenu;
@@ -7659,6 +8101,8 @@ namespace Harris7800HMP
 
                     activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getPrevParam();
                     activeParam.ActiveTo = activeParam.Text.Length;
+                    activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                    titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
                     return;
                 }
 
@@ -7698,6 +8142,8 @@ namespace Harris7800HMP
 
                     activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getNextParam();
                     activeParam.ActiveTo = activeParam.Text.Length;
+                    activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                    titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
                     return;
                 }
 
@@ -8112,11 +8558,22 @@ namespace Harris7800HMP
                 {
                     programMenu.getParam("KeyTitleCont").IsVisible = false;
                 }
+
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             programMenu.addActionToParam(programMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
             {
                 wdg.showPreviousWidget();
+
+                Param activeParam = wdg.activeParam();
+                Param titleParam = wdg.getParam("KeyTitle");
+
+                activeParam.Text = presetNameTP.currParam();
+                titleParam.Text = presetNameTP.Name;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             return programMenu;
@@ -8138,6 +8595,7 @@ namespace Harris7800HMP
             optionMenu.addParam(new Param("Config", null, "CONFIG", 4, 0));
             optionMenu.addParam(new Param("Lqa", null, "LQA", 4, 10));
             optionMenu.addParam(new Param("Amd", null, "AMD", 4, 15));
+            optionMenu.getParam("Chan_group").IsActive = true;
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
             {
@@ -8276,6 +8734,7 @@ namespace Harris7800HMP
             optionMenu.addParam(new Param("EmptyLine", null, " ", 2, 0));
             optionMenu.addParam(new Param("Tx_msg", null, "TX_MSG", 3, 0));
             optionMenu.addParam(new Param("Rx_msg", null, "RX_MSG", 3, 15));
+            optionMenu.getParam("Tx_msg").IsActive = true;
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("LEFT", (Button btn, RadioStation rs, Widget wdg) =>
             {
@@ -8395,6 +8854,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getPrevParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("SmsValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
@@ -8406,6 +8867,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getNextParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
@@ -8575,6 +9038,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getPrevParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("SmsValue"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
@@ -8586,6 +9051,8 @@ namespace Harris7800HMP
 
                 activeParam.Text = radioParams.Find(p => p.Name == paramTitle).getNextParam();
                 activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
@@ -8608,10 +9075,20 @@ namespace Harris7800HMP
                 activeParam.ActiveTo = activeParam.Text.Length;
                 activeParam.ActiveFrom = 0;
 
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleP.Y = Helper.calcCenterIndent(titleP.Text.Length, 28);
             }));
 
             optionMenu.addActionToParam(optionMenu.getParam("Body"), new Button("CLR", (Button btn, RadioStation rs, Widget wdg) =>
             {
+                Param activeParam = wdg.activeParam();
+                Param titleParam = wdg.getParam("SmsTitle");
+
+                activeParam.Text = callTypeTP.currParam();
+                titleParam.Text = callTypeTP.Name;
+                activeParam.Y = Helper.calcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.calcCenterIndent(titleParam.Text.Length, 28);
+
                 clr?.Invoke();
             }));
 

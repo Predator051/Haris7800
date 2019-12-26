@@ -54,9 +54,6 @@
             this.pbOn = new System.Windows.Forms.PictureBox();
             this.timerOn = new System.Windows.Forms.Timer(this.components);
             this.timerAnimation = new System.Windows.Forms.Timer(this.components);
-            this.btnCoupler = new System.Windows.Forms.Button();
-            this.btnHandset = new System.Windows.Forms.Button();
-            this.btnUsb = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbOn)).BeginInit();
             this.SuspendLayout();
@@ -75,6 +72,8 @@
             this.btVolPlus.TabIndex = 0;
             this.btVolPlus.UseVisualStyleBackColor = false;
             this.btVolPlus.Click += new System.EventHandler(this.btVolPlus_Click);
+            this.btVolPlus.MouseEnter += new System.EventHandler(this.btCall_MouseEnter);
+            this.btVolPlus.MouseLeave += new System.EventHandler(this.btCall_MouseLeave);
             // 
             // btVolMinus
             // 
@@ -89,6 +88,8 @@
             this.btVolMinus.TabIndex = 1;
             this.btVolMinus.UseVisualStyleBackColor = false;
             this.btVolMinus.Click += new System.EventHandler(this.btVolMinus_Click);
+            this.btVolMinus.MouseEnter += new System.EventHandler(this.btCall_MouseEnter);
+            this.btVolMinus.MouseLeave += new System.EventHandler(this.btCall_MouseLeave);
             // 
             // btClr
             // 
@@ -103,20 +104,25 @@
             this.btClr.TabIndex = 2;
             this.btClr.UseVisualStyleBackColor = false;
             this.btClr.Click += new System.EventHandler(this.btClr_Click);
+            this.btClr.MouseEnter += new System.EventHandler(this.btCall_MouseEnter);
+            this.btClr.MouseLeave += new System.EventHandler(this.btCall_MouseLeave);
             // 
             // btCall
             // 
             this.btCall.BackColor = System.Drawing.Color.Transparent;
+            this.btCall.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btCall.FlatAppearance.BorderSize = 0;
             this.btCall.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btCall.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btCall.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btCall.Location = new System.Drawing.Point(405, 322);
+            this.btCall.Location = new System.Drawing.Point(408, 322);
             this.btCall.Name = "btCall";
-            this.btCall.Size = new System.Drawing.Size(52, 28);
+            this.btCall.Size = new System.Drawing.Size(45, 28);
             this.btCall.TabIndex = 3;
             this.btCall.UseVisualStyleBackColor = false;
             this.btCall.Click += new System.EventHandler(this.btCall_Click);
+            this.btCall.MouseEnter += new System.EventHandler(this.btCall_MouseEnter);
+            this.btCall.MouseLeave += new System.EventHandler(this.btCall_MouseLeave);
             // 
             // btLt
             // 
@@ -131,6 +137,8 @@
             this.btLt.TabIndex = 4;
             this.btLt.UseVisualStyleBackColor = false;
             this.btLt.Click += new System.EventHandler(this.btLt_Click);
+            this.btLt.MouseEnter += new System.EventHandler(this.btCall_MouseEnter);
+            this.btLt.MouseLeave += new System.EventHandler(this.btCall_MouseLeave);
             // 
             // btMode
             // 
@@ -145,6 +153,8 @@
             this.btMode.TabIndex = 5;
             this.btMode.UseVisualStyleBackColor = false;
             this.btMode.Click += new System.EventHandler(this.btMode_Click);
+            this.btMode.MouseEnter += new System.EventHandler(this.btCall_MouseEnter);
+            this.btMode.MouseLeave += new System.EventHandler(this.btCall_MouseLeave);
             // 
             // btSql
             // 
@@ -159,6 +169,8 @@
             this.btSql.TabIndex = 6;
             this.btSql.UseVisualStyleBackColor = false;
             this.btSql.Click += new System.EventHandler(this.btSql_Click);
+            this.btSql.MouseEnter += new System.EventHandler(this.btCall_MouseEnter);
+            this.btSql.MouseLeave += new System.EventHandler(this.btCall_MouseLeave);
             // 
             // btZero
             // 
@@ -173,6 +185,8 @@
             this.btZero.TabIndex = 7;
             this.btZero.UseVisualStyleBackColor = false;
             this.btZero.Click += new System.EventHandler(this.btZero_Click);
+            this.btZero.MouseEnter += new System.EventHandler(this.btCall_MouseEnter);
+            this.btZero.MouseLeave += new System.EventHandler(this.btCall_MouseLeave);
             // 
             // btUp
             // 
@@ -187,6 +201,8 @@
             this.btUp.TabIndex = 8;
             this.btUp.UseVisualStyleBackColor = false;
             this.btUp.Click += new System.EventHandler(this.btUp_Click);
+            this.btUp.MouseEnter += new System.EventHandler(this.btCall_MouseEnter);
+            this.btUp.MouseLeave += new System.EventHandler(this.btCall_MouseLeave);
             // 
             // btOpt
             // 
@@ -201,6 +217,8 @@
             this.btOpt.TabIndex = 9;
             this.btOpt.UseVisualStyleBackColor = false;
             this.btOpt.Click += new System.EventHandler(this.btOpt_Click);
+            this.btOpt.MouseEnter += new System.EventHandler(this.btCall_MouseEnter);
+            this.btOpt.MouseLeave += new System.EventHandler(this.btCall_MouseLeave);
             // 
             // btPgm
             // 
@@ -215,6 +233,8 @@
             this.btPgm.TabIndex = 10;
             this.btPgm.UseVisualStyleBackColor = false;
             this.btPgm.Click += new System.EventHandler(this.btPgm_Click);
+            this.btPgm.MouseEnter += new System.EventHandler(this.btCall_MouseEnter);
+            this.btPgm.MouseLeave += new System.EventHandler(this.btCall_MouseLeave);
             // 
             // btDown
             // 
@@ -229,6 +249,8 @@
             this.btDown.TabIndex = 11;
             this.btDown.UseVisualStyleBackColor = false;
             this.btDown.Click += new System.EventHandler(this.btDown_Click);
+            this.btDown.MouseEnter += new System.EventHandler(this.btCall_MouseEnter);
+            this.btDown.MouseLeave += new System.EventHandler(this.btCall_MouseLeave);
             // 
             // btUpdate
             // 
@@ -243,6 +265,8 @@
             this.btUpdate.TabIndex = 12;
             this.btUpdate.UseVisualStyleBackColor = false;
             this.btUpdate.Click += new System.EventHandler(this.btUpdate_Click);
+            this.btUpdate.MouseEnter += new System.EventHandler(this.btCall_MouseEnter);
+            this.btUpdate.MouseLeave += new System.EventHandler(this.btCall_MouseLeave);
             // 
             // btLeft
             // 
@@ -257,6 +281,8 @@
             this.btLeft.TabIndex = 13;
             this.btLeft.UseVisualStyleBackColor = false;
             this.btLeft.Click += new System.EventHandler(this.btLeft_Click);
+            this.btLeft.MouseEnter += new System.EventHandler(this.btCall_MouseEnter);
+            this.btLeft.MouseLeave += new System.EventHandler(this.btCall_MouseLeave);
             // 
             // btRigth
             // 
@@ -271,6 +297,8 @@
             this.btRigth.TabIndex = 14;
             this.btRigth.UseVisualStyleBackColor = false;
             this.btRigth.Click += new System.EventHandler(this.btRigth_Click);
+            this.btRigth.MouseEnter += new System.EventHandler(this.btCall_MouseEnter);
+            this.btRigth.MouseLeave += new System.EventHandler(this.btCall_MouseLeave);
             // 
             // btEnt
             // 
@@ -298,6 +326,8 @@
             this.btPrePlus.TabIndex = 16;
             this.btPrePlus.UseVisualStyleBackColor = false;
             this.btPrePlus.Click += new System.EventHandler(this.btPrePlus_Click);
+            this.btPrePlus.MouseEnter += new System.EventHandler(this.btCall_MouseEnter);
+            this.btPrePlus.MouseLeave += new System.EventHandler(this.btCall_MouseLeave);
             // 
             // btPreMinus
             // 
@@ -312,6 +342,8 @@
             this.btPreMinus.TabIndex = 17;
             this.btPreMinus.UseVisualStyleBackColor = false;
             this.btPreMinus.Click += new System.EventHandler(this.btPreMinus_Click);
+            this.btPreMinus.MouseEnter += new System.EventHandler(this.btCall_MouseEnter);
+            this.btPreMinus.MouseLeave += new System.EventHandler(this.btCall_MouseLeave);
             // 
             // btEnter
             // 
@@ -326,6 +358,8 @@
             this.btEnter.TabIndex = 18;
             this.btEnter.UseVisualStyleBackColor = false;
             this.btEnter.Click += new System.EventHandler(this.btEnter_Click);
+            this.btEnter.MouseEnter += new System.EventHandler(this.btCall_MouseEnter);
+            this.btEnter.MouseLeave += new System.EventHandler(this.btCall_MouseLeave);
             // 
             // pictureBox1
             // 
@@ -374,52 +408,6 @@
             this.timerAnimation.Interval = 1000;
             this.timerAnimation.Tick += new System.EventHandler(this.timerAnimation_Tick);
             // 
-            // btnCoupler
-            // 
-            this.btnCoupler.BackColor = System.Drawing.Color.Transparent;
-            this.btnCoupler.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.btnCoupler.FlatAppearance.BorderSize = 0;
-            this.btnCoupler.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
-            this.btnCoupler.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.btnCoupler.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCoupler.Location = new System.Drawing.Point(169, 209);
-            this.btnCoupler.Name = "btnCoupler";
-            this.btnCoupler.Size = new System.Drawing.Size(92, 87);
-            this.btnCoupler.TabIndex = 24;
-            this.btnCoupler.UseVisualStyleBackColor = false;
-            this.btnCoupler.Click += new System.EventHandler(this.btnCoupler_Click);
-            // 
-            // btnHandset
-            // 
-            this.btnHandset.BackColor = System.Drawing.Color.Transparent;
-            this.btnHandset.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.btnHandset.FlatAppearance.BorderSize = 0;
-            this.btnHandset.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
-            this.btnHandset.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.btnHandset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnHandset.Location = new System.Drawing.Point(690, 377);
-            this.btnHandset.Name = "btnHandset";
-            this.btnHandset.Size = new System.Drawing.Size(92, 87);
-            this.btnHandset.TabIndex = 25;
-            this.btnHandset.UseVisualStyleBackColor = false;
-            this.btnHandset.Click += new System.EventHandler(this.btnHandset_Click);
-            // 
-            // btnUsb
-            // 
-            this.btnUsb.BackColor = System.Drawing.Color.Transparent;
-            this.btnUsb.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.btnUsb.FlatAppearance.BorderSize = 0;
-            this.btnUsb.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.btnUsb.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.btnUsb.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUsb.Location = new System.Drawing.Point(768, 295);
-            this.btnUsb.Name = "btnUsb";
-            this.btnUsb.Size = new System.Drawing.Size(46, 43);
-            this.btnUsb.TabIndex = 26;
-            this.btnUsb.UseVisualStyleBackColor = false;
-            this.btnUsb.Click += new System.EventHandler(this.btnUsb_Click);
-            this.btnUsb.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnUsb_MouseUp);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -428,9 +416,6 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(969, 530);
-            this.Controls.Add(this.btnUsb);
-            this.Controls.Add(this.btnHandset);
-            this.Controls.Add(this.btnCoupler);
             this.Controls.Add(this.pbOn);
             this.Controls.Add(this.richDispley);
             this.Controls.Add(this.pictureBox1);
@@ -458,6 +443,8 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
+            this.DoubleClick += new System.EventHandler(this.Form1_DoubleClick);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbOn)).EndInit();
             this.ResumeLayout(false);
@@ -491,9 +478,6 @@
         private System.Windows.Forms.PictureBox pbOn;
         private System.Windows.Forms.Timer timerOn;
         private System.Windows.Forms.Timer timerAnimation;
-        private System.Windows.Forms.Button btnCoupler;
-        private System.Windows.Forms.Button btnHandset;
-        private System.Windows.Forms.Button btnUsb;
     }
 }
 

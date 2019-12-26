@@ -196,5 +196,8 @@
   <ItemGroup>
     <None Include="Resources\antenaModules\handsetTube.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\1\1.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

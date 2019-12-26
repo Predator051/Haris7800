@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -347,6 +348,7 @@ namespace Harris7800HMP
             def.ctVoiceMode = "CLR";
             def.modemPreset = null;
             def.radioMode = RadioStationMode.FIX;
+            systemPresets.Add(def);
         }
 
         public List<StationPresetSystem> SystemPresets { get => systemPresets; set => systemPresets = value; }
@@ -507,6 +509,24 @@ namespace Harris7800HMP
             }
 
             return msgs[currIndex];
+        }
+    }
+
+    public class Square
+    {
+        Point p1, p2, p3, p4;
+
+        public Square(Point leftTop, int sideLenght)
+        {
+            p1 = leftTop;
+            p2 = new Point(p1.X + sideLenght, p1.Y);
+            p3 = new Point(p1.X + sideLenght, p1.Y + sideLenght);
+            p4 = new Point(p1.X, p1.Y + sideLenght);
+        }
+
+        public bool isPointInto(Point point)
+        {
+            return point.X > p1.X && point.Y > p1.Y && point.X < p3.X && point.Y < p3.Y;
         }
     }
 }

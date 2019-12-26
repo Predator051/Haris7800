@@ -53,7 +53,10 @@ namespace Harris7800HMP
         public string Text { get => text; 
             set {
                 text = value;
-                ActiveTo = value.Length;        
+                if (value != null)
+                {
+                    ActiveTo = value.Length;
+                }      
             } 
         }
         public string Name { get => name; set => name = value; }
@@ -316,6 +319,11 @@ namespace Harris7800HMP
 
         public void btnClick(string name, RadioStation station)
         {
+            if (station.getState() == SwitcherState.Off)
+            {
+                return;
+            }
+
             if (Name == WidgetInit.getNameMenu(WidgetInit.MenuNames.MainMenu)
                 && station.KeyBoardLock)
             {

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Text;
 using System.IO;
+using System.Diagnostics;
 
 namespace Harris7800HMP
 {
@@ -28,13 +29,28 @@ namespace Harris7800HMP
         public static Form1 currObject;
         FileInfo fileLesson;
         public RichTextBox lessonsInfo = new RichTextBox();
-        Bitmap usbImage;
 
         RadioModules externalModules = new RadioModules();
+
+        Color displayColor = Color.FromArgb(138, 164, 0);
+        Color displayTextColor = Color.FromArgb(138, 164, 0);
 
         public WidgetQueue QueueWidget
         {
             get => this.queueWidget;
+        }
+
+        public void setBrigth(int value)
+        {
+            displayColor = Color.FromArgb(value * 20, value * 25, displayColor.B);
+            displayTextColor = Color.FromArgb(value * 20, value * 25, displayColor.B);
+            this.richDispley.BackColor = displayColor;
+            this.richDispley.SelectionColor = displayTextColor;
+        }
+
+        public void setContrast(int value)
+        {
+            this.richDispley.BackColor = Color.FromArgb(displayColor.R * value / 100, displayColor.G * value / 100, displayColor.B); ;
         }
 
         public void startShowWidgetQueue(int interval = 1000)
@@ -66,7 +82,7 @@ namespace Harris7800HMP
             this.timer1.Interval = 500;
             this.timerAnimation.Interval = 1000;
             fileLesson = fLesson;
-
+            this.richDispley.BackColor = displayColor;
         }
 
         private void widgetTextToRichText(Widget currWidget)
@@ -130,7 +146,7 @@ namespace Harris7800HMP
                     index += activeParam.ActiveFrom;
                     this.richDispley.Select(index, activeParam.ActiveTo);
                     this.richDispley.SelectionBackColor = Color.Black;
-                    this.richDispley.SelectionColor = Color.White;
+                    this.richDispley.SelectionColor = displayTextColor;
                 }
             }
         }
@@ -420,6 +436,78 @@ namespace Harris7800HMP
 
         private void btnUsb_MouseUp(object sender, MouseEventArgs e)
         {
+        }
+
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+        }
+
+        private void Form1_DoubleClick(object sender, EventArgs e)
+        {
+            MouseEventArgs ee = (MouseEventArgs)e;
+            Square usbArea = new Square(new Point(760, 288), 50);
+            Square handSetArea = new Square(new Point(678, 379), 100);
+            Square couplerArea = new Square(new Point(165, 210), 100);
+
+            if (usbArea.isPointInto(ee.Location))
+            {
+                if (this.radioStation.connectedUsb)
+                {
+                    this.radioStation.connectedUsb = false;
+                    this.BackgroundImage = Properties.Resources.background_keys;
+                }
+                else
+                {
+                    this.radioStation.connectedUsb = true;
+                    var usb = externalModules.modulesImage[RadioModules.ModuleType.Usb];
+                    this.CreateGraphics().DrawImage((Bitmap)usb.Item1, usb.Item2.x, usb.Item2.y);
+                }
+                this.Update();
+            }
+            if (handSetArea.isPointInto(ee.Location))
+            {
+                if (this.radioStation.connectedHandset)
+                {
+                    this.radioStation.connectedHandset = false;
+                    this.BackgroundImage = Properties.Resources.background_keys;
+                }
+                else
+                {
+                    this.radioStation.connectedHandset = true;
+                    var handset = externalModules.modulesImage[RadioModules.ModuleType.Handset];
+                    this.CreateGraphics().DrawImage((Bitmap)handset.Item1, handset.Item2.x, handset.Item2.y);
+                }
+                this.Update();
+            }
+            if (couplerArea.isPointInto(ee.Location))
+            {
+                if (this.radioStation.connectedCoupler)
+                {
+                    this.radioStation.connectedCoupler = false;
+                    this.BackgroundImage = Properties.Resources.background_keys;
+                }
+                else
+                {
+                    this.radioStation.connectedCoupler = true;
+                    var coupler = externalModules.modulesImage[RadioModules.ModuleType.Coupler];
+                    this.CreateGraphics().DrawImage((Bitmap)coupler.Item1, coupler.Item2.x, coupler.Item2.y);
+                }
+                this.Update();
+            }
+            Debug.WriteLine(ee.Location);
+        }
+
+        private void btCall_MouseEnter(object sender, EventArgs e)
+        {
+            System.Windows.Forms.Button btn = (System.Windows.Forms.Button)sender;
+            btn.BackColor = Color.FromArgb(50, Color.White);
+            btn.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, Color.White);
+        }
+
+        private void btCall_MouseLeave(object sender, EventArgs e)
+        {
+            System.Windows.Forms.Button btn = (System.Windows.Forms.Button)sender;
+            btn.BackColor = Color.FromArgb(0, Color.White);
         }
     }
 }
