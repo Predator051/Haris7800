@@ -35,6 +35,7 @@
             // 
             this.rtbLessonsInfo.Location = new System.Drawing.Point(12, 12);
             this.rtbLessonsInfo.Name = "rtbLessonsInfo";
+            this.rtbLessonsInfo.ReadOnly = true;
             this.rtbLessonsInfo.Size = new System.Drawing.Size(776, 426);
             this.rtbLessonsInfo.TabIndex = 0;
             this.rtbLessonsInfo.Text = "";
@@ -46,7 +47,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.rtbLessonsInfo);
             this.Name = "LessonsInfo";
-            this.Text = "LessonsInfo";
+            this.Text = "Iнформацiя";
             this.Load += new System.EventHandler(this.LessonsInfo_Load);
             this.Resize += new System.EventHandler(this.LessonsInfo_Resize);
             this.ResumeLayout(false);

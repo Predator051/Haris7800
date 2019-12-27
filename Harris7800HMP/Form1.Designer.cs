@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.btVolPlus = new System.Windows.Forms.Button();
             this.btVolMinus = new System.Windows.Forms.Button();
             this.btClr = new System.Windows.Forms.Button();
@@ -66,7 +67,7 @@
             this.btVolPlus.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btVolPlus.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btVolPlus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btVolPlus.Location = new System.Drawing.Point(357, 313);
+            this.btVolPlus.Location = new System.Drawing.Point(322, 279);
             this.btVolPlus.Name = "btVolPlus";
             this.btVolPlus.Size = new System.Drawing.Size(43, 37);
             this.btVolPlus.TabIndex = 0;
@@ -82,7 +83,7 @@
             this.btVolMinus.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btVolMinus.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btVolMinus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btVolMinus.Location = new System.Drawing.Point(357, 349);
+            this.btVolMinus.Location = new System.Drawing.Point(322, 315);
             this.btVolMinus.Name = "btVolMinus";
             this.btVolMinus.Size = new System.Drawing.Size(42, 38);
             this.btVolMinus.TabIndex = 1;
@@ -98,7 +99,7 @@
             this.btClr.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btClr.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btClr.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btClr.Location = new System.Drawing.Point(353, 401);
+            this.btClr.Location = new System.Drawing.Point(318, 363);
             this.btClr.Name = "btClr";
             this.btClr.Size = new System.Drawing.Size(47, 23);
             this.btClr.TabIndex = 2;
@@ -115,7 +116,7 @@
             this.btCall.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btCall.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btCall.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btCall.Location = new System.Drawing.Point(408, 322);
+            this.btCall.Location = new System.Drawing.Point(373, 284);
             this.btCall.Name = "btCall";
             this.btCall.Size = new System.Drawing.Size(45, 28);
             this.btCall.TabIndex = 3;
@@ -131,7 +132,7 @@
             this.btLt.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btLt.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btLt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btLt.Location = new System.Drawing.Point(459, 322);
+            this.btLt.Location = new System.Drawing.Point(425, 285);
             this.btLt.Name = "btLt";
             this.btLt.Size = new System.Drawing.Size(44, 25);
             this.btLt.TabIndex = 4;
@@ -147,7 +148,7 @@
             this.btMode.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btMode.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btMode.Location = new System.Drawing.Point(514, 325);
+            this.btMode.Location = new System.Drawing.Point(479, 286);
             this.btMode.Name = "btMode";
             this.btMode.Size = new System.Drawing.Size(47, 25);
             this.btMode.TabIndex = 5;
@@ -163,7 +164,7 @@
             this.btSql.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btSql.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btSql.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btSql.Location = new System.Drawing.Point(408, 358);
+            this.btSql.Location = new System.Drawing.Point(376, 319);
             this.btSql.Name = "btSql";
             this.btSql.Size = new System.Drawing.Size(43, 31);
             this.btSql.TabIndex = 6;
@@ -179,7 +180,7 @@
             this.btZero.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btZero.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btZero.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btZero.Location = new System.Drawing.Point(459, 358);
+            this.btZero.Location = new System.Drawing.Point(426, 321);
             this.btZero.Name = "btZero";
             this.btZero.Size = new System.Drawing.Size(44, 29);
             this.btZero.TabIndex = 7;
@@ -195,9 +196,9 @@
             this.btUp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btUp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btUp.Location = new System.Drawing.Point(515, 358);
+            this.btUp.Location = new System.Drawing.Point(476, 318);
             this.btUp.Name = "btUp";
-            this.btUp.Size = new System.Drawing.Size(46, 29);
+            this.btUp.Size = new System.Drawing.Size(52, 35);
             this.btUp.TabIndex = 8;
             this.btUp.UseVisualStyleBackColor = false;
             this.btUp.Click += new System.EventHandler(this.btUp_Click);
@@ -211,7 +212,7 @@
             this.btOpt.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btOpt.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btOpt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btOpt.Location = new System.Drawing.Point(408, 396);
+            this.btOpt.Location = new System.Drawing.Point(375, 359);
             this.btOpt.Name = "btOpt";
             this.btOpt.Size = new System.Drawing.Size(42, 28);
             this.btOpt.TabIndex = 9;
@@ -227,7 +228,7 @@
             this.btPgm.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btPgm.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btPgm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btPgm.Location = new System.Drawing.Point(459, 401);
+            this.btPgm.Location = new System.Drawing.Point(427, 362);
             this.btPgm.Name = "btPgm";
             this.btPgm.Size = new System.Drawing.Size(42, 23);
             this.btPgm.TabIndex = 10;
@@ -243,7 +244,7 @@
             this.btDown.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btDown.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btDown.Location = new System.Drawing.Point(514, 401);
+            this.btDown.Location = new System.Drawing.Point(480, 362);
             this.btDown.Name = "btDown";
             this.btDown.Size = new System.Drawing.Size(40, 23);
             this.btDown.TabIndex = 11;
@@ -259,7 +260,7 @@
             this.btUpdate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btUpdate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btUpdate.Location = new System.Drawing.Point(408, 437);
+            this.btUpdate.Location = new System.Drawing.Point(374, 399);
             this.btUpdate.Name = "btUpdate";
             this.btUpdate.Size = new System.Drawing.Size(45, 25);
             this.btUpdate.TabIndex = 12;
@@ -275,9 +276,9 @@
             this.btLeft.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btLeft.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btLeft.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btLeft.Location = new System.Drawing.Point(455, 435);
+            this.btLeft.Location = new System.Drawing.Point(424, 397);
             this.btLeft.Name = "btLeft";
-            this.btLeft.Size = new System.Drawing.Size(46, 27);
+            this.btLeft.Size = new System.Drawing.Size(44, 27);
             this.btLeft.TabIndex = 13;
             this.btLeft.UseVisualStyleBackColor = false;
             this.btLeft.Click += new System.EventHandler(this.btLeft_Click);
@@ -291,7 +292,7 @@
             this.btRigth.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btRigth.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btRigth.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btRigth.Location = new System.Drawing.Point(514, 435);
+            this.btRigth.Location = new System.Drawing.Point(480, 397);
             this.btRigth.Name = "btRigth";
             this.btRigth.Size = new System.Drawing.Size(40, 29);
             this.btRigth.TabIndex = 14;
@@ -307,9 +308,9 @@
             this.btEnt.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btEnt.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btEnt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btEnt.Location = new System.Drawing.Point(561, 393);
+            this.btEnt.Location = new System.Drawing.Point(530, 356);
             this.btEnt.Name = "btEnt";
-            this.btEnt.Size = new System.Drawing.Size(46, 37);
+            this.btEnt.Size = new System.Drawing.Size(46, 34);
             this.btEnt.TabIndex = 15;
             this.btEnt.UseVisualStyleBackColor = false;
             // 
@@ -320,7 +321,7 @@
             this.btPrePlus.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btPrePlus.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btPrePlus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btPrePlus.Location = new System.Drawing.Point(567, 313);
+            this.btPrePlus.Location = new System.Drawing.Point(533, 275);
             this.btPrePlus.Name = "btPrePlus";
             this.btPrePlus.Size = new System.Drawing.Size(39, 39);
             this.btPrePlus.TabIndex = 16;
@@ -336,7 +337,7 @@
             this.btPreMinus.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btPreMinus.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btPreMinus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btPreMinus.Location = new System.Drawing.Point(567, 352);
+            this.btPreMinus.Location = new System.Drawing.Point(532, 316);
             this.btPreMinus.Name = "btPreMinus";
             this.btPreMinus.Size = new System.Drawing.Size(39, 35);
             this.btPreMinus.TabIndex = 17;
@@ -352,7 +353,7 @@
             this.btEnter.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.btEnter.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.btEnter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btEnter.Location = new System.Drawing.Point(565, 401);
+            this.btEnter.Location = new System.Drawing.Point(531, 362);
             this.btEnter.Name = "btEnter";
             this.btEnter.Size = new System.Drawing.Size(46, 23);
             this.btEnter.TabIndex = 18;
@@ -365,9 +366,9 @@
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox1.Image = global::Harris7800HMP.Properties.Resources.offSwitch;
-            this.pictureBox1.Location = new System.Drawing.Point(683, 179);
+            this.pictureBox1.Location = new System.Drawing.Point(649, 143);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(99, 99);
+            this.pictureBox1.Size = new System.Drawing.Size(104, 108);
             this.pictureBox1.TabIndex = 19;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
@@ -376,7 +377,7 @@
             // 
             this.richDispley.BackColor = System.Drawing.Color.OliveDrab;
             this.richDispley.Cursor = System.Windows.Forms.Cursors.Default;
-            this.richDispley.Location = new System.Drawing.Point(368, 187);
+            this.richDispley.Location = new System.Drawing.Point(327, 150);
             this.richDispley.Name = "richDispley";
             this.richDispley.ReadOnly = true;
             this.richDispley.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
@@ -391,13 +392,14 @@
             // pbOn
             // 
             this.pbOn.BackColor = System.Drawing.Color.Transparent;
-            this.pbOn.Location = new System.Drawing.Point(368, 182);
+            this.pbOn.Location = new System.Drawing.Point(328, 145);
             this.pbOn.Name = "pbOn";
             this.pbOn.Size = new System.Drawing.Size(234, 76);
             this.pbOn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbOn.TabIndex = 23;
             this.pbOn.TabStop = false;
             this.pbOn.Visible = false;
+            this.pbOn.Click += new System.EventHandler(this.pbOn_Click);
             // 
             // timerOn
             // 
@@ -412,10 +414,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::Harris7800HMP.Properties.Resources.background_keys;
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.CausesValidation = false;
-            this.ClientSize = new System.Drawing.Size(969, 530);
+            this.ClientSize = new System.Drawing.Size(892, 468);
             this.Controls.Add(this.pbOn);
             this.Controls.Add(this.richDispley);
             this.Controls.Add(this.pictureBox1);
@@ -438,8 +440,9 @@
             this.Controls.Add(this.btClr);
             this.Controls.Add(this.btVolMinus);
             this.Controls.Add(this.btVolPlus);
+            this.DoubleBuffered = true;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Harris CBT - RF-7800H-MP";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);

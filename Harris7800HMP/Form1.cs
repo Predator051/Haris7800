@@ -509,5 +509,10 @@ namespace Harris7800HMP
             System.Windows.Forms.Button btn = (System.Windows.Forms.Button)sender;
             btn.BackColor = Color.FromArgb(0, Color.White);
         }
+
+        private void pbOn_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

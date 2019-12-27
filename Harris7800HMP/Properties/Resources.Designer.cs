@@ -85,7 +85,7 @@ namespace Harris7800HMP.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap background_keys {
             get {
-                object obj = ResourceManager.GetObject("background-keys", resourceCulture);
+                object obj = ResourceManager.GetObject("background_keys", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

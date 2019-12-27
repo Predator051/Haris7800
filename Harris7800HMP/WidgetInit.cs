@@ -1788,13 +1788,15 @@ namespace Harris7800HMP
             optionMenu.LineSize[1] = 9;
             optionMenu.LineSize[2] = 9;
             optionMenu.LineSize[3] = 5;
-            optionMenu.LineCharOffset[1] = 6;
+            optionMenu.LineCharOffset[0] = 6;
+            optionMenu.LineCharOffset[1] = 7;
             optionMenu.LineCharOffset[2] = 6;
+            optionMenu.LineCharOffset[3] = 6;
             optionMenu.addParam(new Param("Body", null, "", 1, 0));
             optionMenu.addParam(new Param("Title", null, "OPTI0NS-RADIO", 1, 0));
             optionMenu.addParam(new Param("RadioOptionsTitle", null, "TX POWER LEVEL", 2, 7));
             optionMenu.addParam(new Param("RadioOptionsValue", null, "LOW", 3, 12));
-            optionMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 17));
+            optionMenu.addParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 19));
 
             optionMenu.getParam("RadioOptionsValue").IsActive = true;
 

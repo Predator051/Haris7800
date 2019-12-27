@@ -47,7 +47,7 @@
             this.ClientSize = new System.Drawing.Size(360, 483);
             this.Controls.Add(this.lbLessons);
             this.Name = "LessonsMenu";
-            this.Text = "LessonsMenu";
+            this.Text = "Вправи";
             this.ResumeLayout(false);
 
         }
