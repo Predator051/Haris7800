@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Harris7800HMP
 {
@@ -25,10 +22,10 @@ namespace Harris7800HMP
             }
         }
 
-        public Dictionary< ModuleType, Tuple<Bitmap, Location>> modulesImage = new Dictionary<ModuleType, Tuple<Bitmap, Location>> {
-            { ModuleType.Handset, new Tuple<Bitmap, Location>(Properties.Resources.handsetTube, new Location(680, 360)) },
-            { ModuleType.Usb , new Tuple<Bitmap, Location>(Properties.Resources.usbJustConnector, new Location(700, 284)) },
-            { ModuleType.Coupler , new Tuple<Bitmap, Location>(Properties.Resources.coupler, new Location(0, 180)) }
+        public Dictionary<ModuleType, Tuple<Bitmap, Location>> modulesImage = new Dictionary<ModuleType, Tuple<Bitmap, Location>> {
+            { ModuleType.Handset, new Tuple<Bitmap, Location>(Properties.Resources.handsetTube, new Location(650, 320)) },
+            { ModuleType.Usb , new Tuple<Bitmap, Location>(Properties.Resources.usbJustConnector, new Location(665, 245)) },
+            { ModuleType.Coupler , new Tuple<Bitmap, Location>(Properties.Resources.coupler, new Location(-40, 155)) }
         };
     }
 }

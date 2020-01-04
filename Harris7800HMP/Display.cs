@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Harris7800HMP
 {
     public class Display
     {
-        List<string> lines = new List<string>();
-        Battery battery = new Battery();
-        RadioStation radioStation;
+        private List<string> lines = new List<string>();
+        private Battery battery = new Battery();
+        private RadioStation radioStation;
         public Display(RadioStation station)
         {
             Lines.Add(" " + battery);
@@ -20,11 +16,11 @@ namespace Harris7800HMP
             radioStation = station;
         }
 
-        public List<string> Lines { get => lines;}
+        public List<string> Lines { get => lines; }
 
         public override string ToString()
         {
-            string result = radioStation.ToString();
+            var result = radioStation.ToString();
             return result;
         }
     }

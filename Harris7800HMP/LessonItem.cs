@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace Harris7800HMP
 {
@@ -14,7 +9,7 @@ namespace Harris7800HMP
             Lesson = fileLesson;
         }
 
-        FileInfo lesson;
+        private FileInfo lesson;
 
         public FileInfo Lesson { get => lesson; set => lesson = value; }
 

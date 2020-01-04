@@ -2,22 +2,20 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Harris7800HMP
 {
     public enum ChargingStatus { Low, Middle, High };
     public class Battery
     {
-        
+
         private string chargSymbol = "■";
         private ChargingStatus chargingStatus = ChargingStatus.High;
 
         public override string ToString()
         {
-            string result = "BAT ";
-            if( chargingStatus > ChargingStatus.Low )
+            var result = "BAT ";
+            if (chargingStatus > ChargingStatus.Low)
             {
                 result += chargSymbol;
             }
@@ -57,35 +55,35 @@ namespace Harris7800HMP
 
     public class WidgetTextParams
     {
-        string name;
-        List<string> parameters = new List<string>();
-        int currIndex = 0;
+        private string name;
+        private List<string> parameters = new List<string>();
+        private int currIndex = 0;
 
         public WidgetTextParams(string name)
         {
-            this.Name = name;
+            Name = name;
         }
 
         public string Name { get => name; set => name = value; }
         public int CurrIndex { get => currIndex; set => currIndex = value; }
         public List<string> Parameters { get => parameters; set => parameters = value; }
 
-        public WidgetTextParams addParam(string name)
+        public WidgetTextParams AddParam(string name)
         {
             parameters.Add(name);
             return this;
         }
 
-        public string getNextParam()
+        public string GetNextParam()
         {
-            currIndex++; 
+            currIndex++;
             if (currIndex >= parameters.Count)
             {
                 currIndex = 0;
             }
             return parameters[currIndex];
         }
-        public string getPrevParam()
+        public string GetPrevParam()
         {
             currIndex--;
 
@@ -96,7 +94,7 @@ namespace Harris7800HMP
             return parameters[currIndex];
         }
 
-        public string currParam()
+        public string CurrParam()
         {
             return parameters[currIndex];
         }
@@ -109,8 +107,8 @@ namespace Harris7800HMP
         {
             return a.Name != b.Name;
         }
-    
-        public void clear()
+
+        public void Clear()
         {
             currIndex = 0;
             parameters.Clear();
@@ -119,16 +117,15 @@ namespace Harris7800HMP
 
     public class SmsMenu
     {
-        List<string> numberSms = new List<string>() {
+        private List<string> numberSms = new List<string>() {
             "", "", "", "", "", "", "", "", "", ""
         };
-
-        int currentIndex = 0;
+        private int currentIndex = 0;
 
         public int CurrentIndex { get => currentIndex; set => currentIndex = value; }
         public List<string> NumberSms { get => numberSms; set => numberSms = value; }
 
-        public void next()
+        public void Next()
         {
             CurrentIndex++;
             if (CurrentIndex > NumberSms.Count - 1)
@@ -137,7 +134,7 @@ namespace Harris7800HMP
             }
         }
 
-        public void previous()
+        public void Previous()
         {
             CurrentIndex--;
             if (CurrentIndex < 0)
@@ -146,7 +143,7 @@ namespace Harris7800HMP
             }
         }
 
-        public Tuple<string, string> getPair()
+        public Tuple<string, string> GetPair()
         {
             int firstInd;
             int secondInd;
@@ -154,14 +151,14 @@ namespace Harris7800HMP
             {
                 firstInd = CurrentIndex;
                 secondInd = CurrentIndex + 1;
-            } 
+            }
             else
             {
                 firstInd = CurrentIndex - 1;
                 secondInd = CurrentIndex;
             }
-            string firstStr = firstInd + ":" + NumberSms[firstInd];
-            string secondStr = secondInd + ":" + NumberSms[secondInd];
+            var firstStr = firstInd + ":" + NumberSms[firstInd];
+            var secondStr = secondInd + ":" + NumberSms[secondInd];
             return new Tuple<string, string>(firstStr, secondStr);
         }
     }
@@ -176,7 +173,7 @@ namespace Harris7800HMP
             Aes128
         }
 
-        public static string typeToString(KeyType type)
+        public static string TypeToString(KeyType type)
         {
             switch (type)
             {
@@ -196,7 +193,7 @@ namespace Harris7800HMP
             return "";
         }
 
-        public static KeyType stringToType(string typeStr)
+        public static KeyType StringToType(string typeStr)
         {
             switch (typeStr)
             {
@@ -219,11 +216,11 @@ namespace Harris7800HMP
 
         public class KeyValue
         {
-            public string KeyName = "";
-            public string KeyVal = "";
-            public string KeyAws = "";
+            public string keyName = "";
+            public string keyVal = "";
+            public string keyAws = "";
             public int updateCount = 0;
-            public string countToString()
+            public string CountToString()
             {
                 if (updateCount < 10)
                 {
@@ -233,7 +230,7 @@ namespace Harris7800HMP
             }
         }
 
-        Dictionary<KeyType, List<KeyValue>> keys = new Dictionary<KeyType, List<KeyValue>> {
+        private Dictionary<KeyType, List<KeyValue>> keys = new Dictionary<KeyType, List<KeyValue>> {
             {KeyType.Citadel1, new List<KeyValue>() },
             {KeyType.Aes256, new List<KeyValue>() },
             {KeyType.Aes128, new List<KeyValue>() },
@@ -241,19 +238,19 @@ namespace Harris7800HMP
 
         public Dictionary<KeyType, List<KeyValue>> Keys { get => keys; set => keys = value; }
 
-        public void addKey(KeyType type, KeyValue value)
+        public void AddKey(KeyType type, KeyValue value)
         {
             keys[type].Add(value);
         }
 
-        public bool isContainKey(string name)
+        public bool IsContainKey(string name)
         {
-            var KeysName = Keys.Values.ToList();
-            foreach (var klist in KeysName)
+            var keysName = Keys.Values.ToList();
+            foreach (var klist in keysName)
             {
                 foreach (var k in klist)
                 {
-                    if (k.KeyName == name)
+                    if (k.keyName == name)
                     {
                         return true;
                     }
@@ -262,14 +259,14 @@ namespace Harris7800HMP
             return false;
         }
 
-        public KeyValue findKey(string name)
+        public KeyValue FindKey(string name)
         {
-            var KeysName = Keys.Values.ToList();
-            foreach (var klist in KeysName)
+            var keysName = Keys.Values.ToList();
+            foreach (var klist in keysName)
             {
                 foreach (var k in klist)
                 {
-                    if (k.KeyName == name)
+                    if (k.keyName == name)
                     {
                         return k;
                     }
@@ -291,32 +288,32 @@ namespace Harris7800HMP
         public string enable;
         public string originalName = "";
 
-        public void parseFromListWidgetTextParams(List<WidgetTextParams> textParams)
+        public void ParseFromListWidgetTextParams(List<WidgetTextParams> textParams)
         {
-            Func<string, WidgetTextParams> findParam = (string name) =>
+            WidgetTextParams FindParam(string name)
             {
                 return textParams.Find(tp => tp.Name == name);
-            };
+            }
 
-            Func<string, string> getValueTextParam = (string name) =>
+            string GetValueTextParam(string name)
             {
-                return findParam(name).currParam();
-            };
+                return FindParam(name).CurrParam();
+            }
 
-            name = getValueTextParam("PRESET NAME");
-            modemType = getValueTextParam("MODEM TYPE");
-            dataRate = getValueTextParam("DATA RATE");
-            mode = getValueTextParam("MODE");
-            dataBits = getValueTextParam("DATA BITS");
-            stopBits = getValueTextParam("STOP BITS");
-            parity = getValueTextParam("PARITY");
-            enable = getValueTextParam("ENABLE");
-;        }
+            name = GetValueTextParam("PRESET NAME");
+            modemType = GetValueTextParam("MODEM TYPE");
+            dataRate = GetValueTextParam("DATA RATE");
+            mode = GetValueTextParam("MODE");
+            dataBits = GetValueTextParam("DATA BITS");
+            stopBits = GetValueTextParam("STOP BITS");
+            parity = GetValueTextParam("PARITY");
+            enable = GetValueTextParam("ENABLE");
+        }
 
-        public static StationPresetModemModule parse(List<WidgetTextParams> textParams)
+        public static StationPresetModemModule Parse(List<WidgetTextParams> textParams)
         {
-            StationPresetModemModule module = new StationPresetModemModule();
-            module.parseFromListWidgetTextParams(textParams);
+            var module = new StationPresetModemModule();
+            module.ParseFromListWidgetTextParams(textParams);
             return module;
         }
     }
@@ -335,30 +332,31 @@ namespace Harris7800HMP
 
     public class StationPresetSystemContainer
     {
-        List<StationPresetSystem> systemPresets = new List<StationPresetSystem>();
-        int currIndex = 0;
+        private List<StationPresetSystem> systemPresets = new List<StationPresetSystem>();
+        private int currIndex = 0;
 
-        public StationPresetSystemContainer ()
+        public StationPresetSystemContainer()
         {
-            StationPresetSystem def = new StationPresetSystem();
-
-            def.channelNumber = "001";
-            def.enable = "ON";
-            def.key = new KeyValuePair<KeyModule.KeyType, KeyModule.KeyValue>(KeyModule.KeyType.None, null);
-            def.ctVoiceMode = "CLR";
-            def.modemPreset = null;
-            def.radioMode = RadioStationMode.FIX;
+            var def = new StationPresetSystem
+            {
+                channelNumber = "001",
+                enable = "ON",
+                key = new KeyValuePair<KeyModule.KeyType, KeyModule.KeyValue>(KeyModule.KeyType.None, null),
+                ctVoiceMode = "CLR",
+                modemPreset = null,
+                radioMode = RadioStationMode.Fix
+            };
             systemPresets.Add(def);
         }
 
         public List<StationPresetSystem> SystemPresets { get => systemPresets; set => systemPresets = value; }
 
-        public void addPresetSystem(StationPresetSystem newPreset)
+        public void AddPresetSystem(StationPresetSystem newPreset)
         {
             SystemPresets.Add(newPreset);
-        } 
+        }
 
-        public StationPresetSystem nextPreset()
+        public StationPresetSystem NextPreset()
         {
             currIndex++;
             if (currIndex > SystemPresets.Count - 1)
@@ -369,7 +367,7 @@ namespace Harris7800HMP
             return SystemPresets[currIndex];
         }
 
-        public StationPresetSystem prevPreset()
+        public StationPresetSystem PrevPreset()
         {
             currIndex--;
             if (currIndex < 0)
@@ -381,45 +379,44 @@ namespace Harris7800HMP
         }
     }
 
-    public class txMsg
+    public class TxMsg
     {
         public static string emptyMsg = "------------------------";
         public string msg;
         public int number;
-        public bool isDefault()
+        public bool IsDefault()
         {
             return msg == emptyMsg;
         }
     }
 
-    public class txMsgContainer
+    public class TxMsgContainer
     {
-        List<txMsg> msgs;
-        int currIndex = 0;
+        private List<TxMsg> msgs;
+        private int currIndex = 0;
 
-        public bool isEmpty()
+        public bool IsEmpty()
         {
-            return !msgs.Any((txMsg msg)=> {
-                return msg.msg != txMsg.emptyMsg;
+            return !msgs.Any((TxMsg msg) =>
+            {
+                return msg.msg != TxMsg.emptyMsg;
             });
         }
 
-        public txMsgContainer()
+        public TxMsgContainer()
         {
-            msgs = new List<txMsg>();
+            msgs = new List<TxMsg>();
 
-            for (int i = 0; i <= 9; i++)
+            for (var i = 0; i <= 9; i++)
             {
-                txMsg tx = new txMsg();
-                tx.msg = txMsg.emptyMsg;
-                tx.number = i + 1;
+                var tx = new TxMsg {msg = TxMsg.emptyMsg, number = i + 1};
                 msgs.Add(tx);
             }
         }
 
-        public List<txMsg> Msgs { get => msgs; set => msgs = value; }
+        public List<TxMsg> Msgs { get => msgs; set => msgs = value; }
 
-        public txMsg currMsg()
+        public TxMsg CurrMsg()
         {
             if (msgs.Count == 0)
             {
@@ -429,14 +426,14 @@ namespace Harris7800HMP
             return msgs[currIndex];
         }
 
-        public txMsg nextNDMsg()
+        public TxMsg NextNdMsg()
         {
             currIndex++;
-            bool found = false;
+            var found = false;
 
             for (; currIndex < msgs.Count; currIndex++)
             {
-                if (msgs[currIndex].isDefault())
+                if (msgs[currIndex].IsDefault())
                 {
                     continue;
                 }
@@ -449,7 +446,7 @@ namespace Harris7800HMP
                 currIndex = 0;
                 for (; currIndex < msgs.Count; currIndex++)
                 {
-                    if (msgs[currIndex].isDefault())
+                    if (msgs[currIndex].IsDefault())
                     {
                         continue;
                     }
@@ -460,13 +457,13 @@ namespace Harris7800HMP
             return msgs[currIndex];
         }
 
-        public txMsg prevNDMsg()
+        public TxMsg PrevNdMsg()
         {
             currIndex--;
-            bool found = false;
+            var found = false;
             for (; currIndex >= 0; currIndex--)
             {
-                if (msgs[currIndex].isDefault())
+                if (msgs[currIndex].IsDefault())
                 {
                     continue;
                 }
@@ -479,7 +476,7 @@ namespace Harris7800HMP
                 currIndex = msgs.Count - 1;
                 for (; currIndex >= 0; currIndex--)
                 {
-                    if (msgs[currIndex].isDefault())
+                    if (msgs[currIndex].IsDefault())
                     {
                         continue;
                     }
@@ -489,7 +486,7 @@ namespace Harris7800HMP
 
             return msgs[currIndex];
         }
-        public txMsg nextMsg()
+        public TxMsg NextMsg()
         {
             currIndex++;
             if (currIndex > msgs.Count - 1)
@@ -500,7 +497,7 @@ namespace Harris7800HMP
             return msgs[currIndex];
         }
 
-        public txMsg prevMsg()
+        public TxMsg PrevMsg()
         {
             currIndex--;
             if (currIndex < 0)
@@ -514,7 +511,7 @@ namespace Harris7800HMP
 
     public class Square
     {
-        Point p1, p2, p3, p4;
+        private Point p1, p2, p3, p4;
 
         public Square(Point leftTop, int sideLenght)
         {
@@ -524,7 +521,7 @@ namespace Harris7800HMP
             p4 = new Point(p1.X, p1.Y + sideLenght);
         }
 
-        public bool isPointInto(Point point)
+        public bool IsPointInto(Point point)
         {
             return point.X > p1.X && point.Y > p1.Y && point.X < p3.X && point.Y < p3.Y;
         }

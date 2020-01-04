@@ -1,39 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Harris7800HMP
 {
     public class Param
     {
-        bool isActive = false;
+        private bool isActive = false;
         public string text;
-        int activeFrom;
-        int activeTo;
-        string name;
-        Action<string, Param> changeFunction;
-        Action updateFunction;
-        int x;
-        int y;
-        int fontSize = 6;
-        bool isVisible = true;
+        private int activeFrom;
+        private int activeTo;
+        private string name;
+        private Action<string, Param> changeFunction;
+        private Action updateFunction;
+        private int x;
+        private int y;
+        private int fontSize = 6;
+        private bool isVisible = true;
 
         public Param(string name, Action<string, Param> act, string text, int xX, int yY, Action update = null)
         {
-            this.Name = name;
+            Name = name;
             changeFunction = act;
             this.text = text;
-            this.X = xX;
-            this.Y = yY;
+            X = xX;
+            Y = yY;
             updateFunction = update;
         }
-        public void action(string text)
+        public void Action(string text)
         {
             changeFunction?.Invoke(text, this);
         }
-        public bool IsActive { get => isActive; 
+        public bool IsActive
+        {
+            get => isActive;
             set
             {
                 isActive = value;
@@ -42,22 +42,25 @@ namespace Harris7800HMP
             }
         }
 
-        public string getActiveText()
+        public string GetActiveText()
         {
             return text.Substring(activeFrom, activeTo);
         }
-        public bool isInParam()
+        public bool IsInParam()
         {
             return activeFrom != 0 || activeTo != text.Length;
         }
-        public string Text { get => text; 
-            set {
+        public string Text
+        {
+            get => text;
+            set
+            {
                 text = value;
                 if (value != null)
                 {
                     ActiveTo = value.Length;
-                }      
-            } 
+                }
+            }
         }
         public string Name { get => name; set => name = value; }
         public int X { get => x; set => x = value; }
@@ -67,41 +70,49 @@ namespace Harris7800HMP
         public Action UpdateFunction { get => updateFunction; set => updateFunction = value; }
         public bool IsVisible { get => isVisible; set => isVisible = value; }
 
-        public void setLocation(int x, int y)
+        public void SetLocation(int x, int y)
         {
             X = x;
             Y = y;
         }
 
-        public void update()
+        public void Update()
         {
             UpdateFunction?.Invoke();
+        }
+
+        public void FullActive()
+        {
+            ActiveTo = this.Text.Length;
+            ActiveFrom = 0;
         }
     }
     public class Widget
     {
-        string name;
-        Dictionary<string, Widget> availableWidgets = new Dictionary<string, Widget>();
+        private string name;
+        private Dictionary<string, Widget> availableWidgets = new Dictionary<string, Widget>();
         public Widget comeFrom;
         public Widget moveTo;
-        List<Param> parameters = new List<Param>();
-        Dictionary<Param, List<Button>> paramsAction = new Dictionary<Param, List<Button>>();
-        int lineLenght = 50;
-        Dictionary<int, int> lineSize = new Dictionary<int, int> {
+        private List<Param> parameters = new List<Param>();
+        private Dictionary<Param, List<Button>> paramsAction = new Dictionary<Param, List<Button>>();
+        private int lineLenght = 50;
+        private Dictionary<int, int> lineSize = new Dictionary<int, int> {
             {0, 6}, {1, 6}, {3, 6}, {2, 6}, {4, 6},
         };
-        Dictionary<int, int> lineCharOffset = new Dictionary<int, int> {
+        private Dictionary<int, int> lineCharOffset = new Dictionary<int, int> {
             {0, 2}, {1, 2}, {2, 2}, {3, 2}, {4, 2}
         };
-        Dictionary<Param, List<RadioStationMode>> awailableParamForMode = new Dictionary<Param, List<RadioStationMode>>();
-        Dictionary<string, Object> objectContainer = new Dictionary<string, Object>();
+        private Dictionary<Param, List<RadioStationMode>> awailableParamForMode = new Dictionary<Param, List<RadioStationMode>>();
+        private Dictionary<string, Object> objectContainer = new Dictionary<string, Object>();
         public Widget(string name)
         {
             this.name = name;
         }
         public Widget ComeFrom { get => comeFrom; set => comeFrom = value; }
         public string Name { get => name; set => name = value; }
-        public Widget MoveTo { get => moveTo; set
+        public Widget MoveTo
+        {
+            get => moveTo; set
             {
                 moveTo = value;
 
@@ -116,14 +127,14 @@ namespace Harris7800HMP
         public Dictionary<int, int> LineCharOffset { get => lineCharOffset; set => lineCharOffset = value; }
         public Dictionary<string, object> ObjectContainer { get => objectContainer; set => objectContainer = value; }
 
-        public Param activeParam()
+        public Param ActiveParam()
         {
             return parameters.Find(param => param.IsActive);
         }
 
-        public List<Param> getActiveParamsBy(Func<Param, bool> selectFunc = null)
+        public List<Param> GetActiveParamsBy(Func<Param, bool> selectFunc = null)
         {
-            List<Param> @params = new List<Param>();
+            var @params = new List<Param>();
 
             foreach (var pr in parameters)
             {
@@ -133,7 +144,7 @@ namespace Harris7800HMP
                     {
                         @params.Add(pr);
                     }
-                    else if(selectFunc == null)
+                    else if (selectFunc == null)
                     {
                         @params.Add(pr);
                     }
@@ -143,38 +154,38 @@ namespace Harris7800HMP
             return @params;
         }
 
-        public void deactiveParam()
+        public void DeactiveParam()
         {
             parameters.ForEach(param => param.IsActive = false);
         }
 
-        public void addAvailableWidget(string name, Widget widget)
+        public void AddAvailableWidget(string name, Widget widget)
         {
             availableWidgets.Add(name, widget);
         }
-        public Widget getAvailableWidget(string name)
+        public Widget GetAvailableWidget(string name)
         {
             return availableWidgets[name];
         }
 
-        public void prepareToShowWidget(string name)
+        public void PrepareToShowWidget(string name)
         {
-            this.MoveTo = availableWidgets[name];
+            MoveTo = availableWidgets[name];
         }
-        public Widget showPreviousWidget()
+        public Widget ShowPreviousWidget()
         {
-            this.moveTo = this.comeFrom;
-            this.moveTo.moveTo = null;
-            this.comeFrom = null;
-            return this.moveTo;
+            moveTo = comeFrom;
+            moveTo.moveTo = null;
+            comeFrom = null;
+            return moveTo;
         }
-        public Widget addParam(Param param, bool addDefaultMode = true)
+        public Widget AddParam(Param param, bool addDefaultMode = true)
         {
             parameters.Add(param);
-            if(addDefaultMode)
+            if (addDefaultMode)
             {
-                awailableParamForMode.Add(param, new List<RadioStationMode> { RadioStationMode.FIX });
-            } 
+                awailableParamForMode.Add(param, new List<RadioStationMode> { RadioStationMode.Fix });
+            }
             else
             {
                 awailableParamForMode.Add(param, new List<RadioStationMode>());
@@ -182,38 +193,38 @@ namespace Harris7800HMP
             return this;
         }
 
-        public Widget addModeForParam(string paramName, RadioStationMode mode)
+        public Widget AddModeForParam(string paramName, RadioStationMode mode)
         {
-            awailableParamForMode[getParam(paramName)].Add(mode);
+            awailableParamForMode[GetParam(paramName)].Add(mode);
             return this;
         }
 
-        public Widget addModesForParam(string paramName, List<RadioStationMode> mode)
+        public Widget AddModesForParam(string paramName, List<RadioStationMode> mode)
         {
-            var modesByParam = awailableParamForMode[getParam(paramName)];
+            var modesByParam = awailableParamForMode[GetParam(paramName)];
 
             modesByParam.AddRange(mode);
-            awailableParamForMode[getParam(paramName)] = modesByParam.Distinct().ToList();
+            awailableParamForMode[GetParam(paramName)] = modesByParam.Distinct().ToList();
 
             return this;
         }
 
-        public void addActionToParam(Param param, Button btn)
+        public void AddActionToParam(Param param, Button btn)
         {
-            if(paramsAction.ContainsKey(param))
+            if (paramsAction.ContainsKey(param))
             {
                 paramsAction[param].Add(btn);
-            } 
+            }
             else
             {
-                paramsAction.Add(param, new List<Button>(){btn});
+                paramsAction.Add(param, new List<Button>() { btn });
             }
         }
 
-        public List<Param> getParamByMode(RadioStationMode mode)
+        public List<Param> GetParamByMode(RadioStationMode mode)
         {
-            List<Param> modeParams = new List<Param>();
-            foreach (Param pr in parameters)
+            var modeParams = new List<Param>();
+            foreach (var pr in parameters)
             {
                 if (awailableParamForMode[pr].Contains(mode))
                 {
@@ -223,11 +234,11 @@ namespace Harris7800HMP
             return modeParams;
         }
 
-        public void invisibleParamsByNode(RadioStationMode mode)
+        public void InvisibleParamsByNode(RadioStationMode mode)
         {
-            List<Param> paramsByNode = getParamByMode(mode);
+            var paramsByNode = GetParamByMode(mode);
 
-            foreach (Param pr in parameters)
+            foreach (var pr in parameters)
             {
                 if (!paramsByNode.Contains(pr))
                 {
@@ -235,11 +246,11 @@ namespace Harris7800HMP
                 }
             }
         }
-        public void visibleParamsByNode(RadioStationMode mode)
+        public void VisibleParamsByNode(RadioStationMode mode)
         {
-            List<Param> paramsByNode = getParamByMode(mode);
+            var paramsByNode = GetParamByMode(mode);
 
-            foreach (Param pr in parameters)
+            foreach (var pr in parameters)
             {
                 if (paramsByNode.Contains(pr))
                 {
@@ -248,7 +259,7 @@ namespace Harris7800HMP
             }
         }
 
-        public void invisibleAllParams()
+        public void InvisibleAllParams()
         {
             foreach (var item in parameters)
             {
@@ -256,17 +267,17 @@ namespace Harris7800HMP
             }
         }
 
-        private string insertParamToLine(Param param, string line)
+        private string InsertParamToLine(Param param, string line)
         {
             line = line.Remove(param.Y, param.Text.Length);
             return line.Insert(param.Y, param.Text);
         }
 
-        public string[] toLines()
+        public string[] ToLines()
         {
-            Dictionary<int, string> lineString = new Dictionary<int, string>();
+            var lineString = new Dictionary<int, string>();
 
-            foreach (Param param in parameters)
+            foreach (var param in parameters)
             {
                 if (param.IsVisible == false)
                 {
@@ -277,12 +288,12 @@ namespace Harris7800HMP
                 {
                     lineString.Add(param.X, new string(' ', lineLenght));
                 }
-                lineString[param.X] = this.insertParamToLine(param, lineString[param.X]);
+                lineString[param.X] = InsertParamToLine(param, lineString[param.X]);
             }
 
-            List<string> result = new List<string>();
+            var result = new List<string>();
 
-            foreach (int line in lineString.Keys)
+            foreach (var line in lineString.Keys)
             {
                 result.Add(lineString[line]);
             }
@@ -291,20 +302,20 @@ namespace Harris7800HMP
 
         public override string ToString()
         {
-            string result = "";
+            var result = "";
 
-            Dictionary<int, string> lineString = new Dictionary<int, string>();
+            var lineString = new Dictionary<int, string>();
 
-            foreach(Param param in parameters)
+            foreach (var param in parameters)
             {
                 if (!lineString.ContainsKey(param.X))
                 {
                     lineString.Add(param.X, new string(' ', lineLenght));
                 }
-                lineString[param.X] = this.insertParamToLine(param, lineString[param.X]);
+                lineString[param.X] = InsertParamToLine(param, lineString[param.X]);
             }
 
-            foreach(int line in lineString.Keys)
+            foreach (var line in lineString.Keys)
             {
                 result += lineString[line] + "\n";
             }
@@ -312,22 +323,22 @@ namespace Harris7800HMP
             return result;
         }
 
-        public Param getParam(string name)
+        public Param GetParam(string name)
         {
             return parameters.Find(param => param.Name == name);
         }
 
-        public void btnClick(string name, RadioStation station)
+        public void BtnClick(string name, RadioStation station)
         {
-            if (station.getState() == SwitcherState.Off)
+            if (station.GetState() == SwitcherState.OFF)
             {
                 return;
             }
 
-            if (Name == WidgetInit.getNameMenu(WidgetInit.MenuNames.MainMenu)
+            if (Name == WidgetInit.GetNameMenu(WidgetInit.MenuNames.MainMenu)
                 && station.KeyBoardLock)
             {
-                switch(name)
+                switch (name)
                 {
                     case "CALL":
                         {
@@ -351,21 +362,21 @@ namespace Harris7800HMP
                             break;
                         }
                 }
-                if(station.KeyBoardLock)
+                if (station.KeyBoardLock)
                 {
-                    prepareToShowWidget(WidgetInit.getNameMenu(WidgetInit.MenuNames.KeyboardLock));
+                    PrepareToShowWidget(WidgetInit.GetNameMenu(WidgetInit.MenuNames.KeyboardLock));
                     Form1.timerAction = () =>
                     {
-                        Widget trans = getAvailableWidget(WidgetInit.getNameMenu(WidgetInit.MenuNames.KeyboardLock));
-                        trans.prepareToShowWidget(WidgetInit.getNameMenu(WidgetInit.MenuNames.MainMenu));
+                        var trans = GetAvailableWidget(WidgetInit.GetNameMenu(WidgetInit.MenuNames.KeyboardLock));
+                        trans.PrepareToShowWidget(WidgetInit.GetNameMenu(WidgetInit.MenuNames.MainMenu));
                     };
-                    Form1.startTimer();
+                    Form1.StartTimer();
                 }
                 return;
             }
 
-            List<Button> btn = new List<Button>();
-            foreach(var list in paramsAction.Values)
+            var btn = new List<Button>();
+            foreach (var list in paramsAction.Values)
             {
                 var bt = list.Find(button => button.Name == name);
                 if (bt != null)
@@ -374,18 +385,18 @@ namespace Harris7800HMP
                 }
             }
 
-            btn.ForEach(button => button.click(station, this));
+            btn.ForEach(button => button.Click(station, this));
         }
-        public void update()
+        public void Update()
         {
-            parameters.ForEach(p => p.update());
+            parameters.ForEach(p => p.Update());
         }
-    
-        public bool isContainParam(string name)
+
+        public bool IsContainParam(string name)
         {
-            foreach(var pr in parameters)
+            foreach (var pr in parameters)
             {
-                if(pr.Name == name)
+                if (pr.Name == name)
                 {
                     return true;
                 }

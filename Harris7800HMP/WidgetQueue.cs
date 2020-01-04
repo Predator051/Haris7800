@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Harris7800HMP
 {
     public class WidgetQueue
     {
-        List<Widget> queue = new List<Widget>();
-        int currentIndex = -1;
+        private List<Widget> queue = new List<Widget>();
+        private int currentIndex = -1;
 
-        public void add(Widget wdg)
+        public void Add(Widget wdg)
         {
             queue.Add(wdg);
         }
-        public Widget next()
+        public Widget Next()
         {
             currentIndex++;
 
-            if(currentIndex > queue.Count - 1)
+            if (currentIndex > queue.Count - 1)
             {
                 return null;
             }
@@ -27,7 +23,7 @@ namespace Harris7800HMP
             return queue[currentIndex];
         }
 
-        public Widget current()
+        public Widget Current()
         {
             if (currentIndex > queue.Count - 1)
             {
@@ -37,7 +33,7 @@ namespace Harris7800HMP
             return queue[currentIndex];
         }
 
-        public void clear()
+        public void Clear()
         {
             queue.Clear();
             currentIndex = -1;

@@ -1,28 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Harris7800HMP
+﻿namespace Harris7800HMP
 {
     public class Helper
     {
-        static public string EmptySpaceString = "                                            ";
-        static public string centerString(string str, string insertString)
+        public static string emptySpaceString = "                                            ";
+        public static string CenterString(string str, string insertString)
         {
-            int middleNumInsertString = insertString.Length / 2;
-            int middleNumStr = str.Length / 2;
+            var middleNumInsertString = insertString.Length / 2;
+            var middleNumStr = str.Length / 2;
 
-            string firstPart = str.Substring(0, middleNumStr - middleNumInsertString);
-            string secondPart = str.Substring(middleNumStr + middleNumInsertString);
+            var firstPart = str.Substring(0, middleNumStr - middleNumInsertString);
+            var secondPart = str.Substring(middleNumStr + middleNumInsertString);
             return firstPart + insertString + secondPart;
         }
 
-        static public int calcCenterIndent(int textLength, int lineLength)
+        public static int CalcCenterIndent(int textLength, int lineLength)
         {
-            int midTextLength = textLength / 2;
-            int midLineLength = lineLength / 2;
+            var midTextLength = textLength / 2;
+            var midLineLength = lineLength / 2;
 
             return midLineLength - midTextLength;
         }

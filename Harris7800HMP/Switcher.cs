@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Harris7800HMP
 {
     public enum SwitcherState
     {
-        Off, 
+        OFF,
         PT,
         CT,
         LD,
@@ -17,12 +13,12 @@ namespace Harris7800HMP
     };
     public class Switcher
     {
-        SwitcherState state;
+        private SwitcherState state;
         internal SwitcherState State { get => state; set => state = value; }
 
-        Dictionary<SwitcherState, System.Drawing.Bitmap> imagesPath = new Dictionary<SwitcherState, System.Drawing.Bitmap>()
+        private Dictionary<SwitcherState, System.Drawing.Bitmap> imagesPath = new Dictionary<SwitcherState, System.Drawing.Bitmap>()
         {
-            { SwitcherState.Off, Properties.Resources.offSwitch },
+            { SwitcherState.OFF, Properties.Resources.offSwitch },
             { SwitcherState.PT, Properties.Resources.PTSwitch },
             { SwitcherState.CT, Properties.Resources.CTSwitch },
             { SwitcherState.LD, Properties.Resources.LDSwitch },
@@ -30,24 +26,25 @@ namespace Harris7800HMP
             { SwitcherState.CLR, Properties.Resources.ClrSwitch },
         };
 
-        public SwitcherState nextState()
+        public SwitcherState NextState()
         {
-            if((int)state + 1 > 5)
+            if ((int)state + 1 > 5)
             {
-                state = SwitcherState.Off;
-            } else
+                state = SwitcherState.OFF;
+            }
+            else
             {
-                state = state + 1;
+                state += 1;
             }
             return state;
         }
 
-        public void initToOff()
+        public void InitToOff()
         {
-            state = SwitcherState.Off;
+            state = SwitcherState.OFF;
         }
 
-        public System.Drawing.Bitmap getImage()
+        public System.Drawing.Bitmap GetImage()
         {
             return imagesPath[state];
         }

@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Harris7800HMP
 {
     public enum RadioStationMode
     {
-        FIX, ALE, ThreeG, HOP
+        Fix, Ale, ThreeG, Hop
     };
     public class RadioStation
     {
@@ -17,23 +14,21 @@ namespace Harris7800HMP
             Logo, Model, Init, AfterInit
         }
 
-        SwitchOnSteps onSteps = SwitchOnSteps.Logo;
-
-        Battery battery = new Battery();
-        bool receptionMode = true;
-        RadioStationMode mode = RadioStationMode.FIX;
-        Volume volume = new Volume();
-        Switcher switcher;
-        bool keyBoardLock = false;
-        string firstLine = "";
-        string secondLine = "";
-        string thirdLine = " ";
-        string fourthLine = "";
-
-        KeyModule keys = new KeyModule();
-        List<StationPresetModemModule> presetModemsModule = new List<StationPresetModemModule>();
-        StationPresetSystemContainer presetSystemsModule = new StationPresetSystemContainer();
-        txMsgContainer txMsgs = new txMsgContainer();
+        private SwitchOnSteps onSteps = SwitchOnSteps.Logo;
+        private Battery battery = new Battery();
+        private bool receptionMode = true;
+        private RadioStationMode mode = RadioStationMode.Fix;
+        private Volume volume = new Volume();
+        private Switcher switcher;
+        private bool keyBoardLock = false;
+        private string firstLine = "";
+        private string secondLine = "";
+        private string thirdLine = " ";
+        private string fourthLine = "";
+        private KeyModule keys = new KeyModule();
+        private List<StationPresetModemModule> presetModemsModule = new List<StationPresetModemModule>();
+        private StationPresetSystemContainer presetSystemsModule = new StationPresetSystemContainer();
+        private TxMsgContainer txMsgs = new TxMsgContainer();
 
         public bool connectedUsb = false;
         public bool connectedHandset = false;
@@ -41,12 +36,10 @@ namespace Harris7800HMP
 
         public RadioStation()
         {
-            for (int i = 1; i <= 20; i++)
+            for (var i = 1; i <= 20; i++)
             {
-                string numStr = i < 10 ? "0" + i : i.ToString();
-                StationPresetModemModule m = new StationPresetModemModule();
-                m.originalName = "MDM" + numStr;
-                m.name = "MDM" + numStr;
+                var numStr = i < 10 ? "0" + i : i.ToString();
+                var m = new StationPresetModemModule {originalName = "MDM" + numStr, name = "MDM" + numStr};
                 presetModemsModule.Add(m);
             }
         }
@@ -55,10 +48,10 @@ namespace Harris7800HMP
         public RadioStationMode Mode { get => mode; set => mode = value; }
         public KeyModule Keys { get => keys; set => keys = value; }
         public List<StationPresetModemModule> PresetModems { get => presetModemsModule; set => presetModemsModule = value; }
-        public txMsgContainer TxMsgs { get => txMsgs; set => txMsgs = value; }
+        public TxMsgContainer TxMsgs { get => txMsgs; set => txMsgs = value; }
         public StationPresetSystemContainer PresetSystemsModule { get => presetSystemsModule; set => presetSystemsModule = value; }
 
-        public void addPresetModem(StationPresetModemModule modem)
+        public void AddPresetModem(StationPresetModemModule modem)
         {
             var isContains = presetModemsModule.Find(m => m.originalName == modem.originalName);
             if (isContains != null)
@@ -68,29 +61,29 @@ namespace Harris7800HMP
             presetModemsModule.Add(modem);
         }
 
-        public void addPresetSystem(List<WidgetTextParams> textParams, string oldName)
+        public void AddPresetSystem(List<WidgetTextParams> textParams, string oldName)
         {
-            Func<string, WidgetTextParams> findParam = (string name) =>
+            WidgetTextParams FindParam(string name)
             {
                 return textParams.Find(tp => tp.Name == name);
-            };
+            }
 
-            Func<string, string> getValueTextParam = (string name) =>
+            string GetValueTextParam(string name)
             {
-                return findParam(name).currParam();
-            };
+                return FindParam(name).CurrParam();
+            }
 
-            StationPresetSystem stationPresetSystemModule = new StationPresetSystem();
+            var stationPresetSystemModule = new StationPresetSystem();
 
-            stationPresetSystemModule.name = getValueTextParam("PRESET NAME");
-            stationPresetSystemModule.radioMode = stringToMode(getValueTextParam("RADIO MODE"));
-            stationPresetSystemModule.channelNumber = getValueTextParam("CHANNEL NUMBER");
-            string modemPreset = getValueTextParam("MODEM PRESET");
-            string keyTypeName = getValueTextParam("ENCRYPTION TYPE");
-            string keyName = getValueTextParam("ENCRYPTION KEY");
-            stationPresetSystemModule.ptVoiceMode = getValueTextParam("PT VOICE MODE");
-            stationPresetSystemModule.ctVoiceMode = getValueTextParam("CT VOICE MODE");
-            stationPresetSystemModule.enable = getValueTextParam("ENABLE");
+            stationPresetSystemModule.name = GetValueTextParam("PRESET NAME");
+            stationPresetSystemModule.radioMode = StringToMode(GetValueTextParam("RADIO MODE"));
+            stationPresetSystemModule.channelNumber = GetValueTextParam("CHANNEL NUMBER");
+            var modemPreset = GetValueTextParam("MODEM PRESET");
+            var keyTypeName = GetValueTextParam("ENCRYPTION TYPE");
+            var keyName = GetValueTextParam("ENCRYPTION KEY");
+            stationPresetSystemModule.ptVoiceMode = GetValueTextParam("PT VOICE MODE");
+            stationPresetSystemModule.ctVoiceMode = GetValueTextParam("CT VOICE MODE");
+            stationPresetSystemModule.enable = GetValueTextParam("ENABLE");
 
 
             if (modemPreset != "OFF")
@@ -100,13 +93,13 @@ namespace Harris7800HMP
 
             if (keyName == "--------------------")
             {
-                KeyModule.KeyType kType = KeyModule.stringToType(keyTypeName);
-                KeyModule.KeyValue value = Keys.Keys[kType].Find(k => k.KeyName == keyName);
+                var kType = KeyModule.StringToType(keyTypeName);
+                var value = Keys.Keys[kType].Find(k => k.keyName == keyName);
                 stationPresetSystemModule.key = new KeyValuePair<KeyModule.KeyType, KeyModule.KeyValue>(kType, value);
-            } 
+            }
             else
             {
-                KeyModule.KeyType kType = KeyModule.stringToType(keyTypeName);
+                var kType = KeyModule.StringToType(keyTypeName);
                 stationPresetSystemModule.key = new KeyValuePair<KeyModule.KeyType, KeyModule.KeyValue>(kType, null);
             }
 
@@ -116,9 +109,9 @@ namespace Harris7800HMP
                 presetSystemsModule.SystemPresets.Remove(isContains);
             }
 
-            presetSystemsModule.addPresetSystem(stationPresetSystemModule);
+            presetSystemsModule.AddPresetSystem(stationPresetSystemModule);
         }
-        public void updatePresetModem(StationPresetModemModule modem, string oldName)
+        public void UpdatePresetModem(StationPresetModemModule modem, string oldName)
         {
             var isContains = presetModemsModule.Find(m => m.name == oldName);
             if (isContains != null)
@@ -128,12 +121,12 @@ namespace Harris7800HMP
             presetModemsModule.Add(modem);
         }
 
-        public string currentModeToString()
+        public string CurrentModeToString()
         {
-            return modeToString(mode);
+            return ModeToString(mode);
         }
 
-        public static string modeToString(RadioStationMode mode)
+        public static string ModeToString(RadioStationMode mode)
         {
             if (mode == RadioStationMode.ThreeG)
             {
@@ -143,10 +136,10 @@ namespace Harris7800HMP
             return Enum.GetName(typeof(RadioStationMode), mode);
         }
 
-        public static RadioStationMode stringToMode(string str)
+        public static RadioStationMode StringToMode(string str)
         {
 
-            switch(str)
+            switch (str)
             {
                 case "3G ":
                 case "3G":
@@ -155,84 +148,83 @@ namespace Harris7800HMP
                     }
                 case "FIX":
                     {
-                        return RadioStationMode.FIX;
+                        return RadioStationMode.Fix;
                     }
                 case "ALE":
                     {
-                        return RadioStationMode.ALE;
+                        return RadioStationMode.Ale;
                     }
                 case "HOP":
                     {
-                        return RadioStationMode.HOP;
+                        return RadioStationMode.Hop;
                     }
             }
-            return RadioStationMode.FIX;
+            return RadioStationMode.Fix;
         }
 
         public RadioStation(Switcher sw)
         {
-            switcher = sw; 
-            for (int i = 1; i <= 20; i++)
+            switcher = sw;
+            for (var i = 1; i <= 20; i++)
             {
-                string numStr = i < 10 ? "0" + i : i.ToString();
-                StationPresetModemModule m = new StationPresetModemModule();
-                m.originalName = "MDM" + numStr;
-                m.name = "MDM" + numStr;
+                var numStr = i < 10 ? "0" + i : i.ToString();
+                var m = new StationPresetModemModule {originalName = "MDM" + numStr, name = "MDM" + numStr};
                 presetModemsModule.Add(m);
             }
         }
 
-        public SwitcherState getState()
+        public SwitcherState GetState()
         {
             return switcher.State;
         }
 
-        public bool isOff()
+        public bool IsOff()
         {
-            return switcher.State == SwitcherState.Off;
+            return switcher.State == SwitcherState.OFF;
         }
 
-        public void nextState()
+        public void NextState()
         {
-            switcher.nextState();
+            switcher.NextState();
 
             //sec
         }
 
         public override string ToString()
         {
-            if(switcher.State == SwitcherState.Off)
+            if (switcher.State == SwitcherState.OFF)
             {
                 return "";
             }
 
-            return getFirstLine()
-                + "\n" + getSecondLine()
-                + "\n" + getThirdLine()
-                + "\n" + getFourthLine();
+            return GetFirstLine()
+                + "\n" + GetSecondLine()
+                + "\n" + GetThirdLine()
+                + "\n" + GetFourthLine();
         }
-        public string getFirstLine()
+        public string GetFirstLine()
         {
-            string result = " ";
-            if(receptionMode)
+            var result = " ";
+            if (receptionMode)
             {
                 result += "R";
             }
 
             result += " " + battery.ToString();
 
-            switch (Mode) {
-                case RadioStationMode.ALE:
+            switch (Mode)
+            {
+                case RadioStationMode.Ale:
                     {
                         result += " ALE";
                         break;
                     }
-                case RadioStationMode.FIX:
+                case RadioStationMode.Fix:
                     {
                         result += " FIX";
                         break;
                     }
-                case RadioStationMode.HOP:
+                case RadioStationMode.Hop:
                     {
                         result += " HOP";
                         break;
@@ -276,27 +268,27 @@ namespace Harris7800HMP
             return result;
         }
 
-        public string getSecondLine()
+        public string GetSecondLine()
         {
             return secondLine;
         }
 
-        public string getThirdLine()
+        public string GetThirdLine()
         {
             return thirdLine;
         }
 
-        public string getFourthLine()
+        public string GetFourthLine()
         {
             return fourthLine;
         }
 
-        public RadioStationMode nextMode()
+        public RadioStationMode NextMode()
         {
-            if((int)Mode + 1 > 3)
+            if ((int)Mode + 1 > 3)
             {
-                Mode = RadioStationMode.FIX;
-            } 
+                Mode = RadioStationMode.Fix;
+            }
             else
             {
                 Mode += 1;
@@ -304,29 +296,29 @@ namespace Harris7800HMP
 
             switch (Mode)
             {
-                case RadioStationMode.ALE:
+                case RadioStationMode.Ale:
                     {
-                        secondLine = Helper.centerString(Helper.EmptySpaceString, ">>>  ALE  <<<");
+                        secondLine = Helper.CenterString(Helper.emptySpaceString, ">>>  ALE  <<<");
                         break;
                     }
-                case RadioStationMode.FIX:
+                case RadioStationMode.Fix:
                     {
-                        secondLine = Helper.centerString(Helper.EmptySpaceString, ">>>  FIX  <<<");
+                        secondLine = Helper.CenterString(Helper.emptySpaceString, ">>>  FIX  <<<");
                         break;
                     }
-                case RadioStationMode.HOP:
+                case RadioStationMode.Hop:
                     {
-                        secondLine = Helper.centerString(Helper.EmptySpaceString, ">>>  HOP  <<<");
+                        secondLine = Helper.CenterString(Helper.emptySpaceString, ">>>  HOP  <<<");
                         break;
                     }
                 case RadioStationMode.ThreeG:
                     {
-                        secondLine = Helper.centerString(Helper.EmptySpaceString, ">>>  3G  <<<");
+                        secondLine = Helper.CenterString(Helper.emptySpaceString, ">>>  3G  <<<");
                         break;
                     }
             }
 
-            fourthLine = Helper.centerString(Helper.EmptySpaceString, "MODE TO SELECT");
+            fourthLine = Helper.CenterString(Helper.emptySpaceString, "MODE TO SELECT");
 
             return Mode;
         }
