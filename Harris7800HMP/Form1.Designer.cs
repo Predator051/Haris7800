@@ -377,9 +377,8 @@
             // 
             this.richDispley.BackColor = System.Drawing.Color.OliveDrab;
             this.richDispley.Cursor = System.Windows.Forms.Cursors.Default;
-            this.richDispley.Location = new System.Drawing.Point(327, 150);
+            this.richDispley.Location = new System.Drawing.Point(330, 150);
             this.richDispley.Name = "richDispley";
-            this.richDispley.ReadOnly = true;
             this.richDispley.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.richDispley.Size = new System.Drawing.Size(234, 66);
             this.richDispley.TabIndex = 22;
@@ -392,7 +391,7 @@
             // pbOn
             // 
             this.pbOn.BackColor = System.Drawing.Color.Transparent;
-            this.pbOn.Location = new System.Drawing.Point(328, 145);
+            this.pbOn.Location = new System.Drawing.Point(331, 144);
             this.pbOn.Name = "pbOn";
             this.pbOn.Size = new System.Drawing.Size(234, 76);
             this.pbOn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -414,7 +413,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.BackgroundImage = global::Harris7800HMP.Properties.Resources.background_keys;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(892, 468);
@@ -441,6 +440,7 @@
             this.Controls.Add(this.btVolMinus);
             this.Controls.Add(this.btVolPlus);
             this.DoubleBuffered = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Harris CBT - RF-7800H-MP";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);

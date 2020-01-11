@@ -25,7 +25,7 @@ namespace Harris7800HMP.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(".\\..\\..\\..\\Lessons")]
+        [global::System.Configuration.DefaultSettingValueAttribute(".\\Lessons")]
         public string LessonsDirectory {
             get {
                 return ((string)(this["LessonsDirectory"]));

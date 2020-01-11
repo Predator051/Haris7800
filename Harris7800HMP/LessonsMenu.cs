@@ -12,6 +12,11 @@ namespace Harris7800HMP
         public FileInfo[] LoadListOfLessons()
         {
             var d = new DirectoryInfo(Properties.Settings.Default.LessonsDirectory);//Assuming Test is your Folder
+            if (!d.Exists)
+            {
+                d.Create();
+                File.Create(d.FullName + "\\default.rtf");
+            }
             var files = d.GetFiles("*.rtf"); //Getting Text files
 
 

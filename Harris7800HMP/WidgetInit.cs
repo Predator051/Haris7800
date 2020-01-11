@@ -11,6 +11,7 @@ namespace Harris7800HMP
             MainMenu,
             MainMenu2,
             CallMenu,
+            CallingMenu,
             MainMenuDisplayOpt,
             ProgramMenu,
             ProgramComsecMenu,
@@ -69,6 +70,7 @@ namespace Harris7800HMP
             var mainMenu = InitMainMenu(station);
             var mainMenu2 = InitMainMenu2(station);
             var callMenu = InitCallMenu(station);
+            var callingMenu = InitCallingMenu(station);
             var mainMenuDisplayOpt = InitMainMenuDisplayOpt(station);
             var programMenu = InitProgramMenu(station);
             var transitionPm = InitTransitionProgramMenu(station);
@@ -205,7 +207,7 @@ namespace Harris7800HMP
             mainMenu
                 .AddParam(new Param("StationMode", null, "FIX", 1, 10, () =>
                 {
-                    mainMenu.GetParam("StationMode").Text = Enum.GetName(typeof(RadioStationMode), station.Mode);
+                    mainMenu.GetParam("StationMode").Text = RadioStation.ModeToString(station.Mode);
                 }))
                 .AddModesForParam("StationMode", new List<RadioStationMode> { RadioStationMode.ThreeG, RadioStationMode.Ale, RadioStationMode.Hop }); ;
             mainMenu
@@ -824,7 +826,7 @@ namespace Harris7800HMP
             mainMenu
                 .AddParam(new Param("StationMode", null, "FIX", 1, 10, () =>
                 {
-                    mainMenu.GetParam("StationMode").Text = Enum.GetName(typeof(RadioStationMode), station.Mode);
+                    mainMenu.GetParam("StationMode").Text = RadioStation.ModeToString(station.Mode);
                 }))
                 .AddModesForParam("StationMode", new List<RadioStationMode> { RadioStationMode.ThreeG, RadioStationMode.Ale, RadioStationMode.Hop }); ;
             mainMenu
@@ -1372,7 +1374,7 @@ namespace Harris7800HMP
             callMenu
                 .AddParam(new Param("StationMode", null, "FIX", 1, 10, () =>
                 {
-                    callMenu.GetParam("StationMode").Text = Enum.GetName(typeof(RadioStationMode), station.Mode);
+                    callMenu.GetParam("StationMode").Text = RadioStation.ModeToString(station.Mode);
                 }))
                 .AddModesForParam("StationMode", new List<RadioStationMode> { RadioStationMode.ThreeG, RadioStationMode.Ale, RadioStationMode.Hop }); ;
             callMenu
@@ -1451,6 +1453,99 @@ namespace Harris7800HMP
             return callMenu;
         }
 
+        public static Widget InitCallingMenu(RadioStation station)
+        {
+            var callMenu = new Widget(GetNameMenu(MenuNames.CallMenu))
+            {
+                LineSize = {[0] = 5, [1] = 9, [2] = 9, [3] = 5},
+                LineCharOffset = {[0] = 6, [1] = 7, [2] = 6, [3] = 6}
+            };
+
+            callMenu.AddParam(new Param("Body", null, "", 1, 0));
+            callMenu.AddParam(new Param("StationRTmode", null, "R", 1, 0))
+                .AddModesForParam("StationRTmode", new List<RadioStationMode> { RadioStationMode.ThreeG, RadioStationMode.Ale, RadioStationMode.Hop });
+            callMenu.AddParam(new Param("Battery", null, "BAT ■■■■■", 1, 2))
+                .AddModesForParam("Battery", new List<RadioStationMode> { RadioStationMode.ThreeG, RadioStationMode.Ale, RadioStationMode.Hop });
+            callMenu
+                .AddParam(new Param("StationMode", null, "FIX", 1, 10, () =>
+                {
+                    callMenu.GetParam("StationMode").Text = RadioStation.ModeToString(station.Mode);
+                }))
+                .AddModesForParam("StationMode", new List<RadioStationMode> { RadioStationMode.ThreeG, RadioStationMode.Ale, RadioStationMode.Hop }); ;
+            callMenu
+                .AddParam(new Param("SQ", null, "SQ", 1, 14))
+                .AddModesForParam("SQ", new List<RadioStationMode> { RadioStationMode.ThreeG, RadioStationMode.Ale, RadioStationMode.Hop }); ;
+            callMenu
+                .AddParam(new Param("SwitchState", null, "PT", 1, 17, () =>
+                {
+                    callMenu.GetParam("SwitchState").Text = Enum.GetName(typeof(SwitcherState), station.GetState());
+                }))
+                .AddModesForParam("SwitchState", new List<RadioStationMode> { RadioStationMode.ThreeG, RadioStationMode.Ale, RadioStationMode.Hop });
+            callMenu.AddParam(new Param("Title", null, "CALL TYPE", 2, 7));
+            callMenu.GetParam("Title").Y = Helper.CalcCenterIndent(callMenu.GetParam("Title").Text.Length, 28);
+            callMenu.AddParam(new Param("Value", null, "MANUAL", 3, 12));
+            callMenu.GetParam("Value").Y = Helper.CalcCenterIndent(callMenu.GetParam("Value").Text.Length, 28);
+            callMenu.AddParam(new Param("Info", null, "PRESS ↑↓ TO SCROLL", 4, 19));
+
+            callMenu.GetParam("Value").IsActive = true;
+
+            var item1 = new WidgetTextParams("CALL TYPE");
+            item1.AddParam("AUTOMATIC").AddParam("MANUAL");
+            var item2 = new WidgetTextParams("ADDRESS TYPE");
+            item2.AddParam("INDIVIDUAL").AddParam("ALL").AddParam("ANY").AddParam("GROUP").AddParam("NET");
+
+            var radioParams = new List<WidgetTextParams>
+            {
+                item1,
+                item2,
+            };
+
+
+            callMenu.AddActionToParam(callMenu.GetParam("Value"), new Button("DOWN", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                var activeParam = wdg.ActiveParam();
+                var titleParam = wdg.GetParam("Title");
+
+                var paramTitle = titleParam.Text;
+
+                activeParam.Text = radioParams.Find(p => p.Name == paramTitle).GetPrevParam();
+                activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.CalcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.CalcCenterIndent(titleParam.Text.Length, 28);
+            }));
+
+            callMenu.AddActionToParam(callMenu.GetParam("Value"), new Button("UP", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                var activeParam = wdg.ActiveParam();
+                var titleParam = wdg.GetParam("Title");
+
+                var paramTitle = titleParam.Text;
+
+                activeParam.Text = radioParams.Find(p => p.Name == paramTitle).GetNextParam();
+                activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.CalcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.CalcCenterIndent(titleParam.Text.Length, 28);
+            }));
+
+            callMenu.AddActionToParam(callMenu.GetParam("Body"), new Button("ENT", (Button btn, RadioStation rs, Widget wdg) =>
+            {
+                var activeParam = wdg.ActiveParam();
+                var titleParam = wdg.GetParam("Title");
+
+                var paramTitle = titleParam.Text;
+
+                var nextIndex = radioParams.IndexOf(radioParams.Find(p => p.Name == paramTitle)) + 1;
+                if (nextIndex >= radioParams.Count) return;
+                titleParam.Text = radioParams[nextIndex].Name;
+                activeParam.Text = radioParams[nextIndex].CurrParam();
+                activeParam.ActiveTo = activeParam.Text.Length;
+                activeParam.Y = Helper.CalcCenterIndent(activeParam.Text.Length, 28);
+                titleParam.Y = Helper.CalcCenterIndent(titleParam.Text.Length, 28);
+            }));
+
+            return callMenu;
+        }
+
         public static Widget InitMainMenuDisplayOpt(RadioStation station)
         {
             var programMenu = new Widget(GetNameMenu(MenuNames.MainMenuDisplayOpt));
@@ -1470,7 +1565,7 @@ namespace Harris7800HMP
             programMenu
                 .AddParam(new Param("StationMode", null, "FIX", 1, 10, () =>
                 {
-                    programMenu.GetParam("StationMode").Text = Enum.GetName(typeof(RadioStationMode), station.Mode);
+                    programMenu.GetParam("StationMode").Text = RadioStation.ModeToString(station.Mode);
                 }))
                 .AddModesForParam("StationMode", new List<RadioStationMode> { RadioStationMode.ThreeG, RadioStationMode.Ale, RadioStationMode.Hop }); ;
             programMenu

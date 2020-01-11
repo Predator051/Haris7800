@@ -26,10 +26,7 @@ namespace Harris7800HMP
         private Color displayColor = Color.FromArgb(138, 164, 0);
         private Color displayTextColor = Color.FromArgb(138, 164, 0);
 
-        public WidgetQueue QueueWidget
-        {
-            get => queueWidget;
-        }
+        public WidgetQueue QueueWidget => queueWidget;
 
         public void SetBrigth(int value)
         {
@@ -129,7 +126,7 @@ namespace Harris7800HMP
                 {
                     var activeParam = param;
                     var pText = activeParam.Text;
-                    var index = richDispley.Lines[activeParam.X - 1].IndexOf(pText);
+                    var index = richDispley.Lines[activeParam.X - 1].IndexOf(pText, StringComparison.Ordinal);
                     for (var i = 0; i < richDispley.Lines.Length && i < activeParam.X - 1; i++)
                     {
                         index += richDispley.Lines[i].Length + 1;
@@ -141,14 +138,14 @@ namespace Harris7800HMP
                 }
             }
 
-            richDispley.SelectionStart = 0;
-            richDispley.SelectionLength = 1;
-            Clipboard.SetImage(Properties.Resources.test_image);
-            if (richDispley.CanPaste(DataFormats.GetFormat(DataFormats.Bitmap)))
-            {
-                richDispley.Paste(DataFormats.GetFormat(DataFormats.Bitmap));
-            }
-            
+
+            //richDispley.Select(0, 10);
+            //Clipboard.SetImage(Properties.Resources.text_image);
+            ////if (richDispley.CanPaste(DataFormats.GetFormat(DataFormats.Bitmap)))
+            //{
+            //    richDispley.Paste();
+            //}
+
         }
 
         private void btVolPlus_Click(object sender, EventArgs e)
@@ -462,5 +459,6 @@ namespace Harris7800HMP
         {
 
         }
+
     }
 }

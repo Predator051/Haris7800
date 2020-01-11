@@ -41,5 +41,16 @@ namespace Harris7800HMP
                 Properties.Settings.Default.LessonsDirectory = fbd.SelectedPath;
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Save();
+            this.Close();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Reload();
+        }
     }
 }

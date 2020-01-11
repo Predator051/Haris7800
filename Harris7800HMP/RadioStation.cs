@@ -128,12 +128,7 @@ namespace Harris7800HMP
 
         public static string ModeToString(RadioStationMode mode)
         {
-            if (mode == RadioStationMode.ThreeG)
-            {
-                return "3G ";
-            }
-
-            return Enum.GetName(typeof(RadioStationMode), mode);
+            return mode == RadioStationMode.ThreeG ? "3G " : Enum.GetName(typeof(RadioStationMode), mode)?.ToUpper();
         }
 
         public static RadioStationMode StringToMode(string str)

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LessonsMenu));
             this.lbLessons = new System.Windows.Forms.ListBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.менюToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,14 +68,14 @@
             // параметриToolStripMenuItem
             // 
             this.параметриToolStripMenuItem.Name = "параметриToolStripMenuItem";
-            this.параметриToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.параметриToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.параметриToolStripMenuItem.Text = "Параметри";
             this.параметриToolStripMenuItem.Click += new System.EventHandler(this.параметриToolStripMenuItem_Click);
             // 
             // вихідToolStripMenuItem
             // 
             this.вихідToolStripMenuItem.Name = "вихідToolStripMenuItem";
-            this.вихідToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.вихідToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.вихідToolStripMenuItem.Text = "Вихід";
             // 
             // LessonsMenu
@@ -84,6 +85,7 @@
             this.ClientSize = new System.Drawing.Size(360, 483);
             this.Controls.Add(this.lbLessons);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "LessonsMenu";
             this.Text = "Вправи";

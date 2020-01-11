@@ -16,7 +16,15 @@ namespace Harris7800HMP
 
         private void LessonsInfo_Load(object sender, EventArgs e)
         {
-            rtbLessonsInfo.LoadFile(fileLesson.FullName);
+            try
+            {
+                rtbLessonsInfo.LoadFile(fileLesson.FullName);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                throw;
+            }
         }
 
         private void LessonsInfo_Resize(object sender, EventArgs e)
