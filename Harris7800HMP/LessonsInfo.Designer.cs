@@ -36,7 +36,6 @@
             // 
             this.rtbLessonsInfo.Location = new System.Drawing.Point(12, 12);
             this.rtbLessonsInfo.Name = "rtbLessonsInfo";
-            this.rtbLessonsInfo.ReadOnly = true;
             this.rtbLessonsInfo.Size = new System.Drawing.Size(776, 426);
             this.rtbLessonsInfo.TabIndex = 0;
             this.rtbLessonsInfo.Text = "";

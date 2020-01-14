@@ -32,7 +32,10 @@ namespace Harris7800HMP
 
         private void textBox1_Click(object sender, EventArgs e)
         {
+            var d = new DirectoryInfo(Properties.Settings.Default.LessonsDirectory);
+
             using var fbd = new FolderBrowserDialog();
+            fbd.SelectedPath = d.FullName;
             var result = fbd.ShowDialog();
 
             if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))

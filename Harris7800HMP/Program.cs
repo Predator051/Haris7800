@@ -20,8 +20,8 @@ namespace Harris7800HMP
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
-                throw;
+                MessageBox.Show(e.ToString());
+                //throw;
             }
         }
     }

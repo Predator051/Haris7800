@@ -15,10 +15,13 @@ namespace Harris7800HMP
             if (!d.Exists)
             {
                 d.Create();
-                File.Create(d.FullName + "\\default.rtf");
+
+                using RichTextBox RTB = new RichTextBox();
+                RTB.Rtf = @"{\rtf1 DEFAULT TEXT!}";
+                RTB.SaveFile(d.FullName + "\\default.rtf", RichTextBoxStreamType.RichText);
             }
             var files = d.GetFiles("*.rtf"); //Getting Text files
-
+           
 
             return files.Where((fInfo) => fInfo.Name[0] != '~').ToArray();
         }
